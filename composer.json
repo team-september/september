@@ -59,7 +59,7 @@
             "@php artisan key:generate --ansi"
         ],
         "fix": [
-            "./vendor/bin/php-cs-fixer fix"
+            "php-cs-fixer fix"
         ]
     }
 }
