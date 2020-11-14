@@ -1,4 +1,4 @@
-name: example
+name: ci
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master, develop ]
 
 jobs:
-  laravel-tests:
+  tests:
 
     runs-on: ubuntu-latest
 
@@ -40,3 +40,21 @@ jobs:
         run: php artisan db:seed --force
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: vendor/bin/phpunit
+      - name: Prepare php-cs-fixer
+        run: |
+            wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer
+            chmod a+x php-cs-fixer
+      - name: php-cs-fixer
+        run: php php-cs-fixer fix --dry-run
+
+  php-cs-fixer:
+    
+   runs-on: ubuntu-latest
+   steps:
+       - uses: actions/checkout@master
+       - name: Prepare php-cs-fixer
+         run: |
+             wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer
+             chmod a+x php-cs-fixer
+       - name: Execute php-cs-fixer
+         run: php php-cs-fixer fix --dry-run
