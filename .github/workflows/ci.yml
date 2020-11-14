@@ -57,4 +57,4 @@ jobs:
              wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer
              chmod a+x php-cs-fixer
        - name: Execute php-cs-fixer
-         run: php php-cs-fixer fix --dry-run
+         run: php php-cs-fixer fix --path-mode=intersection --dry-run
