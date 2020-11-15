@@ -1,4 +1,15 @@
 <?php
+$finder = PhpCsFixer\Finder::create()
+    ->exclude([
+        'app/Console',
+        'app/Exceptions',
+        'app/Providers',
+        'bootstrap',
+        'storage',
+        'vendor',
+    ])
+    ->in(__DIR__)
+;
 
 return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
@@ -115,8 +126,5 @@ return PhpCsFixer\Config::create()
         'whitespace_after_comma_in_array' => true,
         'yoda_style' => ['equal' => false, 'identical' => false],
     ])
-    ->setFinder(PhpCsFixer\Finder::create()
-        ->exclude('vendor')
-        ->in(__DIR__)
-    )
+    ->setFinder($finder);
     ;
