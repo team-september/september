@@ -62,3 +62,7 @@ jobs:
              chmod a+x php-cs-fixer
        - name: Execute php-cs-fixer
          run: php php-cs-fixer fix --path-mode=intersection --dry-run
+       - name: Upload Coverage
+         uses: codecov/codecov-action@v1
+         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
