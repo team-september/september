@@ -46,6 +46,10 @@ jobs:
             chmod a+x php-cs-fixer
       - name: php-cs-fixer
         run: php php-cs-fixer fix --dry-run
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   php-cs-fixer:
     
