@@ -25,7 +25,13 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ route('logout') }}">Logout</a>
+                        <div style="text-align: center">
+                            <a href="{{ route('logout') }}">Logout</a>
+                            <h4>ようこそ!</h4>
+                            <img src={{ Auth::user()->picture }}>
+                            <h3> {{ Auth::user()->name }}</h3>
+                            <h4> さん</h4>
+                        </div>
                     @else
                         <a href="{{ route('login') }}">Login/Signup</a>
                     @endauth
