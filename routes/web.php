@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    if (preg_match('/^.*auth0\/callback.*$/', url()->previous())) {
+        return redirect()->route('profile');
+    }
+
     return view('welcome');
 });
 
