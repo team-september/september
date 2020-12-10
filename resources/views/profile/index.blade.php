@@ -22,15 +22,15 @@
     </head>
     <body class="antialiased">
     @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <div style="text-align: center">
-                            <a href="{{ route('logout') }}">Logout</a>
-                        </div>
-                    @else
-                        <a href="{{ route('login') }}">Login/Signup</a>
-                    @endauth
+        <div class="top-right links">
+            @auth
+                <div style="text-align: center">
+                    <a href="{{ route('logout') }}">Logout</a>
                 </div>
+            @else
+                <a href="{{ route('login') }}">Login/Signup</a>
+            @endauth
+        </div>
     @endif
         <div style="text-align:center">
             <p>profile</p>
