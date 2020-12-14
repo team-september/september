@@ -1,2 +1,1 @@
-web: vendor/bin/heroku-php-nginx public/
-release:cp .env.example .env
+web: vendor/bin/heroku-php-nginx -C .heroku/nginx/nginx.conf public/
