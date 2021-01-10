@@ -15,15 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    if (preg_match('/^.*auth0\/callback.*$/', url()->previous())) {
-        return redirect()->route('profile');
-    }
-
-    return view('welcome');
-})->name('home');
-
+Route::get('/', 'HomeController@index')->name('home');
 Route::get('/auth0/callback', '\Auth0\Login\Auth0Controller@callback')->name('auth0-callback');
 Route::get('/login', 'Auth\Auth0IndexController@login')->name('login');
 Route::get('/logout', 'Auth\Auth0IndexController@logout')->name('logout')->middleware('auth');
-Route::get('/profile', 'ProfileController@show')->name('profile');
+
+// ログインしないと使えない機能はすべて以下に記載するように
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('/profile', 'ProfileController@show')->name('profile');
+});
+
