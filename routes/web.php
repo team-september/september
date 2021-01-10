@@ -21,7 +21,7 @@ Route::get('/', function () {
     }
 
     return view('welcome');
-});
+})->name('home');
 
 Route::get('/auth0/callback', '\Auth0\Login\Auth0Controller@callback')->name('auth0-callback');
 Route::get('/login', 'Auth\Auth0IndexController@login')->name('login');
