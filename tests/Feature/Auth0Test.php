@@ -22,7 +22,7 @@ class Auth0Test extends TestCase
     {
         $response = $this->get('/');
         $response->assertStatus(200)
-            ->assertSee('Login');
+            ->assertSee('ログイン');
     }
 
     /**
@@ -32,7 +32,7 @@ class Auth0Test extends TestCase
     {
         $response = $this->get('/');
         $response->assertStatus(200)
-            ->assertDontSee('Logout');
+            ->assertDontSee('ログアウト');
     }
 
     /**
@@ -45,7 +45,7 @@ class Auth0Test extends TestCase
 
         $response = $this->get('/');
         $response->assertStatus(200)
-            ->assertSee('Logout');
+            ->assertSee('ログアウト');
     }
 
     /**
@@ -58,7 +58,7 @@ class Auth0Test extends TestCase
 
         $response = $this->get('/');
         $response->assertStatus(200)
-            ->assertDontSee('Login');
+            ->assertDontSee('ログイン');
     }
 
     /**
