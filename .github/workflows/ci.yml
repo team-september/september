@@ -29,6 +29,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Copy .env
         run: cp .env.ci .env
       - name: Install Dependencies
