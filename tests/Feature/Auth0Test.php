@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Auth0\Login\Auth0JWTUser;
@@ -16,7 +18,7 @@ class Auth0Test extends TestCase
     /**
      * @test
      */
-    public function a_guest_can_see_the_login_button()
+    public function a_guest_can_see_the_login_button(): void
     {
         $response = $this->get('/');
         $response->assertStatus(200)
@@ -26,7 +28,7 @@ class Auth0Test extends TestCase
     /**
      * @test
      */
-    public function a_guest_cannot_see_the_logout_button()
+    public function a_guest_cannot_see_the_logout_button(): void
     {
         $response = $this->get('/');
         $response->assertStatus(200)
@@ -36,7 +38,7 @@ class Auth0Test extends TestCase
     /**
      * @test
      */
-    public function an_auth_user_can_see_the_logout_button()
+    public function an_auth_user_can_see_the_logout_button(): void
     {
         $user = $this->createDummyAuthUser();
         $this->be($user);
@@ -49,7 +51,7 @@ class Auth0Test extends TestCase
     /**
      * @test
      */
-    public function an_auth_user_cannot_see_the_login_button()
+    public function an_auth_user_cannot_see_the_login_button(): void
     {
         $user = $this->createDummyAuthUser();
         $this->be($user);
@@ -59,10 +61,9 @@ class Auth0Test extends TestCase
             ->assertDontSee('Login');
     }
 
-
     /**
-     * ダミーのログインユーザーを作成して返却
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * ダミーのログインユーザーを作成して返却.
+     * @return null|\Illuminate\Contracts\Auth\Authenticatable
      */
     private function createDummyAuthUser()
     {
