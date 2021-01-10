@@ -7,9 +7,9 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link active" href="{{ route('home') }}">ホーム <span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link active" href="{{ route('profile') }}">プロフィール</a>
                 @if (Route::has('login'))
                     @auth
+                        <a class="nav-item nav-link active" href="{{ route('profile') }}">プロフィール</a>
                         <a class="nav-item nav-link" href="{{ route('logout') }}">ログアウト</a>
                     @else
                         <a class="nav-item nav-link" href="{{ route('login') }}">ログイン</a>
