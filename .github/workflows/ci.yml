@@ -46,15 +46,15 @@ jobs:
       - name: Execute Seed
         run: php artisan db:seed --force
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+        run: vendor/bin/phpunit --coverage-clover .tests/coverage.xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
+          file: .tests/coverage.xml
           flags: tests
           name: codecov-umbrella
-          fail_ci_if_error: true
+          fail_ci_if_error: false
 
   php-cs-fixer:
 
