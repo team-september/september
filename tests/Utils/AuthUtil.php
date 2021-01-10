@@ -17,8 +17,8 @@ class AuthUtil
     {
         $dummyAuth0User = [
             'sub' => 'auth0|xxxx|xxxxxxxx',
-            'nickname' => 'nickname',
-            'name' => 'user name',
+            'nickname' => 'Ryo',
+            'name' => 'Ryo',
             'picture' => 'https://example.com/picture.png',
             'updated_at' => '2020-11-29T08:10:37.855Z',
             'email' => 'test@example.com',
