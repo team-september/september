@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -7,7 +9,7 @@ use App\Http\Controllers\Controller;
 class Auth0IndexController extends Controller
 {
     /**
-     * Redirect to the Auth0 hosted login page
+     * Redirect to the Auth0 hosted login page.
      *
      * @return mixed
      */
@@ -22,7 +24,7 @@ class Auth0IndexController extends Controller
     }
 
     /**
-     * Log out of Auth0
+     * Log out of Auth0.
      *
      * @return mixed
      */

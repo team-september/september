@@ -73,7 +73,7 @@ return [
 //        ],
 
         'users' => [
-            'driver' => 'auth0'
+            'driver' => 'auth0',
         ],
     ],
 
