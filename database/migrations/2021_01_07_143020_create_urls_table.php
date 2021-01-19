@@ -15,7 +15,7 @@ class CreateUrlsTable extends Migration
     {
         Schema::create('urls', function (Blueprint $table): void {
             $table->id()->comment('URL ID');
-            $table->unsignedInteger('url_type')->comment('URL種別'); //1.twitter, 2,github, 3,website, 4.othersのような感じ
+            $table->unsignedInteger('url_type')->comment('URL種別'); //1.twitter, 2,github, 3,blog, 4.othersのような感じ
             $table->string('url')->comment('URL');
             $table->timestamps();
         });

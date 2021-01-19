@@ -28,10 +28,10 @@
                                         <path
                                             d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                                     </svg>
-                                    Website
+                                    blog
                                 </h6>
                                 <span class="text-secondary">
-                                    <input type="text" id="website">
+                                    <input type="text" id="blog">
                                 </span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
@@ -44,7 +44,9 @@
                                     </svg>
                                     Github
                                 </h6>
-                                <span class="text-secondary">未登録</span>
+                                <span class="text-secondary">
+                                    <input type="text" id="github">
+                                </span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -57,7 +59,9 @@
                                     </svg>
                                     Twitter
                                 </h6>
-                                <span class="text-secondary">未登録</span>
+                                <span class="text-secondary">
+                                    <input type="text" id="twitter">
+                                </span>
                             </li>
                         </ul>
                     </div>
@@ -70,7 +74,7 @@
                                     <h6 class="mb-0">名前</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ $old_user->name }}
+                                    <input type="text" id="name" value = {{ $old_user->name }}>
                                 </div>
                             </div>
                             <hr>
@@ -93,7 +97,7 @@
                                     <h6 class="mb-0">利用目的</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    WEBエンジニアとして転職するため。
+                                    <input type="text" id="goal" value={{ $old_profile->goal}}>
                                 </div>
                             </div>
                             <hr>
@@ -101,24 +105,31 @@
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">希望</h6>
                                 </div>
-                                <div class="col-sm-9 text-secondary">
-                                    チーム開発のみ
+                                <div class="col-sm-9 text-secondary row">
+                                    @foreach($purposes as $purpose)
+                                    <div class="col-sm-4 text-secondary">
+                                            <input class="form-check-input" type="checkbox" value= {{ $purpose->id}}>
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                {{ $purpose->purpose }}
+                                            </label>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
-                                <div class="col-sm-3">
+                                <div class="col-sm-3 ">
                                     <h6 class="mb-0">スキル</h6>
                                 </div>
-                                <div class="col-sm-9 text-secondary flex">
-                                    <span class="badge badge-warning">HTML5/CSS</span>
-                                    <span class="badge badge-info">Adobe CS 5.5</span>
-                                    <span class="badge badge-info">Microsoft Office</span>
-                                    <span class="badge badge-success">Windows XP, Vista, 7</span>
-                                    <span class="badge badge-warning">HTML5/CSS</span>
-                                    <span class="badge badge-info">Adobe CS 5.5</span>
-                                    <span class="badge badge-info">Microsoft Office</span>
-                                    <span class="badge badge-success">Windows XP, Vista, 7</span>
+                                <div class="col-sm-9 text-secondary row">
+                                    @foreach($skills as $skill)
+                                        <div class="col-sm-3 text-secondary">
+                                            <input class="form-check-input" type="checkbox" value= {{ $skill->id}}>
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                {{ $skill->skill_name }}
+                                            </label>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <hr>
@@ -127,7 +138,7 @@
                                     <h6 class="mb-0">その他URL</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    未登録
+                                    <input type="text" id="website">
                                 </div>
                             </div>
                             <hr>
@@ -145,7 +156,7 @@
                                     <h6 class="mb-0">ステータス</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    進行中（2021/09/01~）
+                                    {{ $old_profile->created_at }}
                                 </div>
                             </div>
                             <hr>

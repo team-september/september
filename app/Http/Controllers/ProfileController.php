@@ -7,6 +7,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\Career;
+use App\Models\Skill;
+use App\Models\Purpose;
+use App\Models\ProfileUrl;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,18 +46,22 @@ class ProfileController extends Controller
     {
         $old_profile  = Profile::find($id);
         $old_user = User::find($id);
+        
+        //todo:元々入力されていたurlを取る未完成
+        $url_id = $old_profile -> url_id;
+        $old_url = ProfileUrl::find($url_id);
+
         $careers = Career::all();
+        $skills =Skill::all();
+        $purposes = Purpose::all();
 
-        //profileが存在する場合
-        if($old_profile){
-            return view('profile.edit',compact('old_profile','old_user','careers'));
+        //profileが存在しない場合
+        if(!$old_profile){
+            $old_profile =new Profile;
+            $old_profile ->user_id = $id;
+            $old_profile->save();    
         }
-
-        //登録されていない場合
-        $old_profile =new Profile;
-        $old_profile ->user_id = $id;
-        $old_profile->save();
-        return view('profile.edit',compact('old_profile','old_user','careers'));
+        return view('profile.edit',compact('old_profile','old_user','careers','skills','purposes'));
     }
 
     public function update(Request $request,$id)
