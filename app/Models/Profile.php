@@ -11,9 +11,10 @@ class Profile extends Model
     protected $fillable=[
         'id',
         'user_id',
-        'career_id',
         'goal',
+        'career_id',
         'created_at',
         'updateed_at'
     ];
+    protected $primaryKey = 'user_id';
 }

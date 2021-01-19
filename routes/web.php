@@ -24,5 +24,6 @@ Route::get('/logout', 'Auth\Auth0IndexController@logout')->name('logout')->middl
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/profile', 'ProfileController@show')->name('profile');
     Route::get('/profile/edit/{id}','ProfileController@edit');
+    Route::put('/profile/update/{id}','ProfileController@update');    
 });
 

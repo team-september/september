@@ -77,7 +77,11 @@
                                     <h6 class="mb-0">エンジニア歴</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    1年未満
+                                    @foreach($careers as $career)
+                                        @if($profile->career_id === $career->id)
+                                            {{ $career->year}}
+                                        @endif
+                                    @endforeach
                                 </div>
                             </div>
                             <hr>
@@ -86,7 +90,7 @@
                                     <h6 class="mb-0">利用目的</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    WEBエンジニアとして転職するため。
+                                   {{ $profile->goal }}
                                 </div>
                             </div>
                             <hr>
