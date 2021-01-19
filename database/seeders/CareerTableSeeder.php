@@ -16,22 +16,33 @@ class CareerTableSeeder extends Seeder
         \DB::table('careers')->insert([
             [
                 'id' => 1,
-                'year' => '半年未満'],
+                'year' => '半年未満'
+            ],
+            
             [
                 'id' => 2,
-                'year' => '1年'],
+                'year' => '1年'
+            ],
+            
             [
                 'id' => 3,
-                'year' => '1年半'],
+                'year' => '1年半'
+            ],
+            
             [
                 'id' => 4,
-                'year' => '2年'],
+                'year' => '2年'
+            ],
+            
             [
                 'id' => 5,
-                'year' => '3年'],
+                'year' => '3年'
+            ],
+            
             [
                 'id' => 6,
-                'year' => 'それ以上']
+                'year' => 'それ以上'
+            ]
         ]);
      }
 }
