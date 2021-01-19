@@ -9,9 +9,9 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="{{ $user->picture }}" alt="Admin" class="rounded-circle" width="150">
+                                <img src="{{ $old_user->picture }}" alt="Admin" class="rounded-circle" width="150">
                                 <div class="mt-3">
-                                    <h4>{{ $user->name }}</h4>
+                                    <h4>{{ $old_user->name }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -30,7 +30,9 @@
                                     </svg>
                                     Website
                                 </h6>
-                                <span class="text-secondary">未登録</span>
+                                <span class="text-secondary">
+                                    <input type="text" id="website">
+                                </span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -68,7 +70,7 @@
                                     <h6 class="mb-0">名前</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ $user->name }}
+                                    {{ $old_user->name }}
                                 </div>
                             </div>
                             <hr>
@@ -77,7 +79,12 @@
                                     <h6 class="mb-0">エンジニア歴</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    1年未満
+                                    <select name="career">
+                                        @foreach($careers as $career)
+                                            <option value= {{ $career->id }}> {{ $career->year}} </option>
+                                        @endforeach
+                                        <option >
+                                    </select>
                                 </div>
                             </div>
                             <hr>
@@ -152,14 +159,14 @@
                             </div>
                         </div>
                     </div>
-                    <a href="/profile/edit/{{ $user->id }}"  class="btn btn-primary" > edit </a>
+                    <a href="/profile/edit/{{ $old_user->id }}"  class="btn btn-primary" > 更新 </a>
                 </div>
             </div>
         </div>
     </div>
     {{--    <div style="text-align:center">--}}
     {{--        <li>名前</li>--}}
-    {{--        <ul>{{ $user->name}}</ul>--}}
-    {{--        <img src={{ $user->picture }}>--}}
+    {{--        <ul>{{ $old_user->name}}</ul>--}}
+    {{--        <img src={{ $old_user->picture }}>--}}
     {{--    </div>--}}
 @endsection

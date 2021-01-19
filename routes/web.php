@@ -23,5 +23,6 @@ Route::get('/logout', 'Auth\Auth0IndexController@logout')->name('logout')->middl
 // ログインしないと使えない機能はすべて以下に記載するように
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/profile', 'ProfileController@show')->name('profile');
+    Route::get('/profile/edit/{id}','ProfileController@edit');
 });
 
