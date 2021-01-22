@@ -77,7 +77,7 @@
                                     <h6 class="mb-0">エンジニア歴</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    @isset($career->year)    
+                                    @isset($career->year)
                                         {{ $career->year}}
                                     @endisset
                                 </div>
@@ -88,7 +88,7 @@
                                     <h6 class="mb-0">利用目的</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                   {{ $profile->goal }}
+                                    {{ $profile->goal }}
                                 </div>
                             </div>
                             <hr>
@@ -99,7 +99,7 @@
                                 <div class="col-sm-9 text-secondary">
                                     @foreach($purposes as $purpose)
                                         <div class="col-sm-5 text-secondary">
-                                           <li> {{ $purpose }} </li>
+                                            <li> {{ $purpose }} </li>
                                         </div>
                                     @endforeach
                                 </div>
@@ -159,14 +159,9 @@
                             </div>
                         </div>
                     </div>
-                    <a href="/profile/edit/{{ $user->id }}"  class="btn btn-primary" > edit </a>
+                    <a href="/profile/edit/{{ $user->id }}" class="btn btn-primary"> edit </a>
                 </div>
             </div>
         </div>
     </div>
-    {{--    <div style="text-align:center">--}}
-    {{--        <li>名前</li>--}}
-    {{--        <ul>{{ $user->name}}</ul>--}}
-    {{--        <img src={{ $user->picture }}>--}}
-    {{--    </div>--}}
 @endsection
