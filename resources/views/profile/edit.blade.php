@@ -23,22 +23,6 @@
                                 <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                     <h6 class="mb-0">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                            fill="none" stroke="cur    rentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round" class="feather feather-globe mr-2 icon-inline">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <line x1="2" y1="12" x2="22" y2="12"></line>
-                                            <path
-                                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                                        </svg>
-                                        blog
-                                    </h6>
-                                    <span class="text-secondary">
-                                        <input type="text" name="blog">
-                                    </span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 class="mb-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round" class="feather feather-github mr-2 icon-inline">
                                             <path
@@ -47,7 +31,7 @@
                                         Github
                                     </h6>
                                     <span class="text-secondary">
-                                        <input type="text" name="github">
+                                        <input type="text" name="github" value = {{ $github }}>
                                     </span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
@@ -62,7 +46,23 @@
                                         Twitter
                                     </h6>
                                     <span class="text-secondary">
-                                        <input type="text" name="twitter">
+                                        <input type="text" name="twitter" value = {{ $twitter }}>
+                                    </span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <h6 class="mb-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="feather feather-monitor mr-2 icon-inline">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                                            <path
+                                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                        </svg>
+                                        website
+                                    </h6>
+                                    <span class="text-secondary">
+                                        <input type="text" name="website" value = {{ $website }}>
                                     </span>
                                 </li>
                             </ul>
@@ -87,9 +87,13 @@
                                     <div class="col-sm-9 text-secondary">
                                         <select name="career">
                                             @foreach($careers as $career)
-                                                <option name="career" value= {{ $career->id }}> {{ $career->year}} </option>
+                                                @if($old_careers->id === $career->id)
+                                                    <option name="career" value= {{ $career->id }} selected>
+                                                @else
+                                                    <option name="career" value= {{ $career->id }}>
+                                                @endif
+                                                    {{ $career->year}} </option>
                                             @endforeach
-                                            <option >
                                         </select>
                                     </div>
                                 </div>
@@ -105,16 +109,23 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <h6 class="mb-0">希望</h6>
+                                        <h6 class="mb-0">希望 </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary row">
                                         @foreach($purposes as $purpose)
-                                        <div class="col-sm-5 text-secondary">
-                                                <input class="form-check-input" name="purpose" type="checkbox" value= {{ $purpose->id}}>
+                                            <div class="col-sm-5 text-secondary">
+                                                @foreach($old_purposes as $old)
+                                                    @if($old === $purpose->id)
+                                                        <input class="form-check-input" name="purpose[]" type="checkbox" value= {{ $purpose->id}} checked>
+                                                    @break
+                                                    @else
+                                                        <input class="form-check-input" name="purpose[]" type="checkbox" value= {{ $purpose->id}} >
+                                                    @endif
+                                                @endforeach
                                                 <label class="form-check-label" for="flexCheckDefault">
                                                     {{ $purpose->purpose }}
                                                 </label>
-                                            </div>
+                                            </div> 
                                         @endforeach
                                     </div>
                                 </div>
@@ -126,7 +137,14 @@
                                     <div class="col-sm-9 text-secondary row">
                                         @foreach($skills as $skill)
                                             <div class="col-sm-4 text-secondary">
-                                                <input class="form-check-input" type="checkbox" value= {{ $skill->id}}>
+                                                @foreach($old_skills as $old)
+                                                    @if($old === $skill->id)
+                                                        <input class="form-check-input" name="skill[]" type="checkbox" value= {{ $skill->id}} checked>
+                                                    @break
+                                                    @else
+                                                        <input class="form-check-input" name="skill[]" type="checkbox" value= {{ $skill->id}}>
+                                                    @endif
+                                                @endforeach
                                                 <label class="form-check-label" for="flexCheckDefault">
                                                     {{ $skill->skill_name }}
                                                 </label>
@@ -140,7 +158,7 @@
                                         <h6 class="mb-0">その他URL</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" name="website">
+                                        <input type="text" name="other" value={{$other}}>
                                     </div>
                                 </div>
                                 <hr>

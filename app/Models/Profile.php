@@ -10,11 +10,25 @@ class Profile extends Model
     use HasFactory;
     protected $fillable=[
         'id',
-        'user_id',
-        'goal',
         'career_id',
         'created_at',
         'updateed_at'
     ];
-    protected $primaryKey = 'user_id';
+    //purposeの取得
+    public function purposes()
+    {
+        return $this->belongsToMany('App\Models\Purpose','profile_purposes');
+    }
+
+    //skillの取得
+    public function skills()
+    {
+        return $this->belongsToMany('App\Models\Skill','profile_skills');
+    }
+
+    //urlの取得
+    public function urls(){
+        return $this->belongsToMany('App\Models\Url','profile_urls');
+    }
+
 }

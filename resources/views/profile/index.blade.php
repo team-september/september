@@ -21,20 +21,6 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                         fill="none" stroke="cur    rentColor" stroke-width="2" stroke-linecap="round"
-                                         stroke-linejoin="round" class="feather feather-globe mr-2 icon-inline">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <line x1="2" y1="12" x2="22" y2="12"></line>
-                                        <path
-                                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                                    </svg>
-                                    Website
-                                </h6>
-                                <span class="text-secondary">未登録</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                          stroke-linejoin="round" class="feather feather-github mr-2 icon-inline">
                                         <path
@@ -42,7 +28,7 @@
                                     </svg>
                                     Github
                                 </h6>
-                                <span class="text-secondary">未登録</span>
+                                <span class="text-secondary">{{ $github }}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -55,7 +41,21 @@
                                     </svg>
                                     Twitter
                                 </h6>
-                                <span class="text-secondary">未登録</span>
+                                <span class="text-secondary">{{ $twitter }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round" class="feather feather-monitor mr-2 icon-inline">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        <path
+                                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                    </svg>
+                                    Website
+                                </h6>
+                                <span class="text-secondary">{{ $website }}</span>
                             </li>
                         </ul>
                     </div>
@@ -77,11 +77,9 @@
                                     <h6 class="mb-0">エンジニア歴</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    @foreach($careers as $career)
-                                        @if($profile->career_id === $career->id)
-                                            {{ $career->year}}
-                                        @endif
-                                    @endforeach
+                                    @isset($career->year)    
+                                        {{ $career->year}}
+                                    @endisset
                                 </div>
                             </div>
                             <hr>
@@ -99,7 +97,11 @@
                                     <h6 class="mb-0">希望</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    チーム開発のみ
+                                    @foreach($purposes as $purpose)
+                                        <div class="col-sm-5 text-secondary">
+                                           <li> {{ $purpose }} </li>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <hr>
@@ -108,14 +110,15 @@
                                     <h6 class="mb-0">スキル</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary flex">
-                                    <span class="badge badge-warning">HTML5/CSS</span>
-                                    <span class="badge badge-info">Adobe CS 5.5</span>
-                                    <span class="badge badge-info">Microsoft Office</span>
-                                    <span class="badge badge-success">Windows XP, Vista, 7</span>
-                                    <span class="badge badge-warning">HTML5/CSS</span>
-                                    <span class="badge badge-info">Adobe CS 5.5</span>
-                                    <span class="badge badge-info">Microsoft Office</span>
-                                    <span class="badge badge-success">Windows XP, Vista, 7</span>
+                                    @foreach($skills as $skill)
+                                        @if ($skill['skill_type']  === 1)
+                                            <span class="badge badge-warning">{{ $skill['skill_name'] }}</span>
+                                        @elseif($skill['skill_type']  === 2)
+                                            <span class="badge badge-success">{{ $skill['skill_name'] }}</span>
+                                        @elseif($skill['skill_type']  === 3)
+                                            <span class="badge badge-info">{{ $skill['skill_name'] }}</span>
+                                        @endif
+                                    @endforeach
                                 </div>
                             </div>
                             <hr>
@@ -124,7 +127,7 @@
                                     <h6 class="mb-0">その他URL</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    未登録
+                                    {{ $others }}
                                 </div>
                             </div>
                             <hr>
