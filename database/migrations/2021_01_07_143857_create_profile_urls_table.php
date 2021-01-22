@@ -26,9 +26,7 @@ class CreateProfileUrlsTable extends Migration
             $table->foreign('url_id')
                 ->references('id')
                 ->on('urls')
-                ->onDelete('cascade');
-            
-            $table->unique(['profile_id','url_id']);
+                ->onDelete('cascade');            
         });
     }
 
