@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PurposeTableSeeder extends Seeder
 {
@@ -13,16 +14,18 @@ class PurposeTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('purposes')->insert([
+        DB::table('purposes')->insert(
             [
-                'id' => 1,
-                'purpose' =>'1on1希望'
-            ],
+                [
+                    'id' => 1,
+                    'purpose' => '1on1希望'
+                ],
 
-            [
-                'id' =>2,
-                'purpose' =>'チーム開発希望'
+                [
+                    'id' => 2,
+                    'purpose' => 'チーム開発希望'
+                ]
             ]
-        ]);
+        );
     }
 }
