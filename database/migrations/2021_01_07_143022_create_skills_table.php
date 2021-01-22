@@ -16,6 +16,7 @@ class CreateSkillsTable extends Migration
         Schema::create('skills', function (Blueprint $table): void {
             $table->id()->comment('スキルID');
             $table->string('skill_name')->comment('スキル名');
+            $table->integer('skill_type')->comment('スキルのtype言語-1/OS-2/tools-3');
             $table->timestamps();
         });
     }
