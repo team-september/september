@@ -6,10 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MultipleProfileUpdateRequest;
 use App\Models\User;
-use App\Models\Profile;
 use App\Models\Career;
-use App\Models\Url;
-use App\Models\ProfileUrl;
 use App\Services\UrlService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -69,7 +66,6 @@ class ProfileController extends Controller
         $user = User::find($id);
         $profile = $user->profile;
         $urls = $profile->urls;
-//        dd($urls);
 
         DB::transaction(
             function () use ($request, $user, $profile, $urls) {
