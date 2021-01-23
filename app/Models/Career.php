@@ -9,8 +9,6 @@ class Career extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'id',
-        'year'
-    ];
+    protected $guarded = [];
+
 }
