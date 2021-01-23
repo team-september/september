@@ -3,7 +3,13 @@
 @section('content')
     <div class="container mt-5">
         <div class="main-body">
-
+            @if (session('success'))
+                <div class="alert alert-success text-center">
+                    <ul class="list-unstyled">
+                        <li>{{ session('success') }}</li>
+                    </ul>
+                </div>
+            @endif
             <div class="row gutters-sm">
                 <div class="col-md-4 mb-3">
                     <div class="card">
@@ -28,7 +34,7 @@
                                     </svg>
                                     Github
                                 </h6>
-                                <span class="text-secondary">{{ $github }}</span>
+                                <span class="text-secondary">{{ $urls['github']->url ?? '未登録' }}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -41,7 +47,7 @@
                                     </svg>
                                     Twitter
                                 </h6>
-                                <span class="text-secondary">{{ $twitter }}</span>
+                                <span class="text-secondary">{{ $urls['twitter']->url ?? '未登録' }}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -55,7 +61,7 @@
                                     </svg>
                                     Website
                                 </h6>
-                                <span class="text-secondary">{{ $website }}</span>
+                                <span class="text-secondary">{{ $urls['website']->url ?? '未登録' }}</span>
                             </li>
                         </ul>
                     </div>
@@ -77,9 +83,7 @@
                                     <h6 class="mb-0">エンジニア歴</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    @isset($career->year)
-                                        {{ $career->year}}
-                                    @endisset
+                                    {{ $career->year ?? '未登録' }}
                                 </div>
                             </div>
                             <hr>
@@ -88,7 +92,7 @@
                                     <h6 class="mb-0">利用目的</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ $profile->goal }}
+                                    {{ $profile->goal ?? '未登録' }}
                                 </div>
                             </div>
                             <hr>
@@ -97,11 +101,15 @@
                                     <h6 class="mb-0">希望</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    @foreach($purposes as $purpose)
-                                        <div class="col-sm-5 text-secondary">
-                                            <li> {{ $purpose }} </li>
-                                        </div>
-                                    @endforeach
+                                    @if($purposes->isEmpty())
+                                        未登録
+                                    @else
+                                        @foreach($purposes as $purpose)
+                                            <div class="col-sm-5 text-secondary">
+                                                <li> {{ $purpose }} </li>
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
                             <hr>
@@ -110,15 +118,19 @@
                                     <h6 class="mb-0">スキル</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary flex">
-                                    @foreach($skills as $skill)
-                                        @if ($skill['skill_type']  === 1)
-                                            <span class="badge badge-warning">{{ $skill['skill_name'] }}</span>
-                                        @elseif($skill['skill_type']  === 2)
-                                            <span class="badge badge-success">{{ $skill['skill_name'] }}</span>
-                                        @elseif($skill['skill_type']  === 3)
-                                            <span class="badge badge-info">{{ $skill['skill_name'] }}</span>
-                                        @endif
-                                    @endforeach
+                                    @if($skills->isEmpty())
+                                        未登録
+                                    @else
+                                        @foreach($skills as $skill)
+                                            @if ($skill['skill_type']  === 1)
+                                                <span class="badge badge-warning">{{ $skill['skill_name'] }}</span>
+                                            @elseif($skill['skill_type']  === 2)
+                                                <span class="badge badge-success">{{ $skill['skill_name'] }}</span>
+                                            @elseif($skill['skill_type']  === 3)
+                                                <span class="badge badge-info">{{ $skill['skill_name'] }}</span>
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
                             <hr>
@@ -127,7 +139,7 @@
                                     <h6 class="mb-0">その他URL</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ $others }}
+                                    {{ $urls['other']->url ?? '未登録' }}
                                 </div>
                             </div>
                             <hr>
@@ -159,7 +171,9 @@
                             </div>
                         </div>
                     </div>
-                    <a href="/profile/edit/{{ $user->id }}" class="btn btn-primary"> edit </a>
+                    <div class="row justify-content-center px-3">
+                        <a href="{{ route('profile.edit', $user->id) }}" class="btn btn-primary col-md-4"> 編集 </a>
+                    </div>
                 </div>
             </div>
         </div>

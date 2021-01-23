@@ -3,7 +3,16 @@
 @section('content')
     <div class="container mt-5">
         <div class="main-body">
-            <form action="{{ url('profile/update/'.$old_user->id) }}" method="POST">
+            @if ($errors->any())
+                <div class="alert alert-danger text-center">
+                    <ul class="list-unstyled">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <form action="{{ route('profile.update', $user->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="row gutters-sm">
@@ -11,9 +20,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex flex-column align-items-center text-center">
-                                    <img src="{{ $old_user->picture }}" alt="Admin" class="rounded-circle" width="150">
+                                    <img src="{{ $user->picture }}" alt="Admin" class="rounded-circle" width="150">
                                     <div class="mt-3">
-                                        <h4>{{ $old_user->name }}</h4>
+                                        <h4>{{ $user->name }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -32,7 +41,8 @@
                                         Github
                                     </h6>
                                     <span class="text-secondary">
-                                        <input type="text" name="github" value= {{ $github }}>
+                                        <input type="text" name="github" class="form-control"
+                                               value= {{ $urls['github']->url }}>
                                     </span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
@@ -48,7 +58,8 @@
                                         Twitter
                                     </h6>
                                     <span class="text-secondary">
-                                        <input type="text" name="twitter" value= {{ $twitter }}>
+                                        <input type="text" name="twitter" class="form-control"
+                                               value= {{ $urls['twitter']->url }}>
                                     </span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
@@ -62,10 +73,11 @@
                                             <path
                                                 d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                                         </svg>
-                                        website
+                                        Website
                                     </h6>
                                     <span class="text-secondary">
-                                        <input type="text" name="website" value= {{ $website }}>
+                                        <input type="text" name="website" class="form-control"
+                                               value= {{ $urls['website']->url }}>
                                     </span>
                                 </li>
                             </ul>
@@ -79,7 +91,7 @@
                                         <h6 class="mb-0">名前</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" name="name" value= {{ $old_user->name }}>
+                                        <input type="text" name="name" class="form-control" value= {{ $user->name }}>
                                     </div>
                                 </div>
                                 <hr>
@@ -87,18 +99,18 @@
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">エンジニア歴</h6>
                                     </div>
-                                    <div class="col-sm-9 text-secondary">
-                                        <select name="career">
-                                            @foreach($careers as $career)
-                                                @if($old_careers->id === $career->id)
-                                                    <option name="career" value={{ $career->id }} selected>
-                                                @else
-                                                    <option name="career" value= {{ $career->id }}>
-                                                        @endif
-                                                        {{ $career->year}} </option>
-                                                    @endforeach
-                                        </select>
-                                    </div>
+
+                                    <select name="career"
+                                            class="form-select form-select-lg col-sm-9 text-secondary">
+                                        @foreach($careers as $career)
+                                            @if($user_career && $career->id === $user_career->id)
+                                                <option name="career" value={{ $career->id }} selected>
+                                            @else
+                                                <option name="career" value= {{ $career->id }}>
+                                                    @endif
+                                                    {{ $career->year}} </option>
+                                                @endforeach
+                                    </select>
                                 </div>
                                 <hr>
                                 <div class="row">
@@ -106,7 +118,7 @@
                                         <h6 class="mb-0">利用目的</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" name="goal" value={{ $old_profile->goal}}>
+                                        <input type="text" name="goal" class="form-control" value={{ $profile->goal}}>
                                     </div>
                                 </div>
                                 <hr>
@@ -117,7 +129,7 @@
                                     <div class="col-sm-9 text-secondary row">
                                         @foreach($purposes as $purpose)
                                             <div class="col-sm-5 text-secondary">
-                                                @foreach($old_purposes as $old)
+                                                @foreach($purposes as $old)
                                                     @if($old === $purpose->id)
                                                         <input class="form-check-input" name="purpose[]" type="checkbox"
                                                                value={{ $purpose->id}} checked>
@@ -142,7 +154,7 @@
                                     <div class="col-sm-9 text-secondary row">
                                         @foreach($skills as $skill)
                                             <div class="col-sm-4 text-secondary">
-                                                @foreach($old_skills as $old)
+                                                @foreach($skills as $old)
                                                     @if($old === $skill->id)
                                                         <input class="form-check-input" name="skill[]" type="checkbox"
                                                                value={{ $skill->id}} checked>
@@ -165,7 +177,8 @@
                                         <h6 class="mb-0">その他URL</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" name="other" value={{$other}}>
+                                        <input type="text" name="other" class="form-control"
+                                               value={{$urls['other']->url}}>
                                     </div>
                                 </div>
                                 <hr>
@@ -174,7 +187,7 @@
                                         <h6 class="mb-0">ユーザー種別</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        メンティー
+                                        {{ $user->is_mentor ? 'メンター' : 'メンティー' }}
                                     </div>
                                 </div>
                                 <hr>
@@ -183,7 +196,8 @@
                                         <h6 class="mb-0">ステータス</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        {{ $old_profile->created_at }}
+                                        {{-- @TODO: メンター募集システムできたらmentorshipsテーブルを参照するように--}}
+                                        {{ $user->created_at }}
                                     </div>
                                 </div>
                                 <hr>
@@ -197,7 +211,9 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" name="submit" class="btn btn-primary"> 更新</button>
+                        <div class="row justify-content-center px-3">
+                            <button type="submit" name="submit" class="btn btn-primary col-md-4"> 更新</button>
+                        </div>
                     </div>
                 </div>
             </form>
