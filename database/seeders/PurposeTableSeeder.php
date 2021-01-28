@@ -18,12 +18,12 @@ class PurposeTableSeeder extends Seeder
             [
                 [
                     'id' => 1,
-                    'purpose' => '1on1希望'
+                    'purpose_name' => '1on1希望'
                 ],
 
                 [
                     'id' => 2,
-                    'purpose' => 'チーム開発希望'
+                    'purpose_name' => 'チーム開発希望'
                 ]
             ]
         );

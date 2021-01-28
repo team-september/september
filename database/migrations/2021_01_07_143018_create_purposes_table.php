@@ -15,7 +15,7 @@ class CreatePurposesTable extends Migration
     {
         Schema::create('purposes', function (Blueprint $table): void {
             $table->id()->comment('目的ID');
-            $table->string('purpose')->comment('目的');
+            $table->string('purpose_name')->comment('目的');
             $table->timestamps();
         });
     }
