@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MultipleProfileUpdateRequest;
 use App\Models\User;
 use App\Models\Career;
+use App\Models\Purpose;
+use App\Models\Skill;
 use App\Services\UrlService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -52,12 +54,14 @@ class ProfileController extends Controller
         $urls = (new UrlService($profile))->findUrls();
         $user_career = $profile->career;
         $careers = Career::all();
-        $purposes = $profile->purposes;
-        $skills = $profile->skills;
+        $user_purpose = $profile->purposes;
+        $purposes = Purpose::all();
+        $user_skill = $profile->skills;
+        $skills = Skill::all();
 
         return view(
             'profile.edit',
-            compact('user', 'profile', 'urls', 'user_career', 'careers', 'purposes', 'skills')
+            compact('user', 'profile', 'urls', 'user_career', 'careers', 'user_purpose', 'purposes', 'user_skill', 'skills')
         );
     }
 
@@ -79,5 +83,4 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.index')->with('success', '更新しました');
     }
-
 }
