@@ -106,7 +106,7 @@
                                     @else
                                         @foreach($purposes as $purpose)
                                             <div class="col-sm-5 text-secondary">
-                                                <li> {{ $purpose }} </li>
+                                                <li> {{ $purpose->purpose_name}} </li>
                                             </div>
                                         @endforeach
                                     @endif

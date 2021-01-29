@@ -130,17 +130,18 @@
                                         @foreach($purposes as $purpose)
                                             <div class="col-sm-5 text-secondary">
                                                 @foreach($purposes as $old)
-                                                    @if($old === $purpose->id)
+                                                    @if($old->id === $purpose->id)
                                                         <input class="form-check-input" name="purpose[]" type="checkbox"
                                                                value={{ $purpose->id}} checked>
                                                         @break
                                                     @else
                                                         <input class="form-check-input" name="purpose[]" type="checkbox"
                                                                value= {{ $purpose->id}} >
+                                                        @break
                                                     @endif
                                                 @endforeach
                                                 <label class="form-check-label" for="flexCheckDefault">
-                                                    {{ $purpose->purpose }}
+                                                    {{ $purpose->purpose_name }}
                                                 </label>
                                             </div>
                                         @endforeach
@@ -154,8 +155,8 @@
                                     <div class="col-sm-9 text-secondary row">
                                         @foreach($skills as $skill)
                                             <div class="col-sm-4 text-secondary">
-                                                @foreach($skills as $old)
-                                                    @if($old === $skill->id)
+                                                @foreach($user_skill as $old)
+                                                    @if($old->id === $skill->id)
                                                         <input class="form-check-input" name="skill[]" type="checkbox"
                                                                value={{ $skill->id}} checked>
                                                         @break
