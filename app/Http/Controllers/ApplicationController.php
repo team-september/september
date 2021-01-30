@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ApplicationCreateRequest;
@@ -7,19 +9,20 @@ use App\Repositories\Application\IApplicationRepository;
 use App\Repositories\ReadApplication\IReadApplicationRepository;
 use App\Repositories\User\IUserRepository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class ApplicationController extends Controller
 {
     protected $applicationRepository;
+
     protected $readApplicationRepository;
+
     protected $userRepository;
 
     /**
      * ApplicationController constructor.
-     * @param IApplicationRepository $applicationRepository
+     * @param IApplicationRepository     $applicationRepository
      * @param IReadApplicationRepository $readApplicationRepository
-     * @param IUserRepository $userRepository
+     * @param IUserRepository            $userRepository
      */
     public function __construct(
         IApplicationRepository $applicationRepository,
@@ -58,5 +61,4 @@ class ApplicationController extends Controller
 
         return redirect()->route('profile.index')->with(['success' => "申請しました！\nメンターの承認をお待ちください。"]);
     }
-
 }

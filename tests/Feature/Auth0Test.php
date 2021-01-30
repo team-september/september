@@ -59,5 +59,4 @@ class Auth0Test extends TestCase
         $response->assertStatus(200)
             ->assertDontSee('ログイン');
     }
-
 }

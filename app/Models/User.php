@@ -38,11 +38,10 @@ class User extends Authenticatable
     {
         return $this->fill(
             [
-                'name' => $request->name
+                'name' => $request->name,
             ]
         )->save();
     }
-
 
     public static function findBySub($sub)
     {

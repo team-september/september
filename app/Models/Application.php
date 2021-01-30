@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,5 +27,4 @@ class Application extends Model
     {
         return $this->hasMany('App\Models\ReadApplication', 'user_id', 'mentor_id');
     }
-
 }

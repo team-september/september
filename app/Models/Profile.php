@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -42,7 +43,7 @@ class Profile extends Model
         );
     }
 
-    public function modify($request)
+    public function modify($request): void
     {
         $this->fill(
             [
@@ -62,5 +63,4 @@ class Profile extends Model
             ]
         );
     }
-
 }

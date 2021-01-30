@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Repositories\Application;
 
@@ -7,7 +8,6 @@ use App\Models\Application;
 
 class ApplicationEQRepository implements IApplicationRepository
 {
-
     public function create($mentee_id, $mentor_id)
     {
         return Application::create(
@@ -38,5 +38,4 @@ class ApplicationEQRepository implements IApplicationRepository
     {
         return Application::doesntHave('read_applications')->count();
     }
-
 }

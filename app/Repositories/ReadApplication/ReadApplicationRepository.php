@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Repositories\ReadApplication;
 
@@ -11,6 +12,7 @@ class ReadApplicationRepository implements IReadApplicationRepository
     public function create($applications)
     {
         $data = [];
+
         foreach ($applications as $application) {
             if ($application->read_applications->isNotEmpty()) {
                 continue;

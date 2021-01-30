@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Tests\Feature;
-
 
 use Tests\TestCase;
 use Tests\Utils\AuthUtil;
@@ -31,7 +31,7 @@ class ProfileTest extends TestCase
     {
         $response = $this->get('/profile');
         $response->assertStatus(302)
-           ->assertRedirect('/login');
+            ->assertRedirect('/login');
     }
 
     /**
@@ -60,6 +60,4 @@ class ProfileTest extends TestCase
             ->assertSee('Ryo')
             ->assertSee('https://example.com/picture.png');
     }
-
-
 }

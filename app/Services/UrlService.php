@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Services;
-
 
 use App\Models\Profile;
 
@@ -23,6 +23,7 @@ class UrlService
     {
         $urls = [];
         $url_types = config('url.types');
+
         foreach ($this->profile->urls as $index => $url) {
             $urls[$url_types[$index]] = $url;
         }

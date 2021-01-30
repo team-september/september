@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Repositories\User;
 
@@ -21,5 +22,4 @@ class UserEQRepository implements IUserRepository
     {
         return User::where('is_mentor', 1)->get();
     }
-
 }

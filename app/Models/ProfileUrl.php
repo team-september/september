@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,7 +18,7 @@ class ProfileUrl extends Model
         return $this->fill()->save();
     }
 
-    public static function make($profile_id, $url_id)
+    public static function make($profile_id, $url_id): void
     {
         self::create(
             [

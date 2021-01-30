@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Validation Language Lines
@@ -128,5 +129,4 @@ return [
         'other' => 'その他URL',
         'mentor_id' => 'メンターの選択',
     ],
-
 ];

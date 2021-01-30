@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MultipleProfileUpdateRequest;
-use App\Models\User;
 use App\Models\Career;
 use App\Models\Purpose;
 use App\Models\Skill;
+use App\Models\User;
 use App\Repositories\Application\IApplicationRepository;
 use App\Repositories\User\IUserRepository;
 use App\Services\UrlService;
@@ -18,11 +18,12 @@ use Illuminate\Support\Facades\DB;
 class ProfileController extends Controller
 {
     protected $userRepository;
+
     protected $applicationRepository;
 
     /**
      * ApplicationController constructor.
-     * @param IUserRepository $userRepository
+     * @param IUserRepository        $userRepository
      * @param IApplicationRepository $applicationRepository
      */
     public function __construct(IUserRepository $userRepository, IApplicationRepository $applicationRepository)
@@ -115,9 +116,10 @@ class ProfileController extends Controller
         $urls = $profile->urls;
 
         DB::transaction(
-            function () use ($request, $user, $profile, $urls) {
+            function () use ($request, $user, $profile, $urls): void {
                 $user->modify($request);
                 $profile->modify($request);
+
                 foreach ($urls as $index => $url) {
                     $url->modify($request, $index);
                 }

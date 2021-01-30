@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Repositories\User;
-
 
 interface IUserRepository
 {
@@ -11,5 +11,4 @@ interface IUserRepository
     public function getUserById($id);
 
     public function getMentors();
-
 }

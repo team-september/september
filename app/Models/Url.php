@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +13,7 @@ class Url extends Model
 
     protected $guarded = [];
 
-    public function modify($request, $index)
+    public function modify($request, $index): void
     {
         $url_types = config('url.types');
         $url_types[$index];
