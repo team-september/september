@@ -134,23 +134,31 @@
                                         <h6 class="mb-0">希望 </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        @foreach($purposes as $purpose)                                            
+                                        @foreach ($purposes as $purpose)                                            
                                             <div class="col-sm-5 text-secondary">
-                                                @if($user_purposes->isEmpty())
-                                                    <input class="form-check-input" name="purpose[]" type="checkbox"
-                                                                value= {{ $purpose->id}} >
-                                                @else
+                                            <input class="form-check-input" name="purpose[]" type="checkbox"
+                                                value= {{ $purpose->id}} 
+
+                                                    @if($user_purposes->isEmpty())
+                                                        id="purpose_{{ $purpose->id }}">
+                                                    @endif
+
                                                     @foreach($user_purposes as $old)
                                                         @if($old->id === $purpose->id)
-                                                            <input class="form-check-input" name="purpose[]" type="checkbox"
-                                                                value={{ $purpose->id}} checked>
+
+                                                            id="purpose_{{ $purpose->id }}" checked="checked">
+                                                            @break
+
+                                                        @endif
+
+                                                        @if($loop->last)
+
+                                                            id="purpose_{{ $purpose->id }}">
                                                             @break
                                                         @endif
-                                                        <input class="form-check-input" name="purpose[]" type="checkbox"
-                                                                value={{ $purpose->id}}>
                                                     @endforeach
-                                                @endif
-                                                <label class="form-check-label" for="flexCheckDefault">
+
+                                                <label class="form-check-label" for="purpose_{{ $purpose->id }}">
                                                     {{ $purpose->purpose_name }}
                                                 </label>
                                             </div>
