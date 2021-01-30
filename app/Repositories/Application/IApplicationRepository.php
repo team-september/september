@@ -12,5 +12,6 @@ interface IApplicationRepository
 
     public function getOngoingApplication($user_id);
 
+    public function countUnreadApplications();
 
 }

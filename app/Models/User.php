@@ -24,6 +24,16 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Profile');
     }
 
+    public function mentorApplications()
+    {
+        return $this->hasMany('App\Models\Application', 'mentor_id', 'id');
+    }
+
+    public function menteeApplications()
+    {
+        return $this->hasMany('App\Models\Application', 'mentee_id', 'id');
+    }
+
     public function modify($request)
     {
         return $this->fill(

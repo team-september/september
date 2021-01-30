@@ -27,6 +27,7 @@ Route::group(
         Route::get('/profile', 'ProfileController@index')->name('profile.index');
         Route::get('/profile/edit/{id}', 'ProfileController@edit')->name('profile.edit');
         Route::put('/profile/update/{id}', 'ProfileController@update')->name('profile.update');
+        Route::get('/application', 'ApplicationController@index')->name('application.index');
         Route::post('/application', 'ApplicationController@store')->name('application.store');
     }
 );

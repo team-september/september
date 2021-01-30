@@ -20,4 +20,10 @@ class Application extends Model
     {
         return $this->belongsTo('App\Models\User', 'mentee_id');
     }
+
+    public function read_applications()
+    {
+        return $this->hasMany('App\Models\ReadApplication', 'user_id', 'mentor_id');
+    }
+
 }

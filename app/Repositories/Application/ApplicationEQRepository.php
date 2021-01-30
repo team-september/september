@@ -4,7 +4,6 @@
 namespace App\Repositories\Application;
 
 use App\Models\Application;
-use Illuminate\Support\Facades\App;
 
 class ApplicationEQRepository implements IApplicationRepository
 {
@@ -33,6 +32,11 @@ class ApplicationEQRepository implements IApplicationRepository
             ->whereNotIn('status', [config('application.status.rejected')])
             ->orderBy('id', 'desc')
             ->first();
+    }
+
+    public function countUnreadApplications()
+    {
+        return Application::doesntHave('read_applications')->count();
     }
 
 }
