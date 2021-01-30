@@ -40,10 +40,12 @@
                                         </svg>
                                         Github
                                     </h6>
-                                    <span class="text-secondary">
-                                        <input type="text" name="github" class="form-control"
-                                               value= {{ $urls['github']->url }}>
-                                    </span>
+                                    <div class="row">
+                                        <span class="text-secondary">
+                                            <input type="text" name="github" class="form-control"
+                                                value= {{ $urls['github']->url }}>
+                                        </span>
+                                    </div>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                     <h6 class="mb-0">
@@ -57,10 +59,12 @@
                                         </svg>
                                         Twitter
                                     </h6>
-                                    <span class="text-secondary">
-                                        <input type="text" name="twitter" class="form-control"
-                                               value= {{ $urls['twitter']->url }}>
-                                    </span>
+                                    <div class="row">
+                                        <span class="text-secondary">
+                                            <input type="text" name="twitter" class="form-control"
+                                                value= {{ $urls['twitter']->url }}>
+                                        </span>
+                                    </div>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                     <h6 class="mb-0">
@@ -75,10 +79,12 @@
                                         </svg>
                                         Website
                                     </h6>
-                                    <span class="text-secondary">
-                                        <input type="text" name="website" class="form-control"
-                                               value= {{ $urls['website']->url }}>
-                                    </span>
+                                    <div class="row">
+                                        <span class="text-secondary">
+                                            <input type="text" name="website" class="form-control"
+                                                value= {{ $urls['website']->url }}>
+                                        </span>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -99,18 +105,19 @@
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">エンジニア歴</h6>
                                     </div>
-
-                                    <select name="career"
-                                            class="form-select form-select-lg col-sm-9 text-secondary">
-                                        @foreach($careers as $career)
-                                            @if($user_career && $career->id === $user_career->id)
-                                                <option name="career" value={{ $career->id }} selected>
-                                            @else
-                                                <option name="career" value= {{ $career->id }}>
-                                                    @endif
-                                                    {{ $career->year}} </option>
-                                                @endforeach
-                                    </select>
+                                    <div class="col-sm-9 text-secondary">
+                                        <select name="career"
+                                                class="form-select form-select-lg col-sm-9 text-secondary">
+                                            @foreach($careers as $career)
+                                                @if($user_career && $career->id === $user_career->id)
+                                                    <option name="career" value={{ $career->id }} selected>
+                                                @else
+                                                    <option name="career" value= {{ $career->id }}>
+                                                        @endif
+                                                        {{ $career->year}} </option>
+                                                    @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                                 <hr>
                                 <div class="row">
@@ -126,7 +133,7 @@
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">希望 </h6>
                                     </div>
-                                    <div class="col-sm-9 text-secondary row">
+                                    <div class="col-sm-9 text-secondary">
                                         @foreach($purposes as $purpose)                                            
                                             <div class="col-sm-5 text-secondary">
                                                 @if($user_purposes->isEmpty())
@@ -155,7 +162,7 @@
                                     <div class="col-sm-3 ">
                                         <h6 class="mb-0">スキル </h6>
                                     </div>
-                                    <div class="col-sm-9 text-secondary row">
+                                    <div class="col-sm-9 text-secondary">
                                         @foreach($skills as $skill)
                                             <div class="col-sm-5 text-secondary">
                                                 @if($user_skills->isEmpty())
