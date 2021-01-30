@@ -54,14 +54,13 @@ class ProfileController extends Controller
         $urls = (new UrlService($profile))->findUrls();
         $user_career = $profile->career;
         $careers = Career::all();
-        $user_purpose = $profile->purposes;
+        $user_purposes = $profile->purposes;
         $purposes = Purpose::all();
-        $user_skill = $profile->skills;
+        $user_skills = $profile->skills;
         $skills = Skill::all();
-
         return view(
             'profile.edit',
-            compact('user', 'profile', 'urls', 'user_career', 'careers', 'user_purpose', 'purposes', 'user_skill', 'skills')
+            compact('user', 'profile', 'urls', 'user_career', 'careers', 'user_purposes', 'purposes', 'user_skills', 'skills')
         );
     }
 
