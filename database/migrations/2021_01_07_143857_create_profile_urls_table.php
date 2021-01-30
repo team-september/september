@@ -14,7 +14,7 @@ class CreateProfileUrlsTable extends Migration
     public function up(): void
     {
         Schema::create('profile_urls', function (Blueprint $table): void {
-            $table->id()->comment('ユーザーURL');
+            $table->id()->comment('ユーザーURL_ID');
             $table->unsignedBigInteger('profile_id')->comment('プロフィールID');
             $table->unsignedBigInteger('url_id')->comment('URL ID');
             $table->timestamps();
@@ -26,7 +26,7 @@ class CreateProfileUrlsTable extends Migration
             $table->foreign('url_id')
                 ->references('id')
                 ->on('urls')
-                ->onDelete('cascade');
+                ->onDelete('cascade');            
         });
     }
 

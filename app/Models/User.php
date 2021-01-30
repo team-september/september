@@ -17,28 +17,38 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = [];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function profile()
+    {
+        return $this->hasOne('App\Models\Profile');
+    }
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function modify($request)
+    {
+        return $this->fill(
+            [
+                'name' => $request->name
+            ]
+        )->save();
+    }
+
+
+    public static function findBySub($sub)
+    {
+        return self::where('sub', $sub)->first();
+    }
+
+    public static function make($user_info)
+    {
+        return self::create(
+            [
+                'sub' => $user_info['sub'],
+                'is_mentor' => 0,
+                'nickname' => $user_info['nickname'],
+                'name' => $user_info['name'],
+                'picture' => $user_info['picture'],
+            ]
+        );
+    }
 }

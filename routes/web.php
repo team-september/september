@@ -21,7 +21,12 @@ Route::get('/login', 'Auth\Auth0IndexController@login')->name('login');
 Route::get('/logout', 'Auth\Auth0IndexController@logout')->name('logout')->middleware('auth');
 
 // ログインしないと使えない機能はすべて以下に記載するように
-Route::group(['middleware' => ['auth']], function() {
-    Route::get('/profile', 'ProfileController@show')->name('profile');
-});
+Route::group(
+    ['middleware' => ['auth']],
+    function () {
+        Route::get('/profile', 'ProfileController@index')->name('profile.index');
+        Route::get('/profile/edit/{id}', 'ProfileController@edit')->name('profile.edit');
+        Route::put('/profile/update/{id}', 'ProfileController@update')->name('profile.update');
+    }
+);
 
