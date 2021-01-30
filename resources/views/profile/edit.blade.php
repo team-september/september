@@ -173,21 +173,28 @@
                                     <div class="col-sm-9 text-secondary">
                                         @foreach($skills as $skill)
                                             <div class="col-sm-5 text-secondary">
+                                            <input class="form-check-input" name="skill[]" type="checkbox"
+                                                value= {{ $skill->id }} 
+
                                                 @if($user_skills->isEmpty())
-                                                    <input class="form-check-input" name="skill[]" type="checkbox"
-                                                            value={{ $skill->id}}>
-                                                @else
-                                                    @foreach($user_skills as $old)
-                                                        @if($old->id === $skill->id)
-                                                            <input class="form-check-input" name="skill[]" type="checkbox"
-                                                                value={{ $skill->id}} checked>
-                                                            @break
-                                                        @endif
-                                                            <input class="form-check-input" name="skill[]" type="checkbox"
-                                                                value= {{ $skill->id}}>
-                                                    @endforeach
+                                                    id="skill_{{ $skill->id }}">
                                                 @endif
-                                                <label class="form-check-label" for="flexCheckDefault">
+                                                
+                                                @foreach($user_skills as $old)
+                                                    @if($old->id === $skill->id)
+                                                    
+                                                        id="skill_{{ $skill->id }}" checked="checked">
+                                                        @break
+
+                                                    @endif
+
+                                                    @if($loop->last)
+                                                        id="skill_{{ $skill->id }}">
+                                                        @break
+                                                    @endif
+                                                @endforeach
+
+                                                <label class="form-check-label" for="skill_{{ $skill->id }}">
                                                     {{ $skill->skill_name }}
                                                 </label>
                                             </div>
