@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\UserRepositoryServiceProvider::class,
         App\Providers\ApplicationRepositoryServiceProvider::class,
+        App\Providers\ReadApplicationRepositoryServiceProvider::class,
 
         Auth0\Login\LoginServiceProvider::class,
     ],
