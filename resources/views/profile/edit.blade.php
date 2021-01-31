@@ -105,9 +105,10 @@
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">エンジニア歴</h6>
                                     </div>
-                                    <div class="col-sm-9 text-secondary">
+                                    <div class="form-group col-sm-9">
+
                                         <select name="career"
-                                                class="form-select form-select-lg col-sm-9 text-secondary">
+                                                class="form-control text-secondary">
                                             @foreach($careers as $career)
                                                 @if($user_career && $career->id === $user_career->id)
                                                     <option name="career" value={{ $career->id }} selected>
@@ -134,10 +135,10 @@
                                         <h6 class="mb-0">希望 </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        @foreach ($purposes as $purpose)                                            
+                                        @foreach ($purposes as $purpose)
                                             <div class="col-sm-5 text-secondary">
                                             <input class="form-check-input" name="purpose[]" type="checkbox"
-                                                value= {{ $purpose->id}} 
+                                                value= {{ $purpose->id}}
 
                                                     @if($user_purposes->isEmpty())
                                                         id="purpose_{{ $purpose->id }}">
@@ -174,15 +175,15 @@
                                         @foreach($skills as $skill)
                                             <div class="col-sm-5 text-secondary">
                                             <input class="form-check-input" name="skill[]" type="checkbox"
-                                                value= {{ $skill->id }} 
+                                                value= {{ $skill->id }}
 
                                                 @if($user_skills->isEmpty())
                                                     id="skill_{{ $skill->id }}">
                                                 @endif
-                                                
+
                                                 @foreach($user_skills as $old)
                                                     @if($old->id === $skill->id)
-                                                    
+
                                                         id="skill_{{ $skill->id }}" checked="checked">
                                                         @break
 
