@@ -140,11 +140,11 @@
                                             <input class="form-check-input" name="purpose[]" type="checkbox"
                                                 value= {{ $purpose->id}}
 
-                                                    @if($user_purposes->isEmpty())
+                                                    @if($user_purpose->isEmpty())
                                                         id="purpose_{{ $purpose->id }}">
                                                     @endif
 
-                                                    @foreach($user_purposes as $old)
+                                                    @foreach($user_purpose as $old)
                                                         @if($old->id === $purpose->id)
 
                                                             id="purpose_{{ $purpose->id }}" checked="checked">
@@ -177,11 +177,11 @@
                                             <input class="form-check-input" name="skill[]" type="checkbox"
                                                 value= {{ $skill->id }}
 
-                                                @if($user_skills->isEmpty())
+                                                @if($user_skill->isEmpty())
                                                     id="skill_{{ $skill->id }}">
                                                 @endif
 
-                                                @foreach($user_skills as $old)
+                                                @foreach($user_skill as $old)
                                                     @if($old->id === $skill->id)
 
                                                         id="skill_{{ $skill->id }}" checked="checked">

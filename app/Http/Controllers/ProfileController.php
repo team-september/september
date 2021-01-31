@@ -82,9 +82,9 @@ class ProfileController extends Controller
         $urls = (new UrlService($profile))->findUrls();
         $user_career = $profile->career;
         $careers = Career::all();
-        $user_purposes = $profile->purposes;
+        $user_purpose = $profile->purposes;
         $purposes = Purpose::all();
-        $user_skills = $profile->skills;
+        $user_skill = $profile->skills;
         $skills = Skill::all();
 
         $application = $this->applicationRepository->getLatestApplication($user->id);
