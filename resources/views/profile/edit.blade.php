@@ -105,9 +105,10 @@
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">エンジニア歴</h6>
                                     </div>
-                                    <div class="col-sm-9 text-secondary">
+                                    <div class="form-group col-sm-9">
+
                                         <select name="career"
-                                                class="form-select form-select-lg col-sm-9 text-secondary">
+                                                class="form-control text-secondary">
                                             @foreach($careers as $career)
                                                 @if($user_career && $career->id === $user_career->id)
                                                     <option name="career" value={{ $career->id }} selected>
@@ -134,16 +135,16 @@
                                         <h6 class="mb-0">希望 </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        @foreach ($purposes as $purpose)                                            
+                                        @foreach ($purposes as $purpose)
                                             <div class="col-sm-5 text-secondary">
                                             <input class="form-check-input" name="purpose[]" type="checkbox"
-                                                value= {{ $purpose->id}} 
+                                                value= {{ $purpose->id}}
 
-                                                    @if($user_purposes->isEmpty())
+                                                    @if($user_purpose->isEmpty())
                                                         id="purpose_{{ $purpose->id }}">
                                                     @endif
 
-                                                    @foreach($user_purposes as $old)
+                                                    @foreach($user_purpose as $old)
                                                         @if($old->id === $purpose->id)
 
                                                             id="purpose_{{ $purpose->id }}" checked="checked">
@@ -174,15 +175,15 @@
                                         @foreach($skills as $skill)
                                             <div class="col-sm-5 text-secondary">
                                             <input class="form-check-input" name="skill[]" type="checkbox"
-                                                value= {{ $skill->id }} 
+                                                value= {{ $skill->id }}
 
-                                                @if($user_skills->isEmpty())
+                                                @if($user_skill->isEmpty())
                                                     id="skill_{{ $skill->id }}">
                                                 @endif
-                                                
-                                                @foreach($user_skills as $old)
+
+                                                @foreach($user_skill as $old)
                                                     @if($old->id === $skill->id)
-                                                    
+
                                                         id="skill_{{ $skill->id }}" checked="checked">
                                                         @break
 
@@ -226,8 +227,17 @@
                                         <h6 class="mb-0">ステータス</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        {{-- @TODO: メンター募集システムできたらmentorshipsテーブルを参照するように--}}
-                                        {{ $user->created_at }}
+                                        @if($application)
+                                            @if($application->status === config('application.status.applied'))
+                                                申請中（{{ $application->created_at->format("Y/m/d") }}に申請）
+                                            @elseif($application->status === config('application.status.approved'))
+                                                {{ "$application->approved_at より開始" }}
+                                            @else
+                                                未申請
+                                            @endif
+                                        @else
+                                            未申請
+                                        @endif
                                     </div>
                                 </div>
                                 <hr>
@@ -236,7 +246,11 @@
                                         <h6 class="mb-0">メンター</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Yuta Nakano
+                                        @if($mentor_applied)
+                                            {{ $mentor_applied->name }}
+                                        @else
+                                            未申請
+                                        @endif
                                     </div>
                                 </div>
                             </div>

@@ -126,6 +126,7 @@ return [
         'github' => 'GitHub URL',
         'website' => 'Website URL',
         'other' => 'その他URL',
+        'mentor_id' => 'メンターの選択',
     ],
 
 ];
