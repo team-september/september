@@ -9,17 +9,32 @@ use App\Models\User;
 use App\Models\Career;
 use App\Models\Purpose;
 use App\Models\Skill;
+use App\Repositories\Application\IApplicationRepository;
+use App\Repositories\User\IUserRepository;
 use App\Services\UrlService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
+    protected $userRepository;
+    protected $applicationRepository;
+
+    /**
+     * ApplicationController constructor.
+     * @param IUserRepository $userRepository
+     * @param IApplicationRepository $applicationRepository
+     */
+    public function __construct(IUserRepository $userRepository, IApplicationRepository $applicationRepository)
+    {
+        $this->userRepository = $userRepository;
+        $this->applicationRepository = $applicationRepository;
+    }
 
     public function index()
     {
         $auth0User = Auth::user();
-        $user = User::findBySub($auth0User->sub);
+        $user = $this->userRepository->getUserBySub($auth0User->sub);
 
         //データがない場合ユーザー関連情報を作成
         if (empty($user)) {
@@ -40,16 +55,29 @@ class ProfileController extends Controller
         $career = $profile->career;
         $purposes = $profile->purposes;
         $skills = $profile->skills;
+        $mentors = $this->userRepository->getMentors();
+        $application = $this->applicationRepository->getLatestApplication($user->id);
+        $mentor_applied = $application ? $application->mentor : null;
 
         return view(
             'profile.index',
-            compact('user', 'profile', 'urls', 'career', 'purposes', 'skills')
+            compact(
+                'user',
+                'profile',
+                'urls',
+                'career',
+                'purposes',
+                'skills',
+                'mentors',
+                'application',
+                'mentor_applied'
+            )
         );
     }
 
     public function edit($id)
     {
-        $user = User::find($id);
+        $user = $this->userRepository->getUserById($id);
         $profile = $user->profile;
         $urls = (new UrlService($profile))->findUrls();
         $user_career = $profile->career;
@@ -58,15 +86,31 @@ class ProfileController extends Controller
         $purposes = Purpose::all();
         $user_skills = $profile->skills;
         $skills = Skill::all();
+
+        $application = $this->applicationRepository->getLatestApplication($user->id);
+        $mentor_applied = $application ? $application->mentor : null;
+
         return view(
             'profile.edit',
-            compact('user', 'profile', 'urls', 'user_career', 'careers', 'user_purposes', 'purposes', 'user_skills', 'skills')
+            compact(
+                'user',
+                'profile',
+                'urls',
+                'user_career',
+                'careers',
+                'user_purpose',
+                'purposes',
+                'user_skill',
+                'skills',
+                'application',
+                'mentor_applied'
+            )
         );
     }
 
     public function update(MultipleProfileUpdateRequest $request, $id)
     {
-        $user = User::find($id);
+        $user = $this->userRepository->getUserById($id);
         $profile = $user->profile;
         $urls = $profile->urls;
 

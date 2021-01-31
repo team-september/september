@@ -10,6 +10,23 @@
                     </ul>
                 </div>
             @endif
+            @if (session('alert'))
+                <div class="alert alert-danger text-center">
+                    <ul class="list-unstyled">
+                        <li>{{ session('alert') }}</li>
+                    </ul>
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger text-center">
+                    <ul class="list-unstyled">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            @include('includes.application_modal')
             <div class="row gutters-sm">
                 <div class="col-md-4 mb-3">
                     <div class="card">
@@ -22,7 +39,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card mt-3">
+                    <div class="row justify-content-center px-3 my-3">
+                        <button type="button" class="btn btn-primary col-md-10" data-toggle="modal"
+                                data-target="#applicationModal"
+                                @if($application && $application->status !== config('application.status.rejected'))
+                                disabled
+                            @endif
+                        >
+                            メンティー申請
+                        </button>
+                    </div>
+                    <div class="card">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -157,7 +184,17 @@
                                     <h6 class="mb-0">ステータス</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    進行中（2021/09/01~）
+                                    @if($application)
+                                        @if($application->status === config('application.status.applied'))
+                                            申請中（{{ $application->created_at->format("Y/m/d") }}に申請）
+                                        @elseif($application->status === config('application.status.approved'))
+                                            {{ "$application->approved_at より開始" }}
+                                        @else
+                                            未申請
+                                        @endif
+                                    @else
+                                        未申請
+                                    @endif
                                 </div>
                             </div>
                             <hr>
@@ -166,7 +203,11 @@
                                     <h6 class="mb-0">メンター</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    Yuta Nakano
+                                    @if($mentor_applied)
+                                        {{ $mentor_applied->name }}
+                                    @else
+                                        未申請
+                                    @endif
                                 </div>
                             </div>
                         </div>

@@ -227,8 +227,17 @@
                                         <h6 class="mb-0">ステータス</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        {{-- @TODO: メンター募集システムできたらmentorshipsテーブルを参照するように--}}
-                                        {{ $user->created_at }}
+                                        @if($application)
+                                            @if($application->status === config('application.status.applied'))
+                                                申請中（{{ $application->created_at->format("Y/m/d") }}に申請）
+                                            @elseif($application->status === config('application.status.approved'))
+                                                {{ "$application->approved_at より開始" }}
+                                            @else
+                                                未申請
+                                            @endif
+                                        @else
+                                            未申請
+                                        @endif
                                     </div>
                                 </div>
                                 <hr>
@@ -237,7 +246,11 @@
                                         <h6 class="mb-0">メンター</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Yuta Nakano
+                                        @if($mentor_applied)
+                                            {{ $mentor_applied->name }}
+                                        @else
+                                            未申請
+                                        @endif
                                     </div>
                                 </div>
                             </div>
