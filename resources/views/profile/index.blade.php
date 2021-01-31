@@ -26,9 +26,13 @@
                     </ul>
                 </div>
             @endif
+
             @include('includes.application_modal')
+
             <div class="row gutters-sm">
+
                 <div class="col-md-4 mb-3">
+
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
@@ -39,17 +43,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row justify-content-center px-3 my-3">
-                        <button type="button" class="btn btn-primary col-md-10" data-toggle="modal"
-                                data-target="#applicationModal"
-                                @if($application && $application->status !== config('application.status.rejected'))
-                                disabled
-                            @endif
-                        >
-                            メンティー申請
-                        </button>
-                    </div>
+                    @if(!$user->is_mentor)
+                        <div class="row justify-content-center px-3 my-3">
+                            <button type="button" class="btn btn-primary col-md-10" data-toggle="modal"
+                                    data-target="#applicationModal"
+                                    @if($application && $application->status !== config('application.status.rejected'))
+                                    disabled
+                                @endif
+                            >
+                                メンティー申請
+                            </button>
+                        </div>
+                    @endif
+
                     <div class="card">
+
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -92,10 +100,13 @@
                             </li>
                         </ul>
                     </div>
+
                 </div>
+
                 <div class="col-md-8">
                     <div class="card mb-3">
                         <div class="card-body">
+
                             <div class="row">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">名前</h6>
@@ -104,7 +115,9 @@
                                     {{ $user->name }}
                                 </div>
                             </div>
+
                             <hr>
+
                             <div class="row">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">エンジニア歴</h6>
@@ -113,7 +126,9 @@
                                     {{ $career->year ?? '未登録' }}
                                 </div>
                             </div>
+
                             <hr>
+
                             <div class="row">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">利用目的</h6>
@@ -122,24 +137,28 @@
                                     {{ $profile->goal ?? '未登録' }}
                                 </div>
                             </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">希望</h6>
+                            @if(!$user->is_mentor)
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">希望</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        @if($purposes->isEmpty())
+                                            未登録
+                                        @else
+                                            @foreach($purposes as $purpose)
+                                                <div class="col-sm-5 text-secondary">
+                                                    <li> {{ $purpose->purpose_name}} </li>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @if($purposes->isEmpty())
-                                        未登録
-                                    @else
-                                        @foreach($purposes as $purpose)
-                                            <div class="col-sm-5 text-secondary">
-                                                <li> {{ $purpose->purpose_name}} </li>
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                </div>
-                            </div>
+                            @endif
+
                             <hr>
+
                             <div class="row">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">スキル</h6>
@@ -160,7 +179,9 @@
                                     @endif
                                 </div>
                             </div>
+
                             <hr>
+
                             <div class="row">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">その他URL</h6>
@@ -169,47 +190,52 @@
                                     {{ $urls['other']->url ?? '未登録' }}
                                 </div>
                             </div>
+
                             <hr>
+
                             <div class="row">
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">ユーザー種別</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    メンティー
+                                    {{ $user->is_mentor ? "メンター" : "メンティー" }}
                                 </div>
                             </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">ステータス</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @if($application)
-                                        @if($application->status === config('application.status.applied'))
-                                            申請中（{{ $application->created_at->format("Y/m/d") }}に申請）
-                                        @elseif($application->status === config('application.status.approved'))
-                                            {{ "$application->approved_at より開始" }}
+                            @if(!$user->is_mentor)
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">ステータス</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        @if($application)
+                                            @if($application->status === config('application.status.applied'))
+                                                申請中（{{ $application->created_at->format("Y/m/d") }}に申請）
+                                            @elseif($application->status === config('application.status.approved'))
+                                                {{ "$application->approved_at より開始" }}
+                                            @else
+                                                未申請
+                                            @endif
                                         @else
                                             未申請
                                         @endif
-                                    @else
-                                        未申請
-                                    @endif
+                                    </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">メンター</h6>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">メンター</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        @if($mentor_applied)
+                                            {{ $mentor_applied->name }}
+                                        @else
+                                            未申請
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @if($mentor_applied)
-                                        {{ $mentor_applied->name }}
-                                    @else
-                                        未申請
-                                    @endif
-                                </div>
-                            </div>
+                            @endif
+
                         </div>
                     </div>
                     <div class="row justify-content-center px-3">

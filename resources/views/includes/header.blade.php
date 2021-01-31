@@ -11,7 +11,15 @@
                         class="sr-only">(current)</span></a>
                 @if (Route::has('login'))
                     @auth
-                        <a class="nav-item nav-link active" href="{{ route('profile.index') }}">プロフィール</a>
+                        <a class="nav-item nav-link" href="{{ route('application.index') }}">
+                            応募一覧
+                            @if( (new \App\Repositories\User\UserEQRepository())->getUserBySub(\Illuminate\Support\Facades\Auth::id())->is_mentor && $unread_count = (new \App\Repositories\Application\ApplicationEQRepository())->countUnreadApplications())
+                                <span class="badge badge-notify rounded-circle bg-primary text-white">
+                                    {{ $unread_count }}
+                                </span>
+                            @endif
+                        </a>
+                        <a class="nav-item nav-link" href="{{ route('profile.index') }}">プロフィール</a>
                         <a class="nav-item nav-link" href="{{ route('logout') }}">ログアウト</a>
                     @else
                         <a class="nav-item nav-link" href="{{ route('login') }}">ログイン</a>

@@ -129,43 +129,36 @@
                                         <input type="text" name="goal" class="form-control" value={{ $profile->goal}}>
                                     </div>
                                 </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <h6 class="mb-0">希望 </h6>
-                                    </div>
-                                    <div class="col-sm-9 text-secondary">
-                                        @foreach ($purposes as $purpose)
-                                            <div class="col-sm-5 text-secondary">
-                                            <input class="form-check-input" name="purpose[]" type="checkbox"
-                                                value= {{ $purpose->id}}
-
-                                                    @if($user_purpose->isEmpty())
-                                                        id="purpose_{{ $purpose->id }}">
-                                                    @endif
-
-                                                    @foreach($user_purpose as $old)
+                                @if(!$user->is_mentor)
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">希望 </h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary row">
+                                            @foreach($purposes as $purpose)
+                                                <div class="col-sm-5 text-secondary">
+                                                    @foreach($purposes as $old)
                                                         @if($old->id === $purpose->id)
-
-                                                            id="purpose_{{ $purpose->id }}" checked="checked">
+                                                            <input class="form-check-input" name="purpose[]"
+                                                                   type="checkbox"
+                                                                   value={{ $purpose->id}} checked>
                                                             @break
-
-                                                        @endif
-
-                                                        @if($loop->last)
-
-                                                            id="purpose_{{ $purpose->id }}">
+                                                        @else
+                                                            <input class="form-check-input" name="purpose[]"
+                                                                   type="checkbox"
+                                                                   value= {{ $purpose->id}} >
                                                             @break
                                                         @endif
                                                     @endforeach
-
-                                                <label class="form-check-label" for="purpose_{{ $purpose->id }}">
-                                                    {{ $purpose->purpose_name }}
-                                                </label>
-                                            </div>
-                                        @endforeach
+                                                    <label class="form-check-label" for="flexCheckDefault">
+                                                        {{ $purpose->purpose_name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-3 ">
@@ -212,47 +205,49 @@
                                                value={{$urls['other']->url}}>
                                     </div>
                                 </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <h6 class="mb-0">ユーザー種別</h6>
+                                @if(!$user->is_mentor)
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">ユーザー種別</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            {{ $user->is_mentor ? 'メンター' : 'メンティー' }}
+                                        </div>
                                     </div>
-                                    <div class="col-sm-9 text-secondary">
-                                        {{ $user->is_mentor ? 'メンター' : 'メンティー' }}
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <h6 class="mb-0">ステータス</h6>
-                                    </div>
-                                    <div class="col-sm-9 text-secondary">
-                                        @if($application)
-                                            @if($application->status === config('application.status.applied'))
-                                                申請中（{{ $application->created_at->format("Y/m/d") }}に申請）
-                                            @elseif($application->status === config('application.status.approved'))
-                                                {{ "$application->approved_at より開始" }}
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">ステータス</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            @if($application)
+                                                @if($application->status === config('application.status.applied'))
+                                                    申請中（{{ $application->created_at->format("Y/m/d") }}に申請）
+                                                @elseif($application->status === config('application.status.approved'))
+                                                    {{ "$application->approved_at より開始" }}
+                                                @else
+                                                    未申請
+                                                @endif
                                             @else
                                                 未申請
                                             @endif
-                                        @else
-                                            未申請
-                                        @endif
+                                        </div>
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <h6 class="mb-0">メンター</h6>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">メンター</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            @if($mentor_applied)
+                                                {{ $mentor_applied->name }}
+                                            @else
+                                                未申請
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div class="col-sm-9 text-secondary">
-                                        @if($mentor_applied)
-                                            {{ $mentor_applied->name }}
-                                        @else
-                                            未申請
-                                        @endif
-                                    </div>
-                                </div>
+                                @endif
                             </div>
                         </div>
                         <div class="row justify-content-center px-3">
