@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Tests\Utils\AuthUtil;
 
 class Auth0Test extends TestCase
 {
+    use RefreshDatabase;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -17,7 +20,7 @@ class Auth0Test extends TestCase
     /**
      * @test
      */
-    public function a_guest_can_see_the_login_button(): void
+    public function ゲストはログインボタンが見える(): void
     {
         $response = $this->get('/');
         $response->assertStatus(200)
@@ -27,7 +30,7 @@ class Auth0Test extends TestCase
     /**
      * @test
      */
-    public function a_guest_cannot_see_the_logout_button(): void
+    public function ゲストはログアウトボタンが見えない(): void
     {
         $response = $this->get('/');
         $response->assertStatus(200)
@@ -37,7 +40,7 @@ class Auth0Test extends TestCase
     /**
      * @test
      */
-    public function an_auth_user_can_see_the_logout_button(): void
+    public function 認証ユーザーはログアウトボタンが見える(): void
     {
         $user = AuthUtil::createDummyAuthUser();
         $this->be($user);
@@ -50,7 +53,7 @@ class Auth0Test extends TestCase
     /**
      * @test
      */
-    public function an_auth_user_cannot_see_the_login_button(): void
+    public function 認証ユーザーはログインボタンが見えない(): void
     {
         $user = AuthUtil::createDummyAuthUser();
         $this->be($user);
