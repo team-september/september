@@ -43,7 +43,7 @@
                                     <div class="row">
                                         <span class="text-secondary">
                                             <input type="text" name="github" class="form-control"
-                                                value= {{ $urls['github']->url }}>
+                                                   value= {{ $urls['github']->url }}>
                                         </span>
                                     </div>
                                 </li>
@@ -62,7 +62,7 @@
                                     <div class="row">
                                         <span class="text-secondary">
                                             <input type="text" name="twitter" class="form-control"
-                                                value= {{ $urls['twitter']->url }}>
+                                                   value= {{ $urls['twitter']->url }}>
                                         </span>
                                     </div>
                                 </li>
@@ -82,7 +82,7 @@
                                     <div class="row">
                                         <span class="text-secondary">
                                             <input type="text" name="website" class="form-control"
-                                                value= {{ $urls['website']->url }}>
+                                                   value= {{ $urls['website']->url }}>
                                         </span>
                                     </div>
                                 </li>
@@ -133,7 +133,7 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <h6 class="mb-0">希望 </h6>
+                                            <h6 class="mb-0">希望</h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary row">
                                             @foreach($purposes as $purpose)
@@ -142,16 +142,20 @@
                                                         @if($old->id === $purpose->id)
                                                             <input class="form-check-input" name="purpose[]"
                                                                    type="checkbox"
-                                                                   value={{ $purpose->id}} checked>
+                                                                   value="{{ $purpose->id}}"
+                                                                   id="{{ $purpose->id }}"
+                                                                   checked>
                                                             @break
                                                         @else
                                                             <input class="form-check-input" name="purpose[]"
                                                                    type="checkbox"
-                                                                   value= {{ $purpose->id}} >
+                                                                   value="{{ $purpose->id}}"
+                                                                   id="{{ $purpose->id }}"
+                                                            >
                                                             @break
                                                         @endif
                                                     @endforeach
-                                                    <label class="form-check-label" for="flexCheckDefault">
+                                                    <label class="form-check-label" for="{{ $purpose->id }}">
                                                         {{ $purpose->purpose_name }}
                                                     </label>
                                                 </div>
@@ -167,11 +171,11 @@
                                     <div class="col-sm-9 text-secondary">
                                         @foreach($skills as $skill)
                                             <div class="col-sm-5 text-secondary">
-                                            <input class="form-check-input" name="skill[]" type="checkbox"
-                                                value= {{ $skill->id }}
+                                                <input class="form-check-input" name="skill[]" type="checkbox"
+                                                       value={{ $skill->id }}
 
-                                                @if($user_skill->isEmpty())
-                                                    id="skill_{{ $skill->id }}">
+                                                       @if($user_skill->isEmpty())
+                                                           id="skill_{{ $skill->id }}">
                                                 @endif
 
                                                 @foreach($user_skill as $old)
