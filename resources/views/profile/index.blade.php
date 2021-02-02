@@ -148,9 +148,9 @@
                                             未登録
                                         @else
                                             @foreach($purposes as $purpose)
-                                                <div class="col-sm-5 text-secondary">
+                                                <ul class="text-secondary list-unstyled">
                                                     <li> {{ $purpose->purpose_name}} </li>
-                                                </div>
+                                                </ul>
                                             @endforeach
                                         @endif
                                     </div>
