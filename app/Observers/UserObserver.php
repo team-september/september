@@ -8,9 +8,34 @@ use App\Models\Profile;
 use App\Models\ProfileUrl;
 use App\Models\Url;
 use App\Models\User;
+use App\Repositories\Profile\IProfileRepository;
+use App\Repositories\ProfileUrl\IProfileUrlRepository;
+use App\Repositories\Url\IUrlRepository;
+use Illuminate\Support\Facades\DB;
 
 class UserObserver
 {
+    protected $urlRepository;
+    protected $profileRepository;
+    protected $profileUrlRepository;
+
+    /**
+     * UserObserver constructor.
+     * @param $urlRepository
+     * @param $profileRepository
+     * @param $profileUrlRepository
+     */
+    public function __construct(
+        IUrlRepository $urlRepository,
+        IProfileRepository $profileRepository,
+        IProfileUrlRepository $profileUrlRepository
+    ) {
+        $this->urlRepository = $urlRepository;
+        $this->profileRepository = $profileRepository;
+        $this->profileUrlRepository = $profileUrlRepository;
+    }
+
+
     /**
      * Handle the User "created" event.
      *
@@ -18,13 +43,14 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        $profile = Profile::make($user->id);
-
-        // GitHub, Twitter, Web, その他の4つのURL格納用レコードを最初に作成
-        for ($url_id = 1; $url_id < 5; $url_id++) {
-            Url::make($url_id);
-            ProfileUrl::make($profile->id, $url_id);
-        }
+        DB::transaction(function () use ($user) {
+            $profile = $this->profileRepository->create($user->id);
+            // GitHub, Twitter, Web, その他の4つのURL格納用レコードを最初に作成
+            for ($urlId = 1; $urlId < 5; $urlId++) {
+                $this->urlRepository->create($urlId);
+                $this->profileUrlRepository->create($profile->id, $urlId);
+            }
+        });
     }
 
     /**

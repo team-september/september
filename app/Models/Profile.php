@@ -43,24 +43,4 @@ class Profile extends Model
         );
     }
 
-    public function modify($request): void
-    {
-        $this->fill(
-            [
-                'goal' => $request->goal,
-                'career_id' => $request->career,
-            ]
-        )->save();
-        $this->purposes()->sync($request->get('purpose', []));
-        $this->skills()->sync($request->get('skill', []));
-    }
-
-    public static function make($user_id)
-    {
-        return self::create(
-            [
-                'user_id' => $user_id,
-            ]
-        );
-    }
 }

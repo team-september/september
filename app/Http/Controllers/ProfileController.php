@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MultipleProfileUpdateRequest;
-use App\Models\Career;
-use App\Models\Purpose;
-use App\Models\Skill;
-use App\Models\User;
 use App\Repositories\Application\IApplicationRepository;
+use App\Repositories\Career\ICareerRepository;
+use App\Repositories\Profile\IProfileRepository;
+use App\Repositories\Purpose\IPurposeRepository;
+use App\Repositories\Skill\ISkillRepository;
+use App\Repositories\Url\IUrlRepository;
 use App\Repositories\User\IUserRepository;
 use App\Services\UrlService;
 use Illuminate\Support\Facades\Auth;
@@ -18,18 +19,43 @@ use Illuminate\Support\Facades\DB;
 class ProfileController extends Controller
 {
     protected $userRepository;
-
     protected $applicationRepository;
+    protected $careerRepository;
+    protected $purposeRepository;
+    protected $skillRepository;
+    protected $profileRepository;
+    protected $urlRepository;
+    protected $urlService;
 
     /**
      * ApplicationController constructor.
-     * @param IUserRepository        $userRepository
+     * @param IUserRepository $userRepository
      * @param IApplicationRepository $applicationRepository
+     * @param ICareerRepository $careerRepository
+     * @param IPurposeRepository $purposeRepository
+     * @param ISkillRepository $skillRepository
+     * @param IProfileRepository $profileRepository
+     * @param IUrlRepository $urlRepository
+     * @param UrlService $urlService
      */
-    public function __construct(IUserRepository $userRepository, IApplicationRepository $applicationRepository)
-    {
+    public function __construct(
+        IUserRepository $userRepository,
+        IApplicationRepository $applicationRepository,
+        ICareerRepository $careerRepository,
+        IPurposeRepository $purposeRepository,
+        ISkillRepository $skillRepository,
+        IProfileRepository $profileRepository,
+        IUrlRepository $urlRepository,
+        UrlService $urlService
+    ) {
         $this->userRepository = $userRepository;
         $this->applicationRepository = $applicationRepository;
+        $this->careerRepository = $careerRepository;
+        $this->purposeRepository = $purposeRepository;
+        $this->skillRepository = $skillRepository;
+        $this->profileRepository = $profileRepository;
+        $this->urlRepository = $urlRepository;
+        $this->urlService = $urlService;
     }
 
     public function index()
@@ -39,20 +65,20 @@ class ProfileController extends Controller
 
         //データがない場合ユーザー関連情報を作成
         if (empty($user)) {
-            $user_info = [
+            $userInfo = [
                 'sub' => $auth0User->sub,
                 'nickname' => $auth0User->nickname,
                 'name' => $auth0User->name,
                 'picture' => $auth0User->picture,
             ];
 
-            $user = User::make($user_info);
+            $user = $this->userRepository->create($userInfo);
             // UserObserverにて関連レコードを作成
         }
 
         //入力されていた値の取得
         $profile = $user->profile;
-        $urls = (new UrlService($profile))->findUrls();
+        $urls = $this->urlService->findUrls($profile, config('url.types'));
         $career = $profile->career;
         $purposes = $profile->purposes;
         $skills = $profile->skills;
@@ -80,13 +106,13 @@ class ProfileController extends Controller
     {
         $user = $this->userRepository->getUserById($id);
         $profile = $user->profile;
-        $urls = (new UrlService($profile))->findUrls();
+        $urls = $this->urlService->findUrls($profile, config('url.types'));
         $user_career = $profile->career;
-        $careers = Career::all();
+        $careers = $this->careerRepository->getAll();
         $user_purpose = $profile->purposes;
-        $purposes = Purpose::all();
+        $purposes = $this->purposeRepository->getAll();
         $user_skill = $profile->skills;
-        $skills = Skill::all();
+        $skills = $this->skillRepository->getAll();
 
         $application = $this->applicationRepository->getLatestApplication($user->id);
         $mentor_applied = $application ? $application->mentor : null;
@@ -117,11 +143,10 @@ class ProfileController extends Controller
 
         DB::transaction(
             function () use ($request, $user, $profile, $urls): void {
-                $user->modify($request);
-                $profile->modify($request);
-
+                $this->userRepository->update($user, $request);
+                $this->profileRepository->update($profile, $request);
                 foreach ($urls as $index => $url) {
-                    $url->modify($request, $index);
+                    $this->urlRepository->update($url, $request, config('url.types'), $index);
                 }
             }
         );

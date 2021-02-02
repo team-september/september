@@ -34,30 +34,4 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Application', 'mentee_id', 'id');
     }
 
-    public function modify($request)
-    {
-        return $this->fill(
-            [
-                'name' => $request->name,
-            ]
-        )->save();
-    }
-
-    public static function findBySub($sub)
-    {
-        return self::where('sub', $sub)->first();
-    }
-
-    public static function make($user_info)
-    {
-        return self::create(
-            [
-                'sub' => $user_info['sub'],
-                'is_mentor' => 0,
-                'nickname' => $user_info['nickname'],
-                'name' => $user_info['name'],
-                'picture' => $user_info['picture'],
-            ]
-        );
-    }
 }

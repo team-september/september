@@ -13,18 +13,4 @@ class ProfileUrl extends Model
 
     protected $guarded = [];
 
-    public function modify()
-    {
-        return $this->fill()->save();
-    }
-
-    public static function make($profile_id, $url_id): void
-    {
-        self::create(
-            [
-                'profile_id' => $profile_id,
-                'url_id' => $url_id,
-            ]
-        );
-    }
 }
