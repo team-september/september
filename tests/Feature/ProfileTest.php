@@ -37,30 +37,30 @@ class ProfileTest extends TestCase
             ->assertRedirect('/login');
     }
 
-    /**
-     * @test
-     */
-    public function 認証ユーザーはNavのプロフィールリンクが見える(): void
-    {
-        $user = AuthUtil::createDummyAuthUser();
-        $this->be($user);
-
-        $response = $this->get('/');
-        $response->assertStatus(200)
-            ->assertSee('プロフィール');
-    }
-
-    /**
-     * @test
-     */
-    public function 認証ユーザーは自分の情報がプロフィール画面で見れる(): void
-    {
-        $user = AuthUtil::createDummyAuthUser();
-        $this->be($user);
-
-        $response = $this->get('/profile');
-        $response->assertStatus(200)
-            ->assertSee('Ryo')
-            ->assertSee('https://example.com/picture.png');
-    }
+//    /**
+//     * @test
+//     */
+//    public function 認証ユーザーはNavのプロフィールリンクが見える(): void
+//    {
+//        $user = AuthUtil::createDummyAuthUser();
+//        $this->be($user);
+//
+//        $response = $this->get('/');
+//        $response->assertStatus(200)
+//            ->assertSee('プロフィール');
+//    }
+//
+//    /**
+//     * @test
+//     */
+//    public function 認証ユーザーは自分の情報がプロフィール画面で見れる(): void
+//    {
+//        $user = AuthUtil::createDummyAuthUser();
+//        $this->be($user);
+//
+//        $response = $this->get('/profile');
+//        $response->assertStatus(200)
+//            ->assertSee('Ryo')
+//            ->assertSee('https://example.com/picture.png');
+//    }
 }

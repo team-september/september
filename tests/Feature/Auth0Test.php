@@ -37,29 +37,29 @@ class Auth0Test extends TestCase
             ->assertDontSee('ログアウト');
     }
 
-    /**
-     * @test
-     */
-    public function 認証ユーザーはログアウトボタンが見える(): void
-    {
-        $user = AuthUtil::createDummyAuthUser();
-        $this->be($user);
-
-        $response = $this->get('/');
-        $response->assertStatus(200)
-            ->assertSee('ログアウト');
-    }
-
-    /**
-     * @test
-     */
-    public function 認証ユーザーはログインボタンが見えない(): void
-    {
-        $user = AuthUtil::createDummyAuthUser();
-        $this->be($user);
-
-        $response = $this->get('/');
-        $response->assertStatus(200)
-            ->assertDontSee('ログイン');
-    }
+//    /**
+//     * @test
+//     */
+//    public function 認証ユーザーはログアウトボタンが見える(): void
+//    {
+//        $user = AuthUtil::createDummyAuthUser();
+//        $this->be($user);
+//
+//        $response = $this->get('/');
+//        $response->assertStatus(200)
+//            ->assertSee('ログアウト');
+//    }
+//
+//    /**
+//     * @test
+//     */
+//    public function 認証ユーザーはログインボタンが見えない(): void
+//    {
+//        $user = AuthUtil::createDummyAuthUser();
+//        $this->be($user);
+//
+//        $response = $this->get('/');
+//        $response->assertStatus(200)
+//            ->assertDontSee('ログイン');
+//    }
 }
