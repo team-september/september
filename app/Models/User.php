@@ -24,31 +24,14 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Profile');
     }
 
-    public function modify($request)
+    public function mentorApplications()
     {
-        return $this->fill(
-            [
-                'name' => $request->name
-            ]
-        )->save();
+        return $this->hasMany('App\Models\Application', 'mentor_id', 'id');
     }
 
-
-    public static function findBySub($sub)
+    public function menteeApplications()
     {
-        return self::where('sub', $sub)->first();
+        return $this->hasMany('App\Models\Application', 'mentee_id', 'id');
     }
 
-    public static function make($user_info)
-    {
-        return self::create(
-            [
-                'sub' => $user_info['sub'],
-                'is_mentor' => 0,
-                'nickname' => $user_info['nickname'],
-                'name' => $user_info['name'],
-                'picture' => $user_info['picture'],
-            ]
-        );
-    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,18 +13,4 @@ class ProfileUrl extends Model
 
     protected $guarded = [];
 
-    public function modify()
-    {
-        return $this->fill()->save();
-    }
-
-    public static function make($profile_id, $url_id)
-    {
-        self::create(
-            [
-                'profile_id' => $profile_id,
-                'url_id' => $url_id,
-            ]
-        );
-    }
 }

@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -39,27 +40,6 @@ class Profile extends Model
     {
         return $this->belongsToMany('App\Models\Url', 'profile_urls')->withPivot('url_id')->orderBy(
             'profile_urls.url_id'
-        );
-    }
-
-    public function modify($request)
-    {
-        $this->fill(
-            [
-                'goal' => $request->goal,
-                'career_id' => $request->career,
-            ]
-        )->save();
-        $this->purposes()->sync($request->get('purpose', []));
-        $this->skills()->sync($request->get('skill', []));
-    }
-
-    public static function make($user_id)
-    {
-        return self::create(
-            [
-                'user_id' => $user_id,
-            ]
         );
     }
 

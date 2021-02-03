@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -9,22 +11,20 @@ class PurposeTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         DB::table('purposes')->insert(
             [
                 [
                     'id' => 1,
-                    'purpose_name' => '1on1希望'
+                    'purpose_name' => '1on1希望',
                 ],
 
                 [
                     'id' => 2,
-                    'purpose_name' => 'チーム開発希望'
-                ]
+                    'purpose_name' => 'チーム開発希望',
+                ],
             ]
         );
     }

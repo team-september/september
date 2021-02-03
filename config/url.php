@@ -7,6 +7,6 @@ return [
         'twitter',
         'github',
         'website',
-        'other'
-    ]
+        'other',
+    ],
 ];

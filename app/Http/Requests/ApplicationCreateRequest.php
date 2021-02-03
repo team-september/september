@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -23,9 +25,8 @@ class ApplicationCreateRequest extends FormRequest
      */
     public function rules()
     {
-
         return [
-            'mentor_id' => ['required', 'exists:users,id']
+            'mentor_id' => ['required', 'exists:users,id'],
         ];
     }
 }

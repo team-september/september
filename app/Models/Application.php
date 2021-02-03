@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,5 +21,10 @@ class Application extends Model
     public function mentee()
     {
         return $this->belongsTo('App\Models\User', 'mentee_id');
+    }
+
+    public function read_applications()
+    {
+        return $this->hasMany('App\Models\ReadApplication', 'user_id', 'mentor_id');
     }
 }

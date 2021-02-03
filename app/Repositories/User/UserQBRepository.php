@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Repositories\User;
 
@@ -23,5 +24,4 @@ class UserQBRepository implements IUserRepository
     {
         return DB::table($this->table)->where('is_mentor', 1)->get();
     }
-
 }
