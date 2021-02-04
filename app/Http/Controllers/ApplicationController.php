@@ -38,12 +38,25 @@ class ApplicationController extends Controller
     {
         $user = $this->userRepository->getUserBySub(Auth::id());
         $applications = $user->is_mentor ? $user->mentorApplications : $user->menteeApplications;
-        //既読処理
+
+        $coustoms = $applications->all();
+        //既読処理メンター
         if ($user->is_mentor) {
             $this->readApplicationRepository->create($applications);
+            foreach ($coustoms as $coustom) {
+                $user =$this->userRepository->getUserById($coustom->mentee_id);
+                $create = $coustom->created_at;
+                $coustomers[] = array('id'=>$coustom->mentee_id,'name'=>$user->name,'created_at'=>$create);
+            }
+        } else {
+            //メンティ側の画面
+            foreach ($coustoms as $coustom) {
+                $user =$this->userRepository->getUserById($coustom->mentor_id);
+                $create = $coustom->created_at;
+                $coustomers[] = array('id'=>$coustom->_id,'name'=>$user->name,'created_at'=>$create);
+            }
         }
-
-        return view('application.index', compact('applications'));
+        return view('application.index', compact('applications', 'coustomers'));
     }
 
     public function store(ApplicationCreateRequest $request)
