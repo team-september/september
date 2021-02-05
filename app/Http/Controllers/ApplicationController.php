@@ -39,18 +39,19 @@ class ApplicationController extends Controller
         $user = $this->userRepository->getUserBySub(Auth::id());
         $applications = $user->is_mentor ? $user->mentorApplications : $user->menteeApplications;
 
-        $coustoms = $applications->all();
+        $coustomer = $applications->all();
         //既読処理メンター
         if ($user->is_mentor) {
             $this->readApplicationRepository->create($applications);
-            foreach ($coustoms as $coustom) {
+            foreach ($coustomer as $coustom) {
                 $user =$this->userRepository->getUserById($coustom->mentee_id);
                 $create = $coustom->created_at;
                 $coustomers[] = array('id'=>$coustom->mentee_id,'name'=>$user->name,'created_at'=>$create);
             }
         } else {
+            //$this->readApplicationRepository->create($applications);
             //メンティ側の画面
-            foreach ($coustoms as $coustom) {
+            foreach ($coustomer as $coustom) {
                 $user =$this->userRepository->getUserById($coustom->mentor_id);
                 $create = $coustom->created_at;
                 $coustomers[] = array('id'=>$coustom->_id,'name'=>$user->name,'created_at'=>$create);
