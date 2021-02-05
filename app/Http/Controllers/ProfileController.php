@@ -102,6 +102,34 @@ class ProfileController extends Controller
         );
     }
 
+    public function show($id)
+    {
+        $user = $this->userRepository->getUserById($id);
+        $profile = $user->profile;
+        $urls = $this->urlService->findUrls($profile, config('url.types'));
+        $career = $profile->career;
+        $purposes = $profile->purposes;
+        $skills = $profile->skills;
+        $mentors = $this->userRepository->getMentors();
+        $application = $this->applicationRepository->getLatestApplication($user->id);
+        $mentor_applied = $application ? $application->mentor : null;
+
+        return view(
+            'profile.show',
+            compact(
+                'user',
+                'profile',
+                'urls',
+                'career',
+                'purposes',
+                'skills',
+                'mentors',
+                'application',
+                'mentor_applied'
+            )
+        );
+    }
+
     public function edit($id)
     {
         $user = $this->userRepository->getUserById($id);
