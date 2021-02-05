@@ -239,7 +239,7 @@
                         </div>
                     </div>
                     <div class="row justify-content-center px-3">
-                        <a href="{{ route('profile.edit', $user->id) }}" class="btn btn-primary col-md-4"> 編集 </a>
+                        <a href="{{ route('profile.edit') }}" class="btn btn-primary col-md-4"> 編集 </a>
                     </div>
                 </div>
             </div>

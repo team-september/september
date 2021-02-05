@@ -135,23 +135,22 @@
                                         <div class="col-sm-3">
                                             <h6 class="mb-0">希望</h6>
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-9 text-secondary row">
                                             @foreach($purposes as $purpose)
-                                                <div class="col-sm-5 text-secondary">
-                                                    @foreach($purposes as $old)
+                                            <div class="col-sm-5 text-secondary">
+                                                    <input class="form-check-input" name="purpose[]" type="checkbox"
+                                                            value= {{ $purpose->id}}          
+                                                @if($user_skill->isEmpty())
+                                                            id="skill_{{ $skill->id }}">
+                                                @endif 
+                                                                                                                                            
+                                                    @foreach($user_purpose as $old)
                                                         @if($old->id === $purpose->id)
-                                                            <input class="form-check-input" name="purpose[]"
-                                                                   type="checkbox"
-                                                                   value="{{ $purpose->id}}"
-                                                                   id="{{ $purpose->id }}"
-                                                                   checked>
+                                                            id="{{ $purpose->id }}" checked>
                                                             @break
-                                                        @else
-                                                            <input class="form-check-input" name="purpose[]"
-                                                                   type="checkbox"
-                                                                   value="{{ $purpose->id}}"
-                                                                   id="{{ $purpose->id }}"
-                                                            >
+
+                                                        @elseif($loop->last)
+                                                            id="{{ $purpose->id }}">
                                                             @break
                                                         @endif
                                                     @endforeach
