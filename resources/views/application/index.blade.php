@@ -12,10 +12,17 @@
             <tbody>
                 @foreach($coustomers as $customer)
                 <tr>
-                    <td><a href="{{ route('profile.show',$customer['id'])}}" >{{ $customer['name']}}</a>
-                    <button type= "button" class="btn btn-primary">承認</button>
-                    <button type= "button" class="btn btn-dark">拒否</button>
-                    <div>{{ $customer['created_at']}}</div>
+                    <td>
+                        <div class="text-left">
+                            <a href="{{ route('profile.show',$customer['id'])}}" >{{ $customer['name']}}</a>
+                        </div>
+                        <div class="text-right">
+                            <button type= "button" class="btn btn-primary">承認</button>
+                            <button type= "button" class="btn btn-dark pull-right">拒否</button>
+                        </div>
+                        <div class="text-left">
+                            {{ $customer['created_at']}}
+                        </div>
                     </td>
                 </tr>
                 @endforeach
