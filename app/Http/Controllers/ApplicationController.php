@@ -40,27 +40,17 @@ class ApplicationController extends Controller
         $applications = $user->is_mentor ? $user->mentorApplications : $user->menteeApplications;
 
         $coustomer = $applications->all();
-        $coustomers = array(); 
 
-        //既読処理メンター
-        if ($user->is_mentor) {
-            $this->readApplicationRepository->create($applications);
-            foreach ($coustomer as $coustom) {
-                $user =$this->userRepository->getUserById($coustom->mentee_id);
-                $create = $coustom->created_at;
-                $coustomers[] = array('id'=>$coustom->mentee_id,'name'=>$user->name,'created_at'=>$create);
-            }
-        } else {
-            //$this->readApplicationRepository->create($applications);
-            //メンティ側の画面
-            foreach ($coustomer as $coustom) {
-                $user =$this->userRepository->getUserById($coustom->mentor_id);
-                $create = $coustom->created_at;
-                $coustomers[] = array('id'=>$coustom->mentor_id,'name'=>$user->name,'created_at'=>$create);
-            }
+        //既読処理
+        $this->readApplicationRepository->create($applications);
+
+        $user_category = $user->is_mentor ?'mentee_id':'mentor_id';
+        foreach ($coustomer as $coustom) {
+            $user =$this->userRepository->getUserById($coustom->$user_category);
+            $create = $coustom->created_at->format("Y/m/d");
+            $coustomers[] = array('id'=>$coustom->$user_category,'name'=>$user->name,'created_at'=>$create);
         }
-        return view('application.index', compact('applications', 'coustomers'));
-
+        return view('application.index', compact('applications', 'coustomers', 'user_category'));
     }
 
     public function store(ApplicationCreateRequest $request)

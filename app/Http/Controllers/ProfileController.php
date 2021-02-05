@@ -132,8 +132,7 @@ class ProfileController extends Controller
 
     public function edit()
     {
-        $auth0User = Auth::user();
-        $user = $this->userRepository->getUserBySub($auth0User->sub);
+        $user = $this->userRepository->getUserBySub(Auth::id());
         $profile = $user->profile;
         $urls = $this->urlService->findUrls($profile, config('url.types'));
         $user_career = $profile->career;
