@@ -135,7 +135,7 @@
                                         <div class="col-sm-3">
                                             <h6 class="mb-0">希望</h6>
                                         </div>
-                                        <div class="col-sm-9 text-secondary row">
+                                        <div class="col-sm-9">
                                             @foreach($purposes as $purpose)
                                             <div class="col-sm-5 text-secondary">
                                                     <input class="form-check-input" name="purpose[]" type="checkbox"
