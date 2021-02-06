@@ -140,8 +140,8 @@
                                             <div class="col-sm-5 text-secondary">
                                                     <input class="form-check-input" name="purpose[]" type="checkbox"
                                                             value= {{ $purpose->id}}          
-                                                @if($user_skill->isEmpty())
-                                                            id="skill_{{ $skill->id }}">
+                                                @if($user_purpose->isEmpty())
+                                                            id="{{ $purpose->id }}">
                                                 @endif 
                                                                                                                                             
                                                     @foreach($user_purpose as $old)
