@@ -10,7 +10,9 @@ use App\Repositories\User\IUserRepository;
 class ProfileService
 {
     protected $userRepository;
+
     protected $applicationRepository;
+
     protected $urlService;
 
     public function __construct(
@@ -21,6 +23,7 @@ class ProfileService
         $this->userRepository = $userRepository;
         $this->applicationRepository = $applicationRepository;
     }
+
     public function findProfile($profile)
     {
         $career = $profile->career;
@@ -30,13 +33,13 @@ class ProfileService
         $application = $this->applicationRepository->getLatestApplication($profile->id);
         $mentor_applied = $application ? $application->mentor : null;
 
-        return array(
-                    $career,
-                    $purposes,
-                    $skills,
-                    $mentors,
-                    $application,
-                    $mentor_applied
-                );
+        return [
+            $career,
+            $purposes,
+            $skills,
+            $mentors,
+            $application,
+            $mentor_applied,
+        ];
     }
 }

@@ -12,5 +12,4 @@ class ProfileUrl extends Model
     use HasFactory;
 
     protected $guarded = [];
-
 }

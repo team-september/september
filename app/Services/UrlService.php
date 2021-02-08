@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\Profile;
-
 class UrlService
 {
     public function findUrls($profile, $urlTypes)

@@ -42,5 +42,4 @@ class Profile extends Model
             'profile_urls.url_id'
         );
     }
-
 }

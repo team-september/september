@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Repositories\Profile;
 
@@ -16,7 +17,7 @@ class ProfileEQRepository implements IProfileRepository
         );
     }
 
-    public function update($profile, $request)
+    public function update($profile, $request): void
     {
         $profile->fill(
             [

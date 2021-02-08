@@ -12,5 +12,4 @@ class Url extends Model
     use HasFactory;
 
     protected $guarded = [];
-
 }

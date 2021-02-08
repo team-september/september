@@ -44,12 +44,13 @@ class ApplicationController extends Controller
         //既読処理
         $this->readApplicationRepository->create($applications);
 
-        $user_category = $user->is_mentor ?'mentee_id':'mentor_id';
-        $coustomers = array();
+        $user_category = $user->is_mentor ? 'mentee_id' : 'mentor_id';
+        $coustomers = [];
+
         foreach ($coustomer as $coustom) {
-            $user =$this->userRepository->getUserById($coustom->$user_category);
-            $create = $coustom->created_at->format("Y/m/d");
-            $coustomers[] = array('id'=>$coustom->$user_category,'name'=>$user->name,'created_at'=>$create);
+            $user = $this->userRepository->getUserById($coustom->{$user_category});
+            $create = $coustom->created_at->format('Y/m/d');
+            $coustomers[] = ['id' => $coustom->{$user_category}, 'name' => $user->name, 'created_at' => $create];
         }
         return view('application.index', compact('applications', 'coustomers', 'user_category'));
     }

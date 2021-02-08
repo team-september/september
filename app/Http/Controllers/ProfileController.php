@@ -12,33 +12,42 @@ use App\Repositories\Purpose\IPurposeRepository;
 use App\Repositories\Skill\ISkillRepository;
 use App\Repositories\Url\IUrlRepository;
 use App\Repositories\User\IUserRepository;
-use App\Services\UrlService;
 use App\Services\ProfileService;
+use App\Services\UrlService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
     protected $userRepository;
+
     protected $applicationRepository;
+
     protected $careerRepository;
+
     protected $purposeRepository;
+
     protected $skillRepository;
+
     protected $profileRepository;
+
     protected $urlRepository;
+
     protected $urlService;
+
     protected $profileService;
 
     /**
      * ApplicationController constructor.
-     * @param IUserRepository $userRepository
+     * @param IUserRepository        $userRepository
      * @param IApplicationRepository $applicationRepository
-     * @param ICareerRepository $careerRepository
-     * @param IPurposeRepository $purposeRepository
-     * @param ISkillRepository $skillRepository
-     * @param IProfileRepository $profileRepository
-     * @param IUrlRepository $urlRepository
-     * @param UrlService $urlService
+     * @param ICareerRepository      $careerRepository
+     * @param IPurposeRepository     $purposeRepository
+     * @param ISkillRepository       $skillRepository
+     * @param IProfileRepository     $profileRepository
+     * @param IUrlRepository         $urlRepository
+     * @param UrlService             $urlService
+     * @param ProfileService         $profileService
      */
     public function __construct(
         IUserRepository $userRepository,
@@ -163,6 +172,7 @@ class ProfileController extends Controller
             function () use ($request, $user, $profile, $urls): void {
                 $this->userRepository->update($user, $request);
                 $this->profileRepository->update($profile, $request);
+
                 foreach ($urls as $index => $url) {
                     $this->urlRepository->update($url, $request, config('url.types'), $index);
                 }

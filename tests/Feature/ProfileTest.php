@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class ProfileTest extends TestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
