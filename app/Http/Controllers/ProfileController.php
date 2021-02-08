@@ -16,7 +16,6 @@ use App\Services\UrlService;
 use App\Services\ProfileService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -102,8 +101,9 @@ class ProfileController extends Controller
         );
     }
 
-    public function show(User $user)
+    public function show($id)
     {
+        $user = $this->userRepository->getUserById($id);
         $profile = $user->profile;
         $urls = $this->urlService->findUrls($profile, config('url.types'));
         list($career, $purposes, $skills, $mentors, $application, $mentor_applied) = $this->profileService->findProfile($profile);

@@ -25,7 +25,7 @@ Route::group(
     ['middleware' => ['auth']],
     function (): void {
         Route::get('/profile', 'ProfileController@index')->name('profile.index');
-        Route::get('/profile/show/{user}', 'ProfileController@show')->name('profile.show');
+        Route::get('/profile/show/{id}', 'ProfileController@show')->name('profile.show');
         Route::get('/profile/edit', 'ProfileController@edit')->name('profile.edit');
         Route::put('/profile/update/{id}', 'ProfileController@update')->name('profile.update');
         Route::get('/application', 'ApplicationController@index')->name('application.index');
