@@ -20,6 +20,7 @@ class ApplicationController extends Controller
 
     /**
      * ApplicationController constructor.
+     *
      * @param IApplicationRepository     $applicationRepository
      * @param IReadApplicationRepository $readApplicationRepository
      * @param IUserRepository            $userRepository
@@ -39,20 +40,18 @@ class ApplicationController extends Controller
         $user = $this->userRepository->getUserBySub(Auth::id());
         $applications = $user->is_mentor ? $user->mentorApplications : $user->menteeApplications;
 
-        $coustomer = $applications->all();
-
         //既読処理
         $this->readApplicationRepository->create($applications);
 
-        $user_category = $user->is_mentor ? 'mentee_id' : 'mentor_id';
-        $coustomers = [];
+        $userCategory = $user->is_mentor ? 'mentee_id' : 'mentor_id';
+        $applicants = [];
 
-        foreach ($coustomer as $coustom) {
-            $user = $this->userRepository->getUserById($coustom->{$user_category});
-            $create = $coustom->created_at->format('Y/m/d');
-            $coustomers[] = ['id' => $coustom->{$user_category}, 'name' => $user->name, 'created_at' => $create];
+        foreach ($applications as $application) {
+            $user = $this->userRepository->getUserById($application->{$userCategory});
+            $create = $application->created_at->format('Y/m/d');
+            $applicants[] = ['id' => $application->{$userCategory}, 'name' => $user->name, 'created_at' => $create];
         }
-        return view('application.index', compact('applications', 'coustomers', 'user_category'));
+        return view('application.index', compact('applications', 'applicants', 'userCategory'));
     }
 
     public function store(ApplicationCreateRequest $request)
