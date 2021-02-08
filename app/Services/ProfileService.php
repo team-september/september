@@ -23,7 +23,6 @@ class ProfileService
     }
     public function findProfile($profile)
     {
-        //$urls = $this->urlService->findUrls($profile, config('url.types'));
         $career = $profile->career;
         $purposes = $profile->purposes;
         $skills = $profile->skills;
@@ -32,7 +31,6 @@ class ProfileService
         $mentor_applied = $application ? $application->mentor : null;
 
         return array(
-          //          $urls,
                     $career,
                     $purposes,
                     $skills,

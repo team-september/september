@@ -129,15 +129,11 @@ class ProfileController extends Controller
         $user = $this->userRepository->getUserBySub(Auth::id());
         $profile = $user->profile;
         $urls = $this->urlService->findUrls($profile, config('url.types'));
-        $user_career = $profile->career;
         $careers = $this->careerRepository->getAll();
-        $user_purpose = $profile->purposes;
         $purposes = $this->purposeRepository->getAll();
-        $user_skill = $profile->skills;
         $skills = $this->skillRepository->getAll();
 
-        $application = $this->applicationRepository->getLatestApplication($user->id);
-        $mentor_applied = $application ? $application->mentor : null;
+        list($user_career, $user_purpose, $user_skill, $mentors, $application, $mentor_applied) = $this->profileService->findProfile($profile);
 
         return view(
             'profile.edit',
