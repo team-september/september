@@ -137,13 +137,13 @@
                                         </div>
                                         <div class="col-sm-9">
                                             @foreach($purposes as $purpose)
-                                            <div class="col-sm-5 text-secondary">
+                                                <div class="col-sm-5 text-secondary">
                                                     <input class="form-check-input" name="purpose[]" type="checkbox"
-                                                            value= {{ $purpose->id}}          
-                                                @if($user_purpose->isEmpty())
-                                                            id="{{ $purpose->id }}">
-                                                @endif 
-                                                                                                                                            
+                                                           value={{ $purpose->id}}
+                                                           @if($user_purpose->isEmpty())
+                                                               id="{{ $purpose->id }}">
+                                                    @endif
+
                                                     @foreach($user_purpose as $old)
                                                         @if($old->id === $purpose->id)
                                                             id="{{ $purpose->id }}" checked>
@@ -243,8 +243,8 @@
                                             <h6 class="mb-0">メンター</h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
-                                            @if($mentor_applied)
-                                                {{ $mentor_applied->name }}
+                                            @if($appliedMentor)
+                                                {{ $appliedMentor->name }}
                                             @else
                                                 未申請
                                             @endif

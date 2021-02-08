@@ -39,6 +39,7 @@ class ProfileController extends Controller
 
     /**
      * ApplicationController constructor.
+     *
      * @param IUserRepository        $userRepository
      * @param IApplicationRepository $applicationRepository
      * @param ICareerRepository      $careerRepository
@@ -79,10 +80,10 @@ class ProfileController extends Controller
         //データがない場合ユーザー関連情報を作成
         if (empty($user)) {
             $userInfo = [
-                'sub' => $auth0User->sub,
+                'sub'      => $auth0User->sub,
                 'nickname' => $auth0User->nickname,
-                'name' => $auth0User->name,
-                'picture' => $auth0User->picture,
+                'name'     => $auth0User->name,
+                'picture'  => $auth0User->picture,
             ];
 
             $user = $this->userRepository->create($userInfo);
@@ -92,7 +93,8 @@ class ProfileController extends Controller
         //入力されていた値の取得
         $profile = $user->profile;
         $urls = $this->urlService->findUrls($profile, config('url.types'));
-        list($career, $purposes, $skills, $mentors, $application, $mentor_applied) = $this->profileService->findProfile($profile);
+        list($career, $purposes, $skills, $mentors, $application, $appliedMentor)
+            = $this->profileService->findProfile($profile);
 
         return view(
             'profile.index',
@@ -105,7 +107,7 @@ class ProfileController extends Controller
                 'skills',
                 'mentors',
                 'application',
-                'mentor_applied'
+                'appliedMentor'
             )
         );
     }
@@ -115,7 +117,8 @@ class ProfileController extends Controller
         $user = $this->userRepository->getUserById($id);
         $profile = $user->profile;
         $urls = $this->urlService->findUrls($profile, config('url.types'));
-        list($career, $purposes, $skills, $mentors, $application, $mentor_applied) = $this->profileService->findProfile($profile);
+        list($career, $purposes, $skills, $mentors, $application, $appliedMentor)
+            = $this->profileService->findProfile($profile);
 
         return view(
             'profile.show',
@@ -128,7 +131,7 @@ class ProfileController extends Controller
                 'skills',
                 'mentors',
                 'application',
-                'mentor_applied'
+                'appliedMentor'
             )
         );
     }
@@ -142,7 +145,8 @@ class ProfileController extends Controller
         $purposes = $this->purposeRepository->getAll();
         $skills = $this->skillRepository->getAll();
 
-        list($user_career, $user_purpose, $user_skill, $mentors, $application, $mentor_applied) = $this->profileService->findProfile($profile);
+        list($user_career, $user_purpose, $user_skill, $mentors, $application, $appliedMentor)
+            = $this->profileService->findProfile($profile);
 
         return view(
             'profile.edit',
@@ -157,7 +161,7 @@ class ProfileController extends Controller
                 'user_skill',
                 'skills',
                 'application',
-                'mentor_applied'
+                'appliedMentor'
             )
         );
     }

@@ -215,8 +215,8 @@
                                         <h6 class="mb-0">メンター</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        @if($mentor_applied)
-                                            {{ $mentor_applied->name }}
+                                        @if($appliedMentor)
+                                            {{ $appliedMentor->name }}
                                         @else
                                             未申請
                                         @endif

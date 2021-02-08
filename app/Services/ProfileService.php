@@ -16,7 +16,6 @@ class ProfileService
     protected $urlService;
 
     public function __construct(
-        UrlService $urlService,
         IUserRepository $userRepository,
         IApplicationRepository $applicationRepository
     ) {
@@ -31,7 +30,7 @@ class ProfileService
         $skills = $profile->skills;
         $mentors = $this->userRepository->getMentors();
         $application = $this->applicationRepository->getLatestApplication($profile->id);
-        $mentor_applied = $application ? $application->mentor : null;
+        $appliedMentor = $application ? $application->mentor : null;
 
         return [
             $career,
@@ -39,7 +38,7 @@ class ProfileService
             $skills,
             $mentors,
             $application,
-            $mentor_applied,
+            $appliedMentor,
         ];
     }
 }
