@@ -13,6 +13,7 @@ use App\Repositories\Skill\ISkillRepository;
 use App\Repositories\Url\IUrlRepository;
 use App\Repositories\User\IUserRepository;
 use App\Services\UrlService;
+use App\Services\ProfileService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -26,6 +27,7 @@ class ProfileController extends Controller
     protected $profileRepository;
     protected $urlRepository;
     protected $urlService;
+    protected $profileService;
 
     /**
      * ApplicationController constructor.
@@ -46,7 +48,8 @@ class ProfileController extends Controller
         ISkillRepository $skillRepository,
         IProfileRepository $profileRepository,
         IUrlRepository $urlRepository,
-        UrlService $urlService
+        UrlService $urlService,
+        ProfileService $profileService
     ) {
         $this->userRepository = $userRepository;
         $this->applicationRepository = $applicationRepository;
@@ -56,6 +59,7 @@ class ProfileController extends Controller
         $this->profileRepository = $profileRepository;
         $this->urlRepository = $urlRepository;
         $this->urlService = $urlService;
+        $this->profileService = $profileService;
     }
 
     public function index()
@@ -79,12 +83,7 @@ class ProfileController extends Controller
         //入力されていた値の取得
         $profile = $user->profile;
         $urls = $this->urlService->findUrls($profile, config('url.types'));
-        $career = $profile->career;
-        $purposes = $profile->purposes;
-        $skills = $profile->skills;
-        $mentors = $this->userRepository->getMentors();
-        $application = $this->applicationRepository->getLatestApplication($user->id);
-        $mentor_applied = $application ? $application->mentor : null;
+        list($career, $purposes, $skills, $mentors, $application, $mentor_applied) = $this->profileService->findProfile($profile);
 
         return view(
             'profile.index',
@@ -107,12 +106,7 @@ class ProfileController extends Controller
         $user = $this->userRepository->getUserById($id);
         $profile = $user->profile;
         $urls = $this->urlService->findUrls($profile, config('url.types'));
-        $career = $profile->career;
-        $purposes = $profile->purposes;
-        $skills = $profile->skills;
-        $mentors = $this->userRepository->getMentors();
-        $application = $this->applicationRepository->getLatestApplication($user->id);
-        $mentor_applied = $application ? $application->mentor : null;
+        list($career, $purposes, $skills, $mentors, $application, $mentor_applied) = $this->profileService->findProfile($profile);
 
         return view(
             'profile.show',
