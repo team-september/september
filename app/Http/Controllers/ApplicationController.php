@@ -20,6 +20,7 @@ class ApplicationController extends Controller
 
     /**
      * ApplicationController constructor.
+     *
      * @param IApplicationRepository     $applicationRepository
      * @param IReadApplicationRepository $readApplicationRepository
      * @param IUserRepository            $userRepository
@@ -38,12 +39,19 @@ class ApplicationController extends Controller
     {
         $user = $this->userRepository->getUserBySub(Auth::id());
         $applications = $user->is_mentor ? $user->mentorApplications : $user->menteeApplications;
-        //既読処理
-        if ($user->is_mentor) {
-            $this->readApplicationRepository->create($applications);
-        }
 
-        return view('application.index', compact('applications'));
+        //既読処理
+        $this->readApplicationRepository->create($applications);
+
+        $userCategory = $user->is_mentor ? 'mentee_id' : 'mentor_id';
+        $applicants = [];
+
+        foreach ($applications as $application) {
+            $user = $this->userRepository->getUserById($application->{$userCategory});
+            $create = $application->created_at->format('Y/m/d');
+            $applicants[] = ['id' => $application->{$userCategory}, 'name' => $user->name, 'created_at' => $create];
+        }
+        return view('application.index', compact('applications', 'applicants', 'userCategory'));
     }
 
     public function store(ApplicationCreateRequest $request)

@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Repositories\Purpose;
 
@@ -11,5 +12,4 @@ class PurposeEQRepository implements IPurposeRepository
     {
         return Purpose::all();
     }
-
 }

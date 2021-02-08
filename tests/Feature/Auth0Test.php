@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class Auth0Test extends TestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();

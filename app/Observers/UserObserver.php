@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Models\Profile;
-use App\Models\ProfileUrl;
-use App\Models\Url;
 use App\Models\User;
 use App\Repositories\Profile\IProfileRepository;
 use App\Repositories\ProfileUrl\IProfileUrlRepository;
@@ -16,7 +13,9 @@ use Illuminate\Support\Facades\DB;
 class UserObserver
 {
     protected $urlRepository;
+
     protected $profileRepository;
+
     protected $profileUrlRepository;
 
     /**
@@ -35,7 +34,6 @@ class UserObserver
         $this->profileUrlRepository = $profileUrlRepository;
     }
 
-
     /**
      * Handle the User "created" event.
      *
@@ -43,7 +41,7 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        DB::transaction(function () use ($user) {
+        DB::transaction(function () use ($user): void {
             $profile = $this->profileRepository->create($user->id);
             // GitHub, Twitter, Web, その他の4つのURL格納用レコードを最初に作成
             for ($urlId = 1; $urlId < 5; $urlId++) {

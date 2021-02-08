@@ -43,18 +43,6 @@
                             </div>
                         </div>
                     </div>
-                    @if(!$user->is_mentor)
-                        <div class="row justify-content-center px-3 my-3">
-                            <button type="button" class="btn btn-primary col-md-10" data-toggle="modal"
-                                    data-target="#applicationModal"
-                                    @if($application && $application->status !== config('application.status.rejected'))
-                                    disabled
-                                @endif
-                            >
-                                メンティー申請
-                            </button>
-                        </div>
-                    @endif
 
                     <div class="card">
 
@@ -237,9 +225,6 @@
                             @endif
 
                         </div>
-                    </div>
-                    <div class="row justify-content-center px-3">
-                        <a href="{{ route('profile.edit') }}" class="btn btn-primary col-md-4"> 編集 </a>
                     </div>
                 </div>
             </div>
