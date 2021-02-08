@@ -45,6 +45,7 @@ class ApplicationController extends Controller
         $this->readApplicationRepository->create($applications);
 
         $user_category = $user->is_mentor ?'mentee_id':'mentor_id';
+        $coustomers = array();
         foreach ($coustomer as $coustom) {
             $user =$this->userRepository->getUserById($coustom->$user_category);
             $create = $coustom->created_at->format("Y/m/d");
