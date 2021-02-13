@@ -166,8 +166,7 @@ class ProfileController extends Controller
         );
     }
 
-    public function update(MultipleProfileUpdateRequest $request, $id)
-    {
+    public function update(MultipleProfileUpdateRequest $request, $id) {
         $user = $this->userRepository->getUserById($id);
         $profile = $user->profile;
         $urls = $profile->urls;

@@ -58,12 +58,28 @@ jobs:
 
   php-cs-fixer:
 
-   runs-on: ubuntu-latest
-   steps:
-       - uses: actions/checkout@master
-       - name: Prepare php-cs-fixer
-         run: |
-             wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer
-             chmod a+x php-cs-fixer
-       - name: Execute php-cs-fixer
-         run: php php-cs-fixer fix --path-mode=intersection --dry-run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+      - name: Prepare php-cs-fixer
+        run: |
+          wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer
+          chmod a+x php-cs-fixer
+      - name: Execute php-cs-fixer
+        run: php php-cs-fixer fix
+      - name: Commit and Push
+        run: |
+          line=`git diff | wc -l`
+          if [ $line -eq 0 ]; then
+            echo "コミットするものがないので終了"
+            exit 0
+          fi
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git config --global pull.rebase false
+          git add .
+          git commit -m "cs-fixer" -a
+          git pull
+          git push origin HEAD
