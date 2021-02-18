@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ApplicationUpdateRequest;
 use App\Http\Requests\ApplicationCreateRequest;
+use App\Http\Requests\ApplicationUpdateRequest;
 use App\Models\Application;
 use App\Repositories\Application\IApplicationRepository;
 use App\Repositories\ReadApplication\IReadApplicationRepository;
 use App\Repositories\User\IUserRepository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 class ApplicationController extends Controller
 {
@@ -48,13 +47,15 @@ class ApplicationController extends Controller
         //既読処理
         $this->readApplicationRepository->create($applications);
 
-        $user_category = $user->is_mentor ?'mentee_id':'mentor_id';
-        $coustomers = array();
+        $user_category = $user->is_mentor ? 'mentee_id' : 'mentor_id';
+        $coustomers = [];
+
         foreach ($coustomer as $coustom) {
-            $user = $this->userRepository->getUserById($coustom->$user_category);
-            $create = $coustom->created_at->format("Y/m/d");
+            $user = $this->userRepository->getUserById($coustom->{$user_category});
+            $create = $coustom->created_at->format('Y/m/d');
+
             if ($coustom->status === 1) {
-                $coustomers[] = array('id'=>$coustom->$user_category,'name'=>$user->name,'created_at'=>$create);
+                $coustomers[] = ['id' => $coustom->{$user_category}, 'name' => $user->name, 'created_at' => $create];
             }
         }
         return view('application.index', compact('applications', 'coustomers', 'user_category', 'user_id'));
@@ -79,17 +80,19 @@ class ApplicationController extends Controller
     public function update(ApplicationUpdateRequest $request)
     {
         $mentor_id = $request->mentor_id;
+
         if ($request->has('rejected')) {
             //todo:application statusを3に更新
             dd('消します');
         } elseif ($request->has('approved')) {
             $mentees = $request->user_id;
+
             foreach ($mentees as $mentee_id) {
                 //todo:aplication statusを2に更新
                 $this->applicationRepository->updateApprovedApplication($mentor_id, $mentee_id);
                 //todo:mentorshipに追加
             }
-            return redirect()->route('application.index')->with(['success' =>"承認しました。"]);
+            return redirect()->route('application.index')->with(['success' => '承認しました。']);
         }
     }
 }
