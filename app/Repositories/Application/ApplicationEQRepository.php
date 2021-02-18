@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories\Application;
 
 use App\Models\Application;
+use Carbon\Carbon;
 
 class ApplicationEQRepository implements IApplicationRepository
 {
@@ -32,6 +33,13 @@ class ApplicationEQRepository implements IApplicationRepository
             ->whereNotIn('status', [config('application.status.rejected')])
             ->orderBy('id', 'desc')
             ->first();
+    }
+
+    public function updateApprovedApplication($mentor_id, $user_id)
+    {
+        return Application::where('mentee_id', $user_id)
+            ->where('mentor_id', $mentor_id)
+            ->update(['status'=> 2,'approved_at'=> Carbon::now()]);
     }
 
     public function countUnreadApplications()

@@ -30,5 +30,6 @@ Route::group(
         Route::put('/profile/update/{id}', 'ProfileController@update')->name('profile.update');
         Route::get('/application', 'ApplicationController@index')->name('application.index');
         Route::post('/application', 'ApplicationController@store')->name('application.store');
+        Route::post('/application/update/', 'ApplicationController@update')->name('application.update');
     }
 );

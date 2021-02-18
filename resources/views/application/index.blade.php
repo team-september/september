@@ -6,25 +6,42 @@
         @if($applications->isEmpty())
             応募がありません
         @else
-            <h1 class="my-3 ml-3">応募一覧</h1>
-            @foreach($applicants as $applicant)
+        <h1 class="my-3 ml-3">応募一覧</h1>
+        
+        @if($user_category!="mentor_id")
+            <form action="{{ route('application.update') }}" method="POST">
+                    @csrf
+                    @method('POST')
                 <div class="col-sm-8 offset-md-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="text-left">
-                                名前： <a href="{{ route('profile.show',$applicant['id'])}}">{{ $applicant['name']}}</a>
-                            </div>
+                    承認する応募をチェックして、承認ボタンを押してください。
+                </div>
+                <div class="col-sm-6 offset-md-6">
+                    <p><button type= "submit" class="btn btn-primary" 
+                        name="approved" value="approved">承認</button>
+                    </p>
+                </div>
+                <input type="hidden" name="mentor_id" value="{{$user_id}}">
+        @endif
+
+           @foreach($coustomers as $customer)
+                    <div class ="col-sm-8 offset-md-2">
+                        <div class="card">
+                            <label>
+                                <div class="card-body">
+                                    <div class="text-left">
+                                        @if($user_category!="mentor_id")
+                                            <p><input type="checkbox" name="user_id[]" value= {{ $customer['id'] }}></p> 
+                                        @endif
+                                        名前： <a href="{{ route('profile.show',$customer['id'])}}" >{{ $customer['name']}}</a></div>
+                                    </div>
+                                <div class="text-right">
+                                    <button type= "submit" class="btn btn-dark pull-right" name="rejected" value="rejected">拒否</button>
+                                    受付日: {{ $customer['created_at']}} </div>
+                            </lavel>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        @if($userCategory != 'mentor_id')
-                            <button type="button" class="btn btn-primary">承認</button>
-                            <button type="button" class="btn btn-dark pull-right">拒否</button>
-                        @endif
-                        <div class="text-right">受付日: {{ $applicant['created_at']}}</div>
-                    </div>
-                </div>
             @endforeach
         @endif
     </div>
+    </form>
 @endsection
