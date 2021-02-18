@@ -51,9 +51,11 @@ class ApplicationController extends Controller
         $user_category = $user->is_mentor ?'mentee_id':'mentor_id';
         $coustomers = array();
         foreach ($coustomer as $coustom) {
-            $user =$this->userRepository->getUserById($coustom->$user_category);
+            $user = $this->userRepository->getUserById($coustom->$user_category);
             $create = $coustom->created_at->format("Y/m/d");
-            $coustomers[] = array('id'=>$coustom->$user_category,'name'=>$user->name,'created_at'=>$create);
+            if ($coustom->status === 1) {
+                $coustomers[] = array('id'=>$coustom->$user_category,'name'=>$user->name,'created_at'=>$create);
+            }
         }
         return view('application.index', compact('applications', 'coustomers', 'user_category', 'user_id'));
     }
@@ -87,7 +89,7 @@ class ApplicationController extends Controller
                 $this->applicationRepository->updateApprovedApplication($mentor_id, $mentee_id);
                 //todo:mentorshipに追加
             }
+            return redirect()->route('application.index')->with(['success' =>"承認しました。"]);
         }
-        return redirect()->route('application.index')->with(['success' =>"承認しました。"]);
     }
 }

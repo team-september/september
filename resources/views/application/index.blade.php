@@ -3,7 +3,22 @@
 @section('content')
     {{--    @TODO:メンティーなら過去の応募内容、メンティーなら受け取った応募一覧を表示--}}
     <div class="text-center">
-        @if($applications->isEmpty())
+            @if (session('success'))
+                <div class="alert alert-success text-center">
+                    <ul class="list-unstyled">
+                        <li>{{ session('success') }}</li>
+                    </ul>
+                </div>
+            @endif
+            @if (session('alert'))
+                <div class="alert alert-danger text-center">
+                    <ul class="list-unstyled">
+                        <li>{{ session('alert') }}</li>
+                    </ul>
+                </div>
+            @endif
+
+        @if(!$coustomers)
             応募がありません
         @else
         <h1 class="my-3 ml-3">応募一覧</h1>
@@ -32,11 +47,16 @@
                                         @if($user_category!="mentor_id")
                                             <p><input type="checkbox" name="user_id[]" value= {{ $customer['id'] }}></p> 
                                         @endif
-                                        名前： <a href="{{ route('profile.show',$customer['id'])}}" >{{ $customer['name']}}</a></div>
+                                        名前： <a href="{{ route('profile.show',$customer['id'])}}" >{{ $customer['name']}}</a>
+                                    </div>
+                                    <div class="text-right">
+                                        受付日: {{ $customer['created_at']}} 
                                     </div>
                                 <div class="text-right">
                                     <button type= "submit" class="btn btn-dark pull-right" name="rejected" value="rejected">拒否</button>
-                                    受付日: {{ $customer['created_at']}} </div>
+                                </div>
+                                <div class="text-left">
+                                </div>
                             </lavel>
                         </div>
                     </div>
