@@ -21,6 +21,7 @@ class ApplicationController extends Controller
 
     /**
      * ApplicationController constructor.
+     *
      * @param IApplicationRepository     $applicationRepository
      * @param IReadApplicationRepository $readApplicationRepository
      * @param IUserRepository            $userRepository
@@ -41,7 +42,6 @@ class ApplicationController extends Controller
         $userId = $user->id;
         $applications = $user->is_mentor ? $user->mentorApplications : $user->menteeApplications;
 
-        $coustomer = $applications->all();
         //既読処理
         $this->readApplicationRepository->create($applications);
 
