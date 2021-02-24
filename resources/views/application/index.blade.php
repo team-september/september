@@ -18,12 +18,12 @@
                 </div>
             @endif
 
-        @if(!$coustomers)
+        @if(!$applicants)
             応募がありません
         @else
         <h1 class="my-3 ml-3">応募一覧</h1>
         
-        @if($user_category!="mentor_id")
+        @if($userCategory!="mentor_id")
             <form action="{{ route('application.update') }}" method="POST">
                     @csrf
                     @method('POST')
@@ -35,33 +35,33 @@
                         name="approved" value="approved">承認</button>
                     </p>
                 </div>
-                <input type="hidden" name="mentor_id" value="{{$user_id}}">
+                <input type="hidden" name="mentor_id" value="{{$userId}}">
         @endif
 
-           @foreach($coustomers as $customer)
-                    <div class ="col-sm-8 offset-md-2">
+        <div class ="col-sm-8 offset-md-2">
+           @foreach($applicants as $applicant)
                         <div class="card">
                             <label>
                                 <div class="card-body">
                                     <div class="text-left">
-                                        @if($user_category!="mentor_id")
-                                            <p><input type="checkbox" name="user_id[]" value= {{ $customer['id'] }}></p> 
+                                        @if($userCategory!="mentor_id")
+                                            <p><input type="checkbox" name="userId[]" value= {{ $applicant['id'] }}>
                                         @endif
-                                        名前： <a href="{{ route('profile.show',$customer['id'])}}" >{{ $customer['name']}}</a>
+                                        名前： <a href="{{ route('profile.show',$applicant['id'])}}" >{{ $applicant['name']}}</a>
                                     </div>
                                     <div class="text-right">
-                                        受付日: {{ $customer['created_at']}} 
+                                        受付日: {{ $applicant['created_at']}} 
                                     </div>
                                 <div class="text-right">
                                     <button type= "submit" class="btn btn-dark pull-right" name="rejected" value="rejected">拒否</button>
                                 </div>
-                                <div class="text-left">
-                                </div>
                             </lavel>
                         </div>
                     </div>
+                    </br>
             @endforeach
         @endif
+        </div>
     </div>
     </form>
 @endsection
