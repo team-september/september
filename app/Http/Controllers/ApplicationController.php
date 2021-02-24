@@ -82,13 +82,12 @@ class ApplicationController extends Controller
             //todo:application statusを3に更新
             dd('消します');
         } elseif ($request->has('approved')) {
-            $mentees = $request->user_id;
+            $mentees = $request->userId;
             foreach ($mentees as $menteeId) {
                 //todo:aplication statusを2に更新
                 $this->applicationRepository->updateApprovedApplication($mentorId, $menteeId);
-                //todo:mentorshipに追加
             }
-            return redirect()->route('application.index')->with(['success' =>"承認しました。"]);
+            return redirect()->route('application.index')->with(['success' =>"応募を承認しました。"]);
         }
     }
 }

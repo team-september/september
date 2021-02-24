@@ -25,8 +25,8 @@
         
         @if($userCategory!="mentor_id")
             <form action="{{ route('application.update') }}" method="POST">
-                    @csrf
-                    @method('POST')
+                @csrf
+                @method('POST')
                 <div class="col-sm-8 offset-md-2">
                     承認する応募をチェックして、承認ボタンを押してください。
                 </div>
@@ -57,11 +57,9 @@
                                 </div>
                             </lavel>
                         </div>
-                    </div>
-                    </br>
+                        </div></br>
             @endforeach
         @endif
         </div>
-    </div>
     </form>
 @endsection
