@@ -39,7 +39,7 @@ class ApplicationEQRepository implements IApplicationRepository
     {
         return Application::where('mentee_id', $user_id)
             ->where('mentor_id', $mentor_id)
-            ->update(['status'=> 2,'approved_at'=> Carbon::now()]);
+            ->update(['status' => 2, 'approved_at' => Carbon::now()]);
     }
 
     public function countUnreadApplications()
