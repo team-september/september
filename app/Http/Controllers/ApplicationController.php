@@ -81,10 +81,10 @@ class ApplicationController extends Controller
         $mentorId = $request->mentor_id;
         if ($request->has('rejected')) {
             //application statusを3に更新
-            $menteeId = $request->userId;
+            $menteeId= $request->rejected;
             $this->applicationRepository->updateApprovedApplication($mentorId, $menteeId);
             return redirect()->route('application.index')->with(['alert' => '応募を拒否しました。']);
-        } elseif ($request->has('approved')) {
+        } elseif ($request->has('approved')) {            
             $mentees = $request->userId;
             foreach ($mentees as $menteeId) {
                 //aplication statusを2に更新

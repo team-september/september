@@ -26,7 +26,7 @@ class ApplicationUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'userId' => ['required', 'exists:users,id'],
+//            'user_id' => ['required', 'exists:users,id'],
         ];
     }
 }
