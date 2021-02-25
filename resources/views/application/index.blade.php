@@ -53,6 +53,7 @@
                                         受付日: {{ $applicant['created_at']}} 
                                     </div>
                                 <div class="text-right">
+                                    <input type="hidden" name="userId" value="{{ $applicant['id'] }}">
                                     <button type= "submit" class="btn btn-dark pull-right" name="rejected" value="rejected">拒否</button>
                                 </div>
                             </lavel>

@@ -79,13 +79,13 @@ class ApplicationController extends Controller
     public function update(ApplicationUpdateRequest $request)
     {
         $mentorId = $request->mentor_id;
-
         if ($request->has('rejected')) {
             //todo:application statusを3に更新
-            dd('消します');
+            $menteeId = $request->userId;
+            $this->applicationRepository->updateApprovedApplication($mentorId, $menteeId);
+            return redirect()->route('application.index')->with(['alert' => '応募を拒否しました。']);
         } elseif ($request->has('approved')) {
             $mentees = $request->userId;
-
             foreach ($mentees as $menteeId) {
                 //todo:aplication statusを2に更新
                 $this->applicationRepository->updateApprovedApplication($mentorId, $menteeId);
