@@ -51,6 +51,11 @@ class ApplicationEQRepository implements IApplicationRepository
 
     public function countUnreadApplications()
     {
-        return Application::doesntHave('read_applications')->count();
+        return Application::doesntHave('readApplications')->count();
+    }
+
+    public function countUnreadApproval()
+    {
+        return Application::doesntHave('readApproval')->where('status', config('application.status.approved'))->count();
     }
 }

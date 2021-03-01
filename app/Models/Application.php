@@ -23,8 +23,13 @@ class Application extends Model
         return $this->belongsTo('App\Models\User', 'mentee_id');
     }
 
-    public function read_applications()
+    public function readApplications()
     {
         return $this->hasMany('App\Models\ReadApplication', 'user_id', 'mentor_id');
+    }
+
+    public function readApproval()
+    {
+        return $this->hasMany('App\Models\ReadApproval', 'user_id', 'mentee_id');
     }
 }
