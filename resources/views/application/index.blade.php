@@ -3,26 +3,26 @@
 @section('content')
     {{--    @TODO:メンティーなら過去の応募内容、メンティーなら受け取った応募一覧を表示--}}
     <div class="text-center">
-            @if (session('success'))
-                <div class="alert alert-success text-center">
-                    <ul class="list-unstyled">
-                        <li>{{ session('success') }}</li>
-                    </ul>
-                </div>
-            @endif
-            @if (session('alert'))
-                <div class="alert alert-danger text-center">
-                    <ul class="list-unstyled">
-                        <li>{{ session('alert') }}</li>
-                    </ul>
-                </div>
-            @endif
+        @if (session('success'))
+            <div class="alert alert-success text-center">
+                <ul class="list-unstyled">
+                    <li>{{ session('success') }}</li>
+                </ul>
+            </div>
+        @endif
+        @if (session('alert'))
+            <div class="alert alert-danger text-center">
+                <ul class="list-unstyled">
+                    <li>{{ session('alert') }}</li>
+                </ul>
+            </div>
+        @endif
 
         @if(!$applicants)
             応募がありません
         @else
-        <h1 class="my-3 ml-3">応募一覧</h1>
-        
+            <h1 class="my-3 ml-3">応募一覧</h1>
+
             @if($userCategory!="mentor_id")
                 <form action="{{ route('application.update') }}" method="POST">
                     @csrf

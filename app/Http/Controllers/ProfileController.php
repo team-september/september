@@ -101,10 +101,13 @@ class ProfileController extends Controller
         $urls = $this->urlService->findUrls($profile, config('url.types'));
         list($career, $purposes, $skills, $mentors, $application, $appliedMentor)
             = $this->profileService->findProfile($profile);
-        if ($application && $application->status == config('application.status.approved')) {
+
+        // 承認直後か判定
+        $justApproved = $application && $application->readApproval->isEmpty() && $application->status == config('application.status.approved');
+        if ($justApproved) {
+            //既読処理
             $this->readApprovalRepository->create($application);
         }
-        //既読処理
 
         return view(
             'profile.index',
@@ -117,7 +120,8 @@ class ProfileController extends Controller
                 'skills',
                 'mentors',
                 'application',
-                'appliedMentor'
+                'appliedMentor',
+                'justApproved'
             )
         );
     }
