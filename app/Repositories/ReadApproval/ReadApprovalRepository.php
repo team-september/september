@@ -14,9 +14,9 @@ class ReadApprovalRepository implements IReadApprovalRepository
         return ReadApproval::create(
             [
                 'application_id' => $application->id,
-                'user_id'        => $application->mentee_id,
-                'created_at'     => Carbon::now(),
-                'updated_at'     => Carbon::now(),
+                'user_id' => $application->mentee_id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]
         );
     }

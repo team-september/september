@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -8,12 +10,10 @@ class CreateReadApprovalsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('read_approvals', function (Blueprint $table) {
+        Schema::create('read_approvals', function (Blueprint $table): void {
             $table->id();
             $table->unsignedBigInteger('application_id')->comment('応募ID');
             $table->unsignedBigInteger('user_id')->comment('ユーザーID');
@@ -32,10 +32,8 @@ class CreateReadApprovalsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('read_approvals');
     }
