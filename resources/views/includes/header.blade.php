@@ -13,13 +13,20 @@
                     @auth
                         <a class="nav-item nav-link" href="{{ route('application.index') }}">
                             応募一覧
-                            @if( (new \App\Repositories\User\UserEQRepository())->getUserBySub(\Illuminate\Support\Facades\Auth::id())->is_mentor && $unread_count = (new \App\Repositories\Application\ApplicationEQRepository())->countUnreadApplications())
+                            @if( (new \App\Repositories\User\UserEQRepository())->getUserBySub(\Illuminate\Support\Facades\Auth::id())->is_mentor && $unreadApplicationCount = (new \App\Repositories\Application\ApplicationEQRepository())->countUnreadApplications())
                                 <span class="badge badge-notify rounded-circle bg-primary text-white">
-                                    {{ $unread_count }}
+                                    {{ $unreadApplicationCount }}
                                 </span>
                             @endif
                         </a>
-                        <a class="nav-item nav-link" href="{{ route('profile.index') }}">プロフィール</a>
+                        <a class="nav-item nav-link" href="{{ route('profile.index') }}">
+                            プロフィール
+                            @if( (! (new \App\Repositories\User\UserEQRepository())->getUserBySub(\Illuminate\Support\Facades\Auth::id())->is_mentor) && $unreadApprovalCount = (new \App\Repositories\Application\ApplicationEQRepository())->countUnreadApproval())
+                                <span class="badge badge-notify rounded-circle bg-primary text-white">
+                                    {{ $unreadApprovalCount }}
+                                </span>
+                            @endif
+                        </a>
                         <a class="nav-item nav-link" href="{{ route('logout') }}">ログアウト</a>
                     @else
                         <a class="nav-item nav-link" href="{{ route('login') }}">ログイン</a>

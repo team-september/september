@@ -9,6 +9,7 @@ use App\Repositories\Application\IApplicationRepository;
 use App\Repositories\Career\ICareerRepository;
 use App\Repositories\Profile\IProfileRepository;
 use App\Repositories\Purpose\IPurposeRepository;
+use App\Repositories\ReadApproval\IReadApprovalRepository;
 use App\Repositories\Skill\ISkillRepository;
 use App\Repositories\Url\IUrlRepository;
 use App\Repositories\User\IUserRepository;
@@ -33,6 +34,8 @@ class ProfileController extends Controller
 
     protected $urlRepository;
 
+    protected $readApprovalRepository;
+
     protected $urlService;
 
     protected $profileService;
@@ -40,15 +43,16 @@ class ProfileController extends Controller
     /**
      * ApplicationController constructor.
      *
-     * @param IUserRepository        $userRepository
-     * @param IApplicationRepository $applicationRepository
-     * @param ICareerRepository      $careerRepository
-     * @param IPurposeRepository     $purposeRepository
-     * @param ISkillRepository       $skillRepository
-     * @param IProfileRepository     $profileRepository
-     * @param IUrlRepository         $urlRepository
-     * @param UrlService             $urlService
-     * @param ProfileService         $profileService
+     * @param IUserRepository         $userRepository
+     * @param IApplicationRepository  $applicationRepository
+     * @param ICareerRepository       $careerRepository
+     * @param IPurposeRepository      $purposeRepository
+     * @param ISkillRepository        $skillRepository
+     * @param IProfileRepository      $profileRepository
+     * @param IUrlRepository          $urlRepository
+     * @param IReadApprovalRepository $readApprovalRepository
+     * @param UrlService              $urlService
+     * @param ProfileService          $profileService
      */
     public function __construct(
         IUserRepository $userRepository,
@@ -58,6 +62,7 @@ class ProfileController extends Controller
         ISkillRepository $skillRepository,
         IProfileRepository $profileRepository,
         IUrlRepository $urlRepository,
+        IReadApprovalRepository $readApprovalRepository,
         UrlService $urlService,
         ProfileService $profileService
     ) {
@@ -68,6 +73,7 @@ class ProfileController extends Controller
         $this->skillRepository = $skillRepository;
         $this->profileRepository = $profileRepository;
         $this->urlRepository = $urlRepository;
+        $this->readApprovalRepository = $readApprovalRepository;
         $this->urlService = $urlService;
         $this->profileService = $profileService;
     }
@@ -80,10 +86,10 @@ class ProfileController extends Controller
         //データがない場合ユーザー関連情報を作成
         if (empty($user)) {
             $userInfo = [
-                'sub' => $auth0User->sub,
+                'sub'      => $auth0User->sub,
                 'nickname' => $auth0User->nickname,
-                'name' => $auth0User->name,
-                'picture' => $auth0User->picture,
+                'name'     => $auth0User->name,
+                'picture'  => $auth0User->picture,
             ];
 
             $user = $this->userRepository->create($userInfo);
@@ -95,6 +101,10 @@ class ProfileController extends Controller
         $urls = $this->urlService->findUrls($profile, config('url.types'));
         list($career, $purposes, $skills, $mentors, $application, $appliedMentor)
             = $this->profileService->findProfile($profile);
+        if ($application && $application->status == config('application.status.approved')) {
+            $this->readApprovalRepository->create($application);
+        }
+        //既読処理
 
         return view(
             'profile.index',
