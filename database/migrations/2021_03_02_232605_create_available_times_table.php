@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAvailabilitiesTable extends Migration
+class CreateAvailableTimesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateAvailabilitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('availabilities', function (Blueprint $table) {
+        Schema::create('available_times', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('mentor_id')->comment('メンターID');
-            $table->date('available_date')->comment('予約可能日');
+            $table->unsignedBigInteger('availability_id')->comment('予約可能日ID');
+            $table->time('time')->comment('予約可能時間');
             $table->timestamps();
-            $table->foreign('mentor_id')
+
+            $table->foreign('availability_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
@@ -32,6 +33,6 @@ class CreateAvailabilitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('availabilities');
+        Schema::dropIfExists('available_times');
     }
 }
