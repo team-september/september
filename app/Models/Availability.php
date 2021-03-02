@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Availability extends Model
 {
     use HasFactory;
+
+    public function availableTimes()
+    {
+        return $this->hasMany('App\Models\AvailableTime', 'availability_id', 'id');
+    }
 }
