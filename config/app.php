@@ -177,6 +177,7 @@ return [
         App\Providers\ProfileRepositoryServiceProvider::class,
         App\Providers\SkillRepositoryServiceProvider::class,
         App\Providers\ReadApplicationRepositoryServiceProvider::class,
+        App\Providers\ReadApprovalRepositoryServiceProvider::class,
 
         Auth0\Login\LoginServiceProvider::class,
     ],

@@ -92,8 +92,9 @@ class ApplicationController extends Controller
                 //aplication statusを2に更新
                 $this->applicationRepository->updateApprovedApplication($mentorId, $menteeId);
                 //read_application　既読済テーブルから既読の情報を消す
-                $applications = $this->applicationRepository->getOngoingApplication($menteeId);
-                $this->readApplicationRepository->delete($applications->id, $menteeId);
+                //@TODO:delete()メソッドの実装
+//                $application = $this->applicationRepository->getOngoingApplication($menteeId);
+//                $this->readApplicationRepository->delete($application->id, $menteeId);
             }
             return redirect()->route('application.index')->with(['success' => '応募を承認しました。']);
         }

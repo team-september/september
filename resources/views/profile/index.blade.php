@@ -26,6 +26,13 @@
                     </ul>
                 </div>
             @endif
+            @if ($justApproved)
+                <div class="alert alert-success text-center">
+                    <ul class="list-unstyled">
+                        <li>メンティー申請が承認されています！</li>
+                    </ul>
+                </div>
+            @endif
 
             @include('includes.application_modal')
 
