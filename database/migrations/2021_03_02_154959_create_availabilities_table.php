@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -8,12 +10,10 @@ class CreateAvailabilitiesTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('availabilities', function (Blueprint $table) {
+        Schema::create('availabilities', function (Blueprint $table): void {
             $table->id();
             $table->unsignedBigInteger('mentor_id')->comment('メンターID');
             $table->date('available_date')->comment('予約可能日');
@@ -27,10 +27,8 @@ class CreateAvailabilitiesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('availabilities');
     }
