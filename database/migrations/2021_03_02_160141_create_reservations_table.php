@@ -20,7 +20,7 @@ class CreateReservationsTable extends Migration
             $table->date('date')->comment('予約日');
             $table->time('time')->comment('予約時間');
             $table->unsignedTinyInteger('status')->comment('予約ステータス');
-            $table->nullable()->text('mentor_comment')->comment('メンターからのコメント');
+            $table->text('mentor_comment')->nullable()->comment('メンターからのコメント');
             $table->timestamps();
 
             $table->foreign('mentee_id')
