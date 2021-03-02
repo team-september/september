@@ -33,4 +33,18 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Application', 'mentee_id', 'id');
     }
+
+    public function availabilities()
+    {
+        return $this->hasMany('App\Models\Availabilty', 'mentor_id', 'id');
+    }
+
+    public function reservations() 
+    {
+        if($this->is_mentor) {
+            return $this->hasMany('App\Models\Reservation', 'mentor_id', 'id');
+        } else {
+            return $this->hasMany('App\Models\Reservation', 'mentee_id', 'id');
+        }
+    }
 }
