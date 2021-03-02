@@ -29,7 +29,7 @@ class ProfileService
         $purposes = $profile->purposes;
         $skills = $profile->skills;
         $mentors = $this->userRepository->getMentors();
-        $application = $this->applicationRepository->getLatestApplication($profile->id);
+        $application = $this->applicationRepository->getLatestApplication($profile->user_id);
         $appliedMentor = $application ? $application->mentor : null;
 
         return [

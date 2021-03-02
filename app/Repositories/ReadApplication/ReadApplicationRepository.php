@@ -14,7 +14,7 @@ class ReadApplicationRepository implements IReadApplicationRepository
         $data = [];
 
         foreach ($applications as $application) {
-            if ($application->read_applications->isNotEmpty()) {
+            if ($application->readApplications->isNotEmpty()) {
                 continue;
             }
 
