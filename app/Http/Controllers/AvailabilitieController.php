@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ApplicationCreateRequest;
 use App\Http\Requests\ApplicationUpdateRequest;
 use App\Repositories\Application\IApplicationRepository;
 use App\Repositories\ReadApplication\IReadApplicationRepository;
 use App\Repositories\User\IUserRepository;
-use Illuminate\Support\Facades\Auth;
 
 class AvailabilitieController extends Controller
 {
@@ -41,7 +39,7 @@ class AvailabilitieController extends Controller
         return view('availabilitie.index');
     }
 
-    public function update(ApplicationUpdateRequest $request)
+    public function update(ApplicationUpdateRequest $request): void
     {
     }
 }
