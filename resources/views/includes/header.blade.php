@@ -19,6 +19,11 @@
                                 </span>
                             @endif
                         </a>
+                        @if( (new \App\Repositories\User\UserEQRepository())->getUserBySub(\Illuminate\Support\Facades\Auth::id())->is_mentor)
+                            <a class="nav-item nav-link" href="{{ route('availabilitie.index') }}">
+                                スケジュール作成
+                            </a>
+                        @endif
                         <a class="nav-item nav-link" href="{{ route('profile.index') }}">
                             プロフィール
                             @if( (! (new \App\Repositories\User\UserEQRepository())->getUserBySub(\Illuminate\Support\Facades\Auth::id())->is_mentor) && $unreadApprovalCount = (new \App\Repositories\Application\ApplicationEQRepository())->countUnreadApproval())

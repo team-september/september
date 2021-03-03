@@ -31,5 +31,6 @@ Route::group(
         Route::get('/application', 'ApplicationController@index')->name('application.index');
         Route::post('/application', 'ApplicationController@store')->name('application.store');
         Route::post('/application/update', 'ApplicationController@update')->name('application.update');
+        Route::get('/availabilitie', 'AvailabilitieController@index')->name('availabilitie.index');
     }
 );
