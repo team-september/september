@@ -1,0 +1,255 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+use App\Constants\Icons;
+use App\Models\Availability;
+use App\Repositories\User\UserEQRepository;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+
+class CalendarService
+{
+    protected UserEQRepository $UserEQRepository;
+
+    protected Carbon $Carbon;
+
+    protected Carbon $fistDayOfMonth;
+
+    protected Carbon $nextMonth;
+
+    protected Carbon $prevMonth;
+
+    public function __construct()
+    {
+        $this->UserEQRepository = new UserEQRepository;
+
+        // GETがあればGETからCarbonインスタンスを作成
+        if (isset($_GET['ym'])) {
+            $Carbon = new Carbon($_GET['ym']);
+        } else {
+            $Carbon = Carbon::now();
+        }
+
+        // クラス変数代入
+        $this->Carbon = $Carbon;
+        $this->firstDayOfMonth = $Carbon->copy()->firstOfMonth();
+        $this->lastDayOfMonth = $Carbon->copy()->lastOfMonth();
+        $this->prevMonth = $Carbon->copy()->subMonthsNoOverflow();
+        $this->nextMonth = $Carbon->copy()->addMonthsNoOverflow();
+    }
+
+    /**
+     * カレンダーデータ（HTML）を返却する.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $calendar = '';
+        $calendar .= $this->getCalendarHeader();
+        $calendar .= $this->getCalendarBody();
+        return $calendar;
+    }
+
+    /**
+     * @return Carbon $this->Carbon
+     */
+    public function getCurrentMonth(): Carbon
+    {
+        return $this->Carbon;
+    }
+
+    /**
+     * @return Carbon $this->prevMonth
+     */
+    public function getPrevMonth(): Carbon
+    {
+        return $this->prevMonth;
+    }
+
+    /**
+     * @return Carbon $this->prevMonth
+     */
+    public function getNextMonth(): Carbon
+    {
+        return $this->nextMonth;
+    }
+
+    /**
+     * テーブルヘッダーHTML.
+     *
+     * @return string $header
+     */
+    private function getCalendarHeader(): string
+    {
+        $header = [];
+
+        $header[] = '<div class="calendar">';
+        $header[] = '<table class="table table-bordered">';
+        $header[] = '<thead>';
+        $header[] = '<tr>';
+        $header[] = '<th>月</th>';
+        $header[] = '<th>火</th>';
+        $header[] = '<th>水</th>';
+        $header[] = '<th>木</th>';
+        $header[] = '<th>金</th>';
+        $header[] = '<th>土</th>';
+        $header[] = '<th>日</th>';
+        $header[] = '</tr>';
+        $header[] = '</head>';
+
+        return implode($header);
+    }
+
+    /**
+     * テーブルボディhtml.
+     *
+     * @return string $html
+     */
+    private function getCalendarBody(): string
+    {
+        $html = [];
+
+        $html[] = '<tdoby>';
+        $weeks = $this->getWeeks();
+
+        foreach ($weeks as $week) {
+            $html[] = '<tr>';
+
+            foreach ($week as $day) {
+                if ($day) {
+                    $date = new Carbon($day);
+                    $css = $this->getCss($date);
+                    $html[] = '<td ' . $css . '>';
+                    $html[] = $date->format('j');
+                    $html[] = $this->generateLink($date);
+                    $html[] = '</td>';
+                } else {
+                    $html[] = '<td></td>';
+                }
+            }
+            $html[] = '</tr>';
+        }
+        $html[] = '</tbody>';
+        $html[] = '</table>';
+        $html[] = '</div>';
+
+        return implode($html);
+    }
+
+    /**
+     * CSS取得 class="~~"の文字列を返す.
+     *
+     * @param Carbon $date
+     * @return string or null
+     */
+    private function getCss(Carbon $date): string
+    {
+        $css = [];
+
+        // 今日と過去の日付は色を変える
+        if ($date->isToday()) {
+            $css[] = 'today';
+        } elseif ($date->isPast()) {
+            $css[] = 'past text-muted';
+        }
+
+        // 曜日ごとのCSS
+        $css[] = strtolower($date->format('D'));
+
+        return 'class="' . implode(' ', $css) . '"';
+    }
+
+    /**
+     * リンクボタン取得.
+     *
+     * @param Carbon
+     * @param Carbon $date
+     * @return string $html
+     */
+    private function generateLink(Carbon $date): string
+    {
+        $user = $this->UserEQRepository->getUserBySub(Auth::id());
+
+        $emtpylink = '<div class="text-muted">' . Icons::SLASH . '</div>';
+
+        $link = [];
+
+        // 過去の日付 or 今日ならリンクなし
+        if ($date->isPast() || $date->isToday()) {
+            return $emtpylink;
+        }
+
+        // メンターは編集画面へのリンク
+        if ($user->is_mentor) {
+            $link[] = '<div>';
+            $link[] = '<a class="text-primary" href="';
+            $link[] = route('reservation.setting', ['date' => $date->format('Y-m-d')]);
+            $link[] = '">' . Icons::SETTINGS . '</a>';
+            $link[] = '</div>';
+            return implode($link);
+        }
+
+        // メンティーはメンターの空きがあればリンクが見られる
+        $availability = Availability::where('available_date', $date)
+            ->where('mentor_id', $user->mentor_id)->first();
+        if ($availability === null) {
+            return $emtpylink;
+        }
+        $link[] = '<div>';
+        $link[] = '<a class="text-success" href="';
+        $link[] = route('reservation.reserve', ['date' => $date->format('Y-m-d')]);
+        $link[] = '">' . Icons::PLUS . '</a>';
+        $link[] = '</div>';
+        return implode($link);
+    }
+
+    /**
+     * 日付配列を週の配列に入れる.
+     *
+     * @return array $weeks
+     */
+    private function getWeeks(): array
+    {
+        $weeks = [];
+        $tmpDay = $this->firstDayOfMonth->copy();
+
+        // 月末までループ
+        while ($tmpDay->lte($this->lastDayOfMonth)) {
+            $weeks[] = $this->getDays($tmpDay);
+            $tmpDay->addDay(7);
+        }
+
+        return $weeks;
+    }
+
+    /**
+     * 日付文字列配列.
+     * @param Carbon $date
+     * @return array $days
+     */
+    private function getDays(Carbon $date): array
+    {
+        $tmpDay = $date->copy()->startOfWeek(); // 週の頭にセット
+
+        // 週末までループ
+        $endOfWeek = $date->copy()->endOfWeek();
+        $days = [];
+        while ($tmpDay->lte($endOfWeek)) {
+            //前の月、もしくは後ろの月の場合はnull
+            if ($tmpDay->month !== $this->Carbon->month) {
+                $days[] = '';
+                $tmpDay->addDay(1);
+                continue;
+            }
+
+            $days[] = $tmpDay->format('Y-m-d');
+
+            $tmpDay->addDay(1);
+        }
+        return $days;
+    }
+}
