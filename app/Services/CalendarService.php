@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Constants\Icons;
-use App\Models\Availability;
-use App\Repositories\User\UserEQRepository;
+use App\Repositories\Availability\AvailabilityEQRepository as Availability;
+use App\Repositories\User\UserEQRepository as User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class CalendarService
 {
-    protected UserEQRepository $UserEQRepository;
+    protected User $User;
+
+    protected Availability $Availability;
 
     protected Carbon $Carbon;
 
@@ -24,7 +26,8 @@ class CalendarService
 
     public function __construct()
     {
-        $this->UserEQRepository = new UserEQRepository;
+        $this->User = new User;
+        $this->Availability = new Availability;
 
         // GETがあればGETからCarbonインスタンスを作成
         if (isset($_GET['ym'])) {
@@ -172,18 +175,18 @@ class CalendarService
      */
     private function generateLink(Carbon $date): string
     {
-        $user = $this->UserEQRepository->getUserBySub(Auth::id());
-
+        
         $emtpylink = '<div class="text-muted">' . Icons::SLASH . '</div>';
 
         $link = [];
-
+        
         // 過去の日付 or 今日ならリンクなし
         if ($date->isPast() || $date->isToday()) {
             return $emtpylink;
         }
-
+        
         // メンターは編集画面へのリンク
+        $user = $this->User->getUserBySub(Auth::id());
         if ($user->is_mentor) {
             $link[] = '<div>';
             $link[] = '<a class="text-primary" href="';
@@ -194,8 +197,11 @@ class CalendarService
         }
 
         // メンティーはメンターの空きがあればリンクが見られる
-        $availability = Availability::where('available_date', $date)
-            ->where('mentor_id', $user->mentor_id)->first();
+        $availability = $this->Availability->getAvailabilityByMentorId($user->mentor_id);
+
+        // TODO: 下記と同じ結果になるようにリポジトリとユーザーModelを実装
+        // Availability::where('available_date', $date)->where('mentor_id', $user->mentor_id)->first();
+        
         if ($availability === null) {
             return $emtpylink;
         }
@@ -239,7 +245,7 @@ class CalendarService
         $endOfWeek = $date->copy()->endOfWeek();
         $days = [];
         while ($tmpDay->lte($endOfWeek)) {
-            //前の月、もしくは後ろの月の場合はnull
+            //前の月、もしくは後ろの月の場合は空文字
             if ($tmpDay->month !== $this->Carbon->month) {
                 $days[] = '';
                 $tmpDay->addDay(1);
