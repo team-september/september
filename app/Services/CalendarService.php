@@ -196,6 +196,7 @@ class CalendarService
         // メンティーはメンターの空きがあればリンクが見られる
         $availability = Availability::where('available_date', $date)
             ->where('mentor_id', $user->mentor_id)->first();
+
         if ($availability === null) {
             return $emtpylink;
         }
