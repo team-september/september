@@ -31,5 +31,11 @@ Route::group(
         Route::get('/application', 'ApplicationController@index')->name('application.index');
         Route::post('/application', 'ApplicationController@store')->name('application.store');
         Route::post('/application/update', 'ApplicationController@update')->name('application.update');
+
+        Route::group(['prefix' => 'reservation'], function (): void {
+            Route::get('', 'ReservationController@index')->name('reservation.index');
+            Route::get('/detail', 'ReservationController@reserve')->name('reservation.reserve');
+            Route::get('/setting', 'ReservationController@setting')->name('reservation.setting');
+        });
     }
 );
