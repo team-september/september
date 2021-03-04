@@ -175,18 +175,18 @@ class CalendarService
      */
     private function generateLink(Carbon $date): string
     {
-        
         $emtpylink = '<div class="text-muted">' . Icons::SLASH . '</div>';
 
         $link = [];
-        
+
         // 過去の日付 or 今日ならリンクなし
         if ($date->isPast() || $date->isToday()) {
             return $emtpylink;
         }
-        
+
         // メンターは編集画面へのリンク
         $user = $this->User->getUserBySub(Auth::id());
+
         if ($user->is_mentor) {
             $link[] = '<div>';
             $link[] = '<a class="text-primary" href="';
@@ -201,7 +201,7 @@ class CalendarService
 
         // TODO: 下記と同じ結果になるようにリポジトリとユーザーModelを実装
         // Availability::where('available_date', $date)->where('mentor_id', $user->mentor_id)->first();
-        
+
         if ($availability === null) {
             return $emtpylink;
         }
