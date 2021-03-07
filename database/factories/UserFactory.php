@@ -26,12 +26,12 @@ class UserFactory extends Factory
     {
         return [
             'sub' => $this->faker->unique()->md5,
-            'is_mentor' => $this->faker->randomElement(['t', 'f']),
-            'nickname' => $this->faker->sentence(),
+            'is_mentor' => 'f',
+            'nickname' => Str::random(8) . '_jp',
             'name' => $this->faker->name,
             'picture' => url('/img/dummyUser.jpeg'),
-            'created_at' => $this->faker->dateTime('now', 'ja-JP'),
-            'updated_at' => $this->faker->dateTime('now', 'ja-JP'),
+            'created_at' => $this->faker->dateTimeBetween('-1 years','now'),
+            'updated_at' => $this->faker->dateTimeBetween('-1 years', 'now'),
         ];
     }
 }
