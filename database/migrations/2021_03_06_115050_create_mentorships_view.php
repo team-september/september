@@ -19,11 +19,11 @@ class CreateMentorshipsView extends Migration
         DB::statement('CREATE VIEW
                             mentorships
                         AS 
-                            SELECT mentor_id, mentee_id, (CASE 
-                                                            WHEN (SELECT status FROM applications) = 2 THEN true 
-                                                            ELSE false
-                                                          END) as is_active 
-                            FROM applications  
+                             SELECT mentor_id, mentee_id, (CASE 
+                                                                WHEN STATUS = 2 THEN true 
+                                                                ELSE false 
+                                                            END) as is_active 
+                             from applications;
           ');
     }
 
