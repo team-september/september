@@ -13,7 +13,7 @@ class CreateMentorshipsView extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('mentorships'); // mentorships実テーブルが環境にあれば一旦ドロップ
+        Schema::dropIfExists('mentorships'); // 実テーブルドロップ
 
         DB::statement('DROP VIEW IF EXISTS mentorships');
         DB::statement('CREATE VIEW
