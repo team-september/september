@@ -30,9 +30,8 @@ class UserFactory extends Factory
             'nickname' => Str::random(8) . '_jp',
             'name' => $this->faker->name,
             'picture' => url('/img/dummyUser.jpeg'),
-            'created_at' => $this->faker->dateTimeBetween('-1 years','now'),
+            'created_at' => $this->faker->dateTimeBetween('-1 years', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 years', 'now'),
         ];
     }
 }
-                

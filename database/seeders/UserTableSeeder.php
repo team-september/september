@@ -8,7 +8,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Faker\Generator as Faker;
 
 class UserTableSeeder extends Seeder
 {
