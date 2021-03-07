@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Faker\Generator as Faker;
 
 class UserTableSeeder extends Seeder
 {
@@ -28,5 +30,9 @@ class UserTableSeeder extends Seeder
                 ],
             ]
         );
+
+        User::factory()
+            ->times(10)
+            ->create();
     }
 }
