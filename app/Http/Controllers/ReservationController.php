@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Services\CalendarService;
+use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
@@ -17,5 +18,11 @@ class ReservationController extends Controller
         $calendar = $Service->render();
 
         return view('reservation.index', compact('prev', 'next', 'current', 'calendar'));
+    }
+
+    public function update(Request $request)
+    {
+        dd($request);
+        return view('');
     }
 }

@@ -36,6 +36,7 @@ Route::group(
             Route::get('', 'ReservationController@index')->name('reservation.index');
             Route::get('/detail', 'ReservationController@reserve')->name('reservation.reserve');
             Route::get('/setting', 'ReservationController@setting')->name('reservation.setting');
+            Route::post('/update', 'ReservationController@update')->name('reservation.update');
         });
     }
 );
