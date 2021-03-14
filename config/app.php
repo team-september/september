@@ -68,7 +68,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'ASIA/TOKYO',
 
     /*
     |--------------------------------------------------------------------------
@@ -231,5 +231,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Auth0' => Auth0\Login\Facade\Auth0::class,
+
+        //Constants
+        'Icons' => App\Constants\Icons::class,
     ],
 ];
