@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Constants\Icons;
-use App\Repositories\Availability\AvailabilityEQRepository as Availability;
-use App\Repositories\User\UserEQRepository as User;
+use App\Models\User;
+use App\Repositories\Availability\IAvailabilityRepository;
+use App\Repositories\Mentorship\IMentorshipRepository;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
+/**
+ * 現在ログイン中のユーザーに合わせてカレンダー用のデータを返すクラス
+ * 1. メンティーの場合は紐づいたメンターの予定
+ * 2. メンターの場合は過去の日付以外は設定のリンク表示.
+ */
 class CalendarService
 {
-    protected User $User;
+    public User $user;
 
-    protected Availability $Availability;
+    protected Collection $Availabilities;
 
     protected Carbon $Carbon;
 
@@ -24,37 +30,22 @@ class CalendarService
 
     protected Carbon $prevMonth;
 
-    public function __construct()
+    public function __construct(User $user, Request $request)
     {
-        $this->User = new User;
-        $this->Availability = new Availability;
+        $this->user = $user;
 
-        // GETがあればGETからCarbonインスタンスを作成
-        if (isset($_GET['ym'])) {
-            $Carbon = new Carbon($_GET['ym']);
-        } else {
-            $Carbon = Carbon::now();
-        }
+        // 日付系のデータ取得／加工
+        $this->Carbon = $request->ym ? new Carbon($request->ym) : Carbon::now();
+        $this->firstDayOfMonth = $this->Carbon->copy()->firstOfMonth();
+        $this->lastDayOfMonth = $this->Carbon->copy()->lastOfMonth();
+        $this->prevMonth = $this->Carbon->copy()->subMonthsNoOverflow();
+        $this->nextMonth = $this->Carbon->copy()->addMonthsNoOverflow();
 
-        // クラス変数代入
-        $this->Carbon = $Carbon;
-        $this->firstDayOfMonth = $Carbon->copy()->firstOfMonth();
-        $this->lastDayOfMonth = $Carbon->copy()->lastOfMonth();
-        $this->prevMonth = $Carbon->copy()->subMonthsNoOverflow();
-        $this->nextMonth = $Carbon->copy()->addMonthsNoOverflow();
-    }
+        // メンターID取得（メンティーの場合は担当メンター）
+        $mentor_id = $this->user->is_mentor ? $this->user->id : app(IMentorshipRepository::class)->getMentorIdByMenteeId($this->user->id);
 
-    /**
-     * カレンダーデータ（HTML）を返却する.
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $calendar = '';
-        $calendar .= $this->getCalendarHeader();
-        $calendar .= $this->getCalendarBody();
-        return $calendar;
+        // メンターに紐づいた予約可能日取得
+        $this->Availabilities = app(IAvailabilityRepository::class)->getMonthsAvailabilitiesByDate($this->Carbon, $mentor_id);
     }
 
     /**
@@ -82,143 +73,11 @@ class CalendarService
     }
 
     /**
-     * テーブルヘッダーHTML.
-     *
-     * @return string $header
-     */
-    private function getCalendarHeader(): string
-    {
-        $header = [];
-
-        $header[] = '<div class="calendar">';
-        $header[] = '<table class="table table-bordered">';
-        $header[] = '<thead>';
-        $header[] = '<tr>';
-        $header[] = '<th>月</th>';
-        $header[] = '<th>火</th>';
-        $header[] = '<th>水</th>';
-        $header[] = '<th>木</th>';
-        $header[] = '<th>金</th>';
-        $header[] = '<th>土</th>';
-        $header[] = '<th>日</th>';
-        $header[] = '</tr>';
-        $header[] = '</head>';
-
-        return implode($header);
-    }
-
-    /**
-     * テーブルボディhtml.
-     *
-     * @return string $html
-     */
-    private function getCalendarBody(): string
-    {
-        $html = [];
-
-        $html[] = '<tdoby>';
-        $weeks = $this->getWeeks();
-
-        foreach ($weeks as $week) {
-            $html[] = '<tr>';
-
-            foreach ($week as $day) {
-                if ($day) {
-                    $date = new Carbon($day);
-                    $css = $this->getCss($date);
-                    $html[] = '<td ' . $css . '>';
-                    $html[] = $date->format('j');
-                    $html[] = $this->generateLink($date);
-                    $html[] = '</td>';
-                } else {
-                    $html[] = '<td></td>';
-                }
-            }
-            $html[] = '</tr>';
-        }
-        $html[] = '</tbody>';
-        $html[] = '</table>';
-        $html[] = '</div>';
-
-        return implode($html);
-    }
-
-    /**
-     * CSS取得 class="~~"の文字列を返す.
-     *
-     * @param Carbon $date
-     * @return string or null
-     */
-    private function getCss(Carbon $date): string
-    {
-        $css = [];
-
-        // 今日と過去の日付は色を変える
-        if ($date->isToday()) {
-            $css[] = 'today';
-        } elseif ($date->isPast()) {
-            $css[] = 'past text-muted';
-        }
-
-        // 曜日ごとのCSS
-        $css[] = strtolower($date->format('D'));
-
-        return 'class="' . implode(' ', $css) . '"';
-    }
-
-    /**
-     * リンクボタン取得.
-     *
-     * @param Carbon
-     * @param Carbon $date
-     * @return string $html
-     */
-    private function generateLink(Carbon $date): string
-    {
-        $emtpylink = '<div class="text-muted">' . Icons::SLASH . '</div>';
-
-        $link = [];
-
-        // 過去の日付 or 今日ならリンクなし
-        if ($date->isPast() || $date->isToday()) {
-            return $emtpylink;
-        }
-
-        // メンターは編集画面へのリンク
-        $user = $this->User->getUserBySub(Auth::id());
-
-        if ($user->is_mentor) {
-            $link[] = '<div>';
-            $link[] = '<a class="text-primary" href="';
-            $link[] = route('reservation.setting', ['date' => $date->format('Y-m-d')]);
-            $link[] = '">' . Icons::SETTINGS . '</a>';
-            $link[] = '</div>';
-            return implode($link);
-        }
-
-        // メンティーはメンターの空きがあればリンクが見られる
-        $availability = $this->Availability->getAvailabilityByMentorId($user->mentor_id);
-
-        // TODO: 下記と同じ結果になるようにリポジトリとユーザーModelを実装
-        // Availability::where('available_date', $date)->where('mentor_id', $user->mentor_id)->first();
-
-        if ($availability === null) {
-            return $emtpylink;
-        }
-        $link[] = '<div>';
-        $link[] = '<a class="text-success" href="';
-        $link[] = route('reservation.reserve', ['date' => $date->format('Y-m-d')]);
-        $link[] = '">' . Icons::PLUS . '</a>';
-        $link[] = '</div>';
-        return implode($link);
-    }
-
-    /**
-     * 日付配列を週の配列に入れる.
+     * 日付データの取得.
      *
      * @return array $weeks
      */
-    private function getWeeks(): array
+    public function getCalendarData(): array
     {
         $weeks = [];
         $tmpDay = $this->firstDayOfMonth->copy();
@@ -247,13 +106,27 @@ class CalendarService
         while ($tmpDay->lte($endOfWeek)) {
             //前の月、もしくは後ろの月の場合は空文字
             if ($tmpDay->month !== $this->Carbon->month) {
-                $days[] = '';
+                $days[] = null;
                 $tmpDay->addDay(1);
                 continue;
             }
 
-            $days[] = $tmpDay->format('Y-m-d');
+            $day = [
+                'date' => $tmpDay->format('Y-m-d'),
+                'date_j' => $tmpDay->format('j'),
+                'day' => strtolower($tmpDay->format('D')),
+                'is_today' => $tmpDay->isToday(),
+                'is_past' => $tmpDay->endOfDay()->isPast(),
+            ];
 
+            // is_availableフラグ
+            if ($this->Availabilities->isEmpty()) {
+                $day['is_available'] = false;
+            } else {
+                $day['is_available'] = $this->Availabilities->where('available_date', '=', $day['date'])->isNotEmpty();
+            }
+
+            $days[] = (object) $day;
             $tmpDay->addDay(1);
         }
         return $days;

@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Repositories\User\IUserRepository;
 use App\Services\CalendarService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    public function index()
+    public function index(Request $request, IUserRepository $UserRepository)
     {
-        $Service = new CalendarService();
-        $prev = $Service->getPrevMonth()->format('Y-m');
-        $next = $Service->getNextMonth()->format('Y-m');
-        $current = $Service->getCurrentMonth()->format('Y年m月');
-        $calendar = $Service->render();
+        $user = $UserRepository->getUserBySub(Auth::id());
+        $Service = new CalendarService($user, $request);
+        $prevMonth = $Service->getPrevMonth()->format('Y-m');
+        $nextMonth = $Service->getNextMonth()->format('Y-m');
+        $currentMonth = $Service->getCurrentMonth()->format('Y年m月');
+        $calendarData = $Service->getCalendarData();
 
-        return view('reservation.index', compact('prev', 'next', 'current', 'calendar'));
+        return view('reservation.index', compact('user', 'prevMonth', 'nextMonth', 'currentMonth', 'calendarData'));
     }
 }
