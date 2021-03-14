@@ -9,5 +9,5 @@ use Carbon\Carbon;
 
 interface IAvailabilityRepository
 {
-    public static function getMonthsAvailabilitiesByDate(Carbon $date, int $mentor_id): ?Availability;
+    public function getMonthsAvailabilitiesByDate(Carbon $date, int $mentor_id): ?Availability;
 }

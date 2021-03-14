@@ -9,7 +9,7 @@ use Carbon\Carbon;
 
 class AvailabilityEQRepository implements IAvailabilityRepository
 {
-    public static function getMonthsAvailabilitiesByDate(Carbon $date, int $mentor_id): ?Availability
+    public function getMonthsAvailabilitiesByDate(Carbon $date, int $mentor_id): ?Availability
     {
         return Availability::where('mentor_id', $mentor_id)
             ->where('available_date', '>=', $date->firstOfMonth())
