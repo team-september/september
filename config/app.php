@@ -178,6 +178,8 @@ return [
         App\Providers\SkillRepositoryServiceProvider::class,
         App\Providers\ReadApplicationRepositoryServiceProvider::class,
         App\Providers\ReadApprovalRepositoryServiceProvider::class,
+        App\Providers\AvailabilityRepositoryServiceProvider::class,
+        App\Providers\MentorshipRepositoryServiceProvider::class,
 
         Auth0\Login\LoginServiceProvider::class,
     ],
