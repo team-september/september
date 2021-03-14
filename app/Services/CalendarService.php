@@ -189,22 +189,23 @@ class CalendarService
 
         if ($user->is_mentor) {
             //時間設定の文字列作成
-            $time = "<option value =''>" .' '."</option>";
-            for($i =0; $i<=23; $i++){
-                $time =  $time . "<option value =" . $i .":00". ">" . $i.":00" ."</option>";
-                $time =  $time . "<option value =" . $i .":30". ">" . $i.":30" ."</option>";
+            $time = "<option value =''>" . ' ' . '</option>';
+
+            for ($i = 0; $i <= 23; $i++) {
+                $time = $time . '<option value =' . $i . ':00' . '>' . $i . ':00' . '</option>';
+                $time = $time . '<option value =' . $i . ':30' . '>' . $i . ':30' . '</option>';
             }
             $link[] = '<div>';
             $link[] = '<a class="text-primary" href="#';
-            $link[] = 'date'.$date->format('Ymd');
-            $link[] = '" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="date'. $date->format('Ymd').'">'. Icons::PLUS . '</a>';
+            $link[] = 'date' . $date->format('Ymd');
+            $link[] = '" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="date' . $date->format('Ymd') . '">' . Icons::PLUS . '</a>';
             $link[] = '<div class="collapse" id="';
-            $link[] = 'date'.$date->format('Ymd').'">';
+            $link[] = 'date' . $date->format('Ymd') . '">';
             $link[] = '<div class="card card-body ">';
             $link[] = '<div class ="start_time text-center"> 開始';
-            $link[] = '<select name='."start_".$date->format('Ymd').">". $time .'</select> </div> </br>';
+            $link[] = '<select name=' . 'start_' . $date->format('Ymd') . '>' . $time . '</select> </div> </br>';
             $link[] = '<div class ="end_time text-center"> 終了';
-            $link[] = '<select name='."end_" .$date->format('Ymd').">". $time .'</select> </div>';
+            $link[] = '<select name=' . 'end_' . $date->format('Ymd') . '>' . $time . '</select> </div>';
             $link[] = '</div>';
             $link[] = '</div>';
             $link[] = '</div>';
@@ -225,7 +226,7 @@ class CalendarService
         $link[] = $date->format('Y-m-d');
         $link[] = '" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample">' . Icons::PLUS . '</a>';
         $link[] = '<div class="collapse" id="';
-        $link[] = $date->format('Y-m-d')."'";
+        $link[] = $date->format('Y-m-d') . "'";
         $link[] = '"</div>';
         $link[] = '</div>';
         return implode($link);
