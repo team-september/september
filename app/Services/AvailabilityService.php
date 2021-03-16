@@ -38,7 +38,7 @@ class AvailabilityService
         $this->lastDayOfMonth = $this->Carbon->copy()->lastOfMonth();
         $this->prevMonth = $this->Carbon->copy()->subMonthsNoOverflow();
         $this->nextMonth = $this->Carbon->copy()->addMonthsNoOverflow();
-        
+
         // メンターID取得（メンティーの場合は担当メンター）
         $this->user = app(IUserRepository::class)->getUserBySub(Auth::id());
         $mentor_id = $this->user->is_mentor ? $this->user->id : app(IMentorshipRepository::class)->getMentorIdByMenteeId($this->user->id);
@@ -48,8 +48,8 @@ class AvailabilityService
     }
 
     /**
-     * 当月のデータ取得
-     * @return object 
+     * 当月のデータ取得.
+     * @return object
      * @properties
      * Carbon $object->currentMonth
      * Carbon $object->nextMonth
@@ -70,17 +70,17 @@ class AvailabilityService
 
         return (object) [
             'currentMonth' => $this->Carbon,
-            'nextMonth'    => $this->nextMonth,
-            'prevMonth'    => $this->prevMonth,
-            'weeks'        => $weeks,
+            'nextMonth' => $this->nextMonth,
+            'prevMonth' => $this->prevMonth,
+            'weeks' => $weeks,
         ];
     }
 
     /**
-     * 週毎のデータを配列化したもの
+     * 週毎のデータを配列化したもの.
      * @param Carbon $date
      * @return array $days
-     * 
+     *
      * day object properties
      * date         => Y-m-d
      * date_j       => 1 - 31

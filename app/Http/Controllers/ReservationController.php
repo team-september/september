@@ -15,8 +15,8 @@ class ReservationController extends Controller
         $availabilityData = $Service->getAvailabilityDataByMonth();
 
         return view('reservation.index', [
-            'prevMonth'    => $availabilityData->prevMonth->format('Y-m'),
-            'nextMonth'    => $availabilityData->nextMonth->format('Y-m'),
+            'prevMonth' => $availabilityData->prevMonth->format('Y-m'),
+            'nextMonth' => $availabilityData->nextMonth->format('Y-m'),
             'currentMonth' => $availabilityData->currentMonth->format('Y年m月'),
             'calendarData' => $availabilityData->weeks,
         ]);
