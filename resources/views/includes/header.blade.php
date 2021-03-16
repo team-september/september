@@ -13,7 +13,7 @@
                     @auth
                         <a class="nav-item nav-link" href="{{ route('application.index') }}">
                             応募一覧
-                            @if( (new \App\Repositories\User\UserEQRepository())->getUserBySub(\Auth::id())->is_mentor && $unreadApplicationCount = (new \App\Repositories\Application\ApplicationEQRepository())->countUnreadApplications())
+                            @if( $user->is_mentor && $unreadApplicationCount)
                                 <span class="badge badge-notify rounded-circle bg-primary text-white">
                                     {{ $unreadApplicationCount }}
                                 </span>
@@ -21,7 +21,7 @@
                         </a>
                         <a class="nav-item nav-link" href="{{ route('profile.index') }}">
                             プロフィール
-                            @if( (! (new \App\Repositories\User\UserEQRepository())->getUserBySub(\Auth::id())->is_mentor) && $unreadApprovalCount = (new \App\Repositories\Application\ApplicationEQRepository())->countUnreadApproval())
+                            @if( !$user->is_mentor && $unreadApprovalCount)
                                 <span class="badge badge-notify rounded-circle bg-primary text-white">
                                     {{ $unreadApprovalCount }}
                                 </span>
