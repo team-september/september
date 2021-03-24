@@ -119,9 +119,9 @@ class AvailabilityService
     private function getDaysByWeek(Carbon $date): array
     {
         $tmpDay = $date->copy()->startOfWeek(); // 週の頭にセット
+        $endOfWeek = $date->copy()->endOfWeek(); // 週末を定義
 
-        // 週末までループ
-        $endOfWeek = $date->copy()->endOfWeek();
+        // 週末まで処理をループ
         $days = [];
         while ($tmpDay->lte($endOfWeek)) {
             //前の月、もしくは後ろの月の場合はnull
@@ -143,11 +143,12 @@ class AvailabilityService
             if ($this->availabilities->isEmpty()) {
                 $day['is_available'] = false;
             } else {
-                $day['is_available'] = $this->availabilities->filter(
-                    function ($date) use ($day) {
-                        return $date->available_date->format('Y-m-d') == $day['date'];
-                    }
-                )
+                $day['is_available'] = $this->availabilities
+                    ->filter(
+                        function ($date) use ($day) {
+                            return $date->available_date->format('Y-m-d') == $day['date'];
+                        }
+                    )
                     ->isNotEmpty();
             }
 
