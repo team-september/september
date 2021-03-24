@@ -27,8 +27,7 @@ class AvailabilityService
         IUserRepository $userRepository,
         IMentorshipRepository $mentorshipRepository,
         IAvailabilityRepository $availabilityRepository
-        )
-    {
+    ) {
         $this->availabilityRepository = $availabilityRepository;
         // メンターID取得（メンティーの場合は担当メンター）
         $this->user = $userRepository->getUserBySub(Auth::id());
