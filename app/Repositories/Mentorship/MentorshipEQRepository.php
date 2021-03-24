@@ -10,8 +10,8 @@ class MentorshipEQRepository implements IMentorshipRepository
 {
     public function getMentorIdByMenteeId(int $mentee_id): ?int
     {
-        $Mentorship = Mentorship::where('mentee_id', $mentee_id)->first();
+        $mentorship = Mentorship::where('mentee_id', $mentee_id)->first();
 
-        return optional($Mentorship)->mentor_id;
+        return optional($mentorship)->mentor_id;
     }
 }
