@@ -28,6 +28,7 @@ Route::group(
         Route::get('/profile/show/{id}', 'ProfileController@show')->name('profile.show');
         Route::get('/profile/edit', 'ProfileController@edit')->name('profile.edit');
         Route::put('/profile/update/{id}', 'ProfileController@update')->name('profile.update');
+
         Route::get('/application', 'ApplicationController@index')->name('application.index');
         Route::post('/application', 'ApplicationController@store')->name('application.store');
         Route::post('/application/update', 'ApplicationController@update')->name('application.update');
@@ -35,7 +36,8 @@ Route::group(
         Route::group(['prefix' => 'reservation'], function (): void {
             Route::get('', 'ReservationController@index')->name('reservation.index');
             Route::get('/detail', 'ReservationController@reserve')->name('reservation.reserve');
-            Route::get('/setting', 'ReservationController@setting')->name('reservation.setting');
+            Route::post('/setting', 'ReservationController@setting')->name('reservation.setting');
+            Route::post('/setting/update', 'ReservationController@setTime')->name('reservation.setTime');
         });
     }
 );

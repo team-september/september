@@ -28,11 +28,34 @@
 
 @include('includes.header')
 
+@if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button class="close" data-dismiss="alert">&times;</button>
+    </div>
+@endif
+
+@if (session('message'))
+<div class="container">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <p class="text-center m-auto">{{ session('message') }}</p>
+        <button class="close" data-dismiss="alert">
+            <span>&times;</span>
+        </button>
+    </div>
+</div>
+@endif
+
 <main class="main">
     @yield('content')
 </main>
 
 @include('includes.footer')
+@yield('js')
 </body>
 </html>
 

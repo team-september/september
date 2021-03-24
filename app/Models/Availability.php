@@ -11,6 +11,8 @@ class Availability extends Model
 {
     use HasFactory;
 
+    protected $casts = ['available_date' => 'date'];
+
     public function availableTimes()
     {
         return $this->hasMany('App\Models\AvailableTime', 'availability_id', 'id');

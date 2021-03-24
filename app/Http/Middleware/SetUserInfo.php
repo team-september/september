@@ -18,8 +18,7 @@ class SetUserInfo
         IUserRepository $userRepository,
         IApplicationRepository $applicationRepository,
         AuthManager $authManager
-    )
-    {
+    ) {
         $this->viewFactory = $viewFactory;
         $this->userRepository = $userRepository;
         $this->applicationRepository = $applicationRepository;

@@ -10,7 +10,6 @@ use App\Repositories\Mentorship\IMentorshipRepository;
 use App\Repositories\User\IUserRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -18,69 +17,93 @@ use Illuminate\Support\Facades\Auth;
  */
 class AvailabilityService
 {
-    public User $user;
+    protected User $user;
 
-    protected Collection $Availabilities;
+    protected int $mentor_id;
 
-    protected Carbon $Carbon;
+    protected Carbon $date;
 
-    protected Carbon $fistDayOfMonth;
-
-    protected Carbon $nextMonth;
-
-    protected Carbon $prevMonth;
-
-    public function __construct(Request $request)
+    public function __construct()
     {
-        // 日付系のデータ取得／加工
-        $this->Carbon = $request->ym ? new Carbon($request->ym) : Carbon::now();
-        $this->firstDayOfMonth = $this->Carbon->copy()->firstOfMonth();
-        $this->lastDayOfMonth = $this->Carbon->copy()->lastOfMonth();
-        $this->prevMonth = $this->Carbon->copy()->subMonthsNoOverflow();
-        $this->nextMonth = $this->Carbon->copy()->addMonthsNoOverflow();
-        
         // メンターID取得（メンティーの場合は担当メンター）
         $this->user = app(IUserRepository::class)->getUserBySub(Auth::id());
-        $mentor_id = $this->user->is_mentor ? $this->user->id : app(IMentorshipRepository::class)->getMentorIdByMenteeId($this->user->id);
-
-        // メンターに紐づいた予約可能日取得
-        $this->Availabilities = app(IAvailabilityRepository::class)->getMonthsAvailabilitiesByDate($this->Carbon, $mentor_id);
+        $this->mentor_id = $this->user->is_mentor ? $this->user->id : app(IMentorshipRepository::class)->getMentorIdByMenteeId($this->user->id);
     }
 
     /**
-     * 当月のデータ取得
-     * @return object 
+     * 当月のデータ取得.
      * @properties
      * Carbon $object->currentMonth
      * Carbon $object->nextMonth
      * Carbon $object->prevMonth
      * Array  $object->weeks->days
      * @see $this->getDays()
+     * @param Carbon $date
+     * @return object
      */
-    public function getAvailabilityDataByMonth(): object
+    public function getAvailabilityDataByMonth(Carbon $date): object
     {
+        $this->Carbon = $date;
+        // メンターに紐づいた当月の予約可能日取得
+        $this->Availabilities = app(IAvailabilityRepository::class)->getMonthsAvailabilitiesByDate($date, $this->mentor_id);
+        $firstDayOfMonth = $date->copy()->firstOfMonth();
+        $lastDayOfMonth = $date->copy()->lastOfMonth();
+        $prevMonth = $date->copy()->subMonthsNoOverflow();
+        $nextMonth = $date->copy()->addMonthsNoOverflow();
+
         $weeks = [];
-        $tmpDay = $this->firstDayOfMonth->copy();
+        $tmpDay = $firstDayOfMonth;
 
         // 月末までループ
-        while ($tmpDay->lte($this->lastDayOfMonth)) {
+        while ($tmpDay->lte($lastDayOfMonth)) {
             $weeks[] = $this->getDaysByWeek($tmpDay);
             $tmpDay->addDay(7);
         }
 
         return (object) [
-            'currentMonth' => $this->Carbon,
-            'nextMonth'    => $this->nextMonth,
-            'prevMonth'    => $this->prevMonth,
-            'weeks'        => $weeks,
+            'currentMonth' => $date,
+            'nextMonth' => $nextMonth,
+            'prevMonth' => $prevMonth,
+            'weeks' => $weeks,
         ];
     }
 
+    public function updateAvailabilities(Request $request)
+    {
+        // ユーザーがメンターでなければbad request
+        if ($this->user->is_mentor === false) {
+            abort(400);
+        }
+        $dates = collect($request->availability_setting);
+
+        $deleteTargets = $dates->where('is_available', false);
+        $deleteResult = app(IAvailabilityRepository::class)->removeAvailabilitiesByDates($deleteTargets, $this->mentor_id);
+
+        if ($deleteResult === false) {
+            return back()->withErrors('更新処理に失敗しました');
+        }
+
+        $updateTargets = $dates->where('is_available', true);
+        return app(IAvailabilityRepository::class)->updateOrInsertAvailabilitiesByDates($updateTargets, $this->mentor_id);
+    }
+
+    public function updateAvailableTimes(Request $request)
+    {
+        // ユーザーがメンターでなければbad request
+        if ($this->user->is_mentor === false) {
+            abort(400);
+        }
+
+        $times = collect($request->set_time);
+
+        return app(IAvailabilityRepository::class)->updateOrInsertAvailableTimes($times, $this->mentor_id);
+    }
+
     /**
-     * 週毎のデータを配列化したもの
+     * 週毎のデータを配列化したもの.
      * @param Carbon $date
      * @return array $days
-     * 
+     *
      * day object properties
      * date         => Y-m-d
      * date_j       => 1 - 31
@@ -116,7 +139,12 @@ class AvailabilityService
             if ($this->Availabilities->isEmpty()) {
                 $day['is_available'] = false;
             } else {
-                $day['is_available'] = $this->Availabilities->where('available_date', '=', $day['date'])->isNotEmpty();
+                $day['is_available'] = $this->Availabilities->filter(
+                    function ($date) use ($day) {
+                        return $date->available_date->format('Y-m-d') == $day['date'];
+                    }
+                )
+                    ->isNotEmpty();
             }
 
             $days[] = (object) $day;
