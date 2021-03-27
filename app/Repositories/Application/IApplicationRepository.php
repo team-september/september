@@ -16,5 +16,7 @@ interface IApplicationRepository
 
     public function updateRejectedApplication($mentor_id, $user_id);
 
-    public function countUnreadApplications();
+    public function countUnreadApplications($userId);
+
+    public function countUnreadApprovals($userId);
 }

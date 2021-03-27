@@ -68,7 +68,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'ASIA/TOKYO',
 
     /*
     |--------------------------------------------------------------------------
@@ -168,16 +168,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\UserRepositoryServiceProvider::class,
-        App\Providers\ApplicationRepositoryServiceProvider::class,
-        App\Providers\CareerRepositoryServiceProvider::class,
-        App\Providers\UrlRepositoryServiceProvider::class,
-        App\Providers\ProfileUrlRepositoryServiceProvider::class,
-        App\Providers\PurposeRepositoryServiceProvider::class,
-        App\Providers\ProfileRepositoryServiceProvider::class,
-        App\Providers\SkillRepositoryServiceProvider::class,
-        App\Providers\ReadApplicationRepositoryServiceProvider::class,
-        App\Providers\ReadApprovalRepositoryServiceProvider::class,
+
+        App\Providers\RepositoryServiceProvider::class,
 
         Auth0\Login\LoginServiceProvider::class,
     ],
@@ -231,5 +223,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Auth0' => Auth0\Login\Facade\Auth0::class,
+
+        //Constants
+        'Icons' => App\Constants\Icons::class,
     ],
 ];
