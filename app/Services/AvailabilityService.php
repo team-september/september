@@ -23,30 +23,12 @@ class AvailabilityService
 
     protected Carbon $carbon;
 
-<<<<<<< HEAD
-    protected Carbon $fistDayOfMonth;
-
-    protected Carbon $nextMonth;
-
-    protected Carbon $prevMonth;
-
-    public function __construct(Request $request)
-    {
-        // 日付系のデータ取得／加工
-        $this->Carbon = $request->ym ? new Carbon($request->ym) : Carbon::now();
-        $this->firstDayOfMonth = $this->Carbon->copy()->firstOfMonth();
-        $this->lastDayOfMonth = $this->Carbon->copy()->lastOfMonth();
-        $this->prevMonth = $this->Carbon->copy()->subMonthsNoOverflow();
-        $this->nextMonth = $this->Carbon->copy()->addMonthsNoOverflow();
-
-=======
     public function __construct(
         IUserRepository $userRepository,
         IMentorshipRepository $mentorshipRepository,
         IAvailabilityRepository $availabilityRepository
     ) {
         $this->availabilityRepository = $availabilityRepository;
->>>>>>> 36df1a7ea58e05c72b590dc1138dd9521d8cec90
         // メンターID取得（メンティーの場合は担当メンター）
         $this->user = $userRepository->getUserBySub(Auth::id());
         $this->mentor_id = $this->user->is_mentor ? $this->user->id : $mentorshipRepository->getMentorIdByMenteeId($this->user->id);
@@ -54,10 +36,6 @@ class AvailabilityService
 
     /**
      * 当月のデータ取得.
-<<<<<<< HEAD
-     * @return object
-=======
->>>>>>> 36df1a7ea58e05c72b590dc1138dd9521d8cec90
      * @properties
      * Carbon $object->currentMonth
      * Carbon $object->nextMonth
@@ -87,15 +65,9 @@ class AvailabilityService
         }
 
         return (object) [
-<<<<<<< HEAD
-            'currentMonth' => $this->Carbon,
-            'nextMonth' => $this->nextMonth,
-            'prevMonth' => $this->prevMonth,
-=======
             'currentMonth' => $this->carbon,
             'nextMonth' => $nextMonth,
             'prevMonth' => $prevMonth,
->>>>>>> 36df1a7ea58e05c72b590dc1138dd9521d8cec90
             'weeks' => $weeks,
         ];
     }
