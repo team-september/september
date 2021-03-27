@@ -49,13 +49,18 @@ class ApplicationEQRepository implements IApplicationRepository
             ->update(['status' => 3]);
     }
 
-    public function countUnreadApplications()
+    public function countUnreadApplications($userId)
     {
-        return Application::doesntHave('readApplications')->count();
+        return Application::doesntHave('readApplications')
+            ->where('mentor_id', $userId)
+            ->count();
     }
 
-    public function countUnreadApproval()
+    public function countUnreadApprovals($userId)
     {
-        return Application::doesntHave('readApproval')->where('status', config('application.status.approved'))->count();
+        return Application::doesntHave('readApproval')
+            ->where('status', config('application.status.approved'))
+            ->where('mentee_id', $userId)
+            ->count();
     }
 }
