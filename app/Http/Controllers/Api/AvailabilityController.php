@@ -23,14 +23,15 @@ class AvailabilityController extends Controller
         // 設定された空き日を取得
         $availabilities = $this->availabilityRepository->findAvailabilitiesByDates($dates, $request->mentor_id);
 
-        //
+        // 日付⇒時間の連想配列に加工する
         $result = [];
         foreach ($availabilities as $availability) {
             $date = $availability->available_date->format('Y-m-d');
             $result[$date] = $availability->availableTimes->map(function ($availableTime) {
-                return $availableTime->time;
+                return substr($availableTime->time, 0, 5); // 末尾の不要な:00除去してから返す
             });
         }
+        // JSONレスポンス
         return response()->json($result);
     }
 }

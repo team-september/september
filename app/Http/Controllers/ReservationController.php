@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReservationRequest;
 use App\Services\AvailabilityService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,11 +18,17 @@ class ReservationController extends Controller
         $availabilityData = $service->getAvailabilityDataByMonth($date);
 
         return view('reservation.index', [
+            'mentor_id' => $availabilityData->mentor_id,
             'prevMonth' => $availabilityData->prevMonth,
             'nextMonth' => $availabilityData->nextMonth,
             'currentMonth' => $availabilityData->currentMonth,
             'calendarData' => $availabilityData->weeks,
         ]);
+    }
+
+    public function reserve(ReservationRequest $request)
+    {
+        dd($request);
     }
 
     public function setting(AvailabilityService $service, Request $request)

@@ -65,6 +65,7 @@ class AvailabilityService
         }
 
         return (object) [
+            'mentor_id' => $this->mentor_id,
             'currentMonth' => $this->carbon,
             'nextMonth' => $nextMonth,
             'prevMonth' => $prevMonth,

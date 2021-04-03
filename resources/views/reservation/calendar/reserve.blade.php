@@ -18,7 +18,7 @@
             <span class="date">{{ $day->date_j }}</span>
             <div class="icon">
                 @if($day->is_available) {{-- メンティー用表示 --}}
-                <a href="{{ route('reservation.reserve', $day->date) }}" class="text-success">{!! Icons::PLUS !!}</a>
+                <div onclick="getModalContents({{$mentor_id}}, '{{$day->date}}')" role="button" class="text-success" data-toggle="modal" data-target="#reservationModal">{!! Icons::PLUS !!}</div>
                 @else {{-- 過去の日付など、設定ができないor無効な日 --}}
                 <p class="text-danger">{!! Icons::SLASH !!}</p>
                 @endif
@@ -28,3 +28,7 @@
     @endforeach
     </tr>
 @endforeach
+
+@section('modal-window')
+@include('reservation.modal')
+@endsection
