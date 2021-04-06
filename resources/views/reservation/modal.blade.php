@@ -15,7 +15,7 @@
           <div class="form-group">
             <input id="date-input" type="text" class="form-control-plaintext" readonly name="date" value="">
           </div>
-          <div id="radio-box">
+          <div id="radio-box" class="mb-2">
             <label><b>希望時間</b></label>
             <template id="radio-template">
               <div class="form-check time-select-radio">
@@ -24,7 +24,7 @@
               </div>
             </template>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer mt-1">
             <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetModal()">閉じる</button>
             <button type="submit" class="btn btn-success" onclick="validate()">予約する</button>
           </div>
