@@ -6,8 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ReservationRequest;
 use App\Services\AvailabilityService;
+use App\Services\ReservationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
@@ -25,10 +28,16 @@ class ReservationController extends Controller
             'calendarData' => $availabilityData->weeks,
         ]);
     }
-
-    public function reserve(ReservationRequest $request)
+    
+    public function reserve(ReservationService $service, ReservationRequest $request)
     {
-        dd($request);
+        try {
+            $service->makeNewReservation($request);
+            return redirect(route('reservation.index'))->with(['message' => '1on1の予約申請を受け付けました']);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return back()->withErrors('予約の申請に失敗しました');
+        }
     }
 
     public function setting(AvailabilityService $service, Request $request)
