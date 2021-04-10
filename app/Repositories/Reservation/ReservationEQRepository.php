@@ -5,6 +5,7 @@ namespace App\Repositories\Reservation;
 use App\Http\Requests\ReservationRequest;
 use App\Models\Reservation;
 use Exception;
+use Illuminate\Support\Collection;
 
 class ReservationEQRepository implements IReservationRepository
 {
@@ -34,5 +35,10 @@ class ReservationEQRepository implements IReservationRepository
         $reservation->time = $request->time;        
 
         return $reservation->save();
+    }
+
+    public function fetchReservationsByMenteeId(int $menteeId): Collection
+    {
+        return Reservation::where('mentee_id', $menteeId)->get();
     }
 }

@@ -6,6 +6,9 @@ namespace App\Repositories\Availability;
 
 use App\Models\Availability;
 use App\Models\AvailableTime;
+use App\Models\User;
+use App\Repositories\Mentorship\IMentorshipRepository;
+use App\Repositories\Reservation\IReservationRepository;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
@@ -13,13 +16,33 @@ use Illuminate\Support\Facades\Log;
 
 class AvailabilityEQRepository implements IAvailabilityRepository
 {
-    public function getMonthsAvailabilitiesByDate(Carbon $date, int $mentorId): Collection
+    public function __construct(
+        IMentorshipRepository $mentorshipRepository,
+        IReservationRepository $reservationRepository
+        )
     {
-        return Availability::where('mentor_id', $mentorId)
-            ->whereDate('available_date', '>=', $date->firstOfMonth())
-            ->whereDate('available_date', '<=', $date->lastOfMonth())
-            ->with('availableTimes')
-            ->get();
+        $this->mentorshipRepository = $mentorshipRepository;
+        $this->reservationRepository = $reservationRepository;
+    }
+
+    public function getMonthsAvailabilitiesByDate(Carbon $date, User $user): Collection
+    {
+        $query = Availability::query();
+
+        // メンターIDで絞り込み
+        $mentorId = $this->mentorshipRepository->getMentorIdByUser($user);
+        $query->where('mentor_id', $mentorId);
+
+        // 既に予約日が紐付いているものは除外
+        $existingReservationDates = $this->reservationRepository->fetchReservationsByMenteeId($user->id)->pluck('date');
+        if ( $existingReservationDates->isNotEmpty() ) {
+            $query->whereNotIn('available_date', $existingReservationDates);
+        }
+        // 日付が該当月のもの
+        $query->whereDate('available_date', '>=', $date->firstOfMonth());
+        $query->whereDate('available_date', '<=', $date->lastOfMonth());
+
+        return $query->with('availableTimes')->get();
     }
 
     public function findAvailabilitiesByDates(Collection $dates, int $mentorId): Collection
