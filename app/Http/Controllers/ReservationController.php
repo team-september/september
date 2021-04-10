@@ -9,7 +9,6 @@ use App\Services\AvailabilityService;
 use App\Services\ReservationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
@@ -28,7 +27,7 @@ class ReservationController extends Controller
             'calendarData' => $availabilityData->weeks,
         ]);
     }
-    
+
     public function reserve(ReservationService $service, ReservationRequest $request)
     {
         try {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -15,7 +17,7 @@ class AvailabilityController extends Controller
         $this->availabilityRepository = $availabilityRepository;
     }
 
-    public function getAvailability(Request $request) 
+    public function getAvailability(Request $request)
     {
         // 日付をコレクションに入れる
         $dates = collect($request->date);
@@ -25,6 +27,7 @@ class AvailabilityController extends Controller
 
         // 日付⇒時間の連想配列に加工する
         $result = [];
+
         foreach ($availabilities as $availability) {
             $date = $availability->available_date->format('Y-m-d');
             $result[$date] = $availability->availableTimes->map(function ($availableTime) {

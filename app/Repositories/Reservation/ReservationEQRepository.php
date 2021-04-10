@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories\Reservation;
 
 use App\Http\Requests\ReservationRequest;
@@ -10,21 +12,21 @@ use Illuminate\Support\Collection;
 class ReservationEQRepository implements IReservationRepository
 {
     /**
-     * 予約の新規作成
+     * 予約の新規作成.
      * @param ReservationRequest $request
-     * @param int $user_id
-     * 
-     * @return bool 保存に成功した場合はtrueを返す
+     * @param int                $user_id
+     *
      * @throws Exception 重複する予約があった場合は例外を投げる
+     * @return bool 保存に成功した場合はtrueを返す
      */
-    public function store(ReservationRequest $request, int $user_id):bool 
+    public function store(ReservationRequest $request, int $user_id): bool
     {
         $duplicate = Reservation::where('mentee_id', $user_id)
-        ->where('mentor_id', $request->mentor_id)
-        ->where('date', $request->date)
-        ->first();
+            ->where('mentor_id', $request->mentor_id)
+            ->where('date', $request->date)
+            ->first();
 
-        if($duplicate) {
+        if ($duplicate) {
             throw new Exception(__FILE__ . 'Error:Duplicate Reservation Found');
         }
 
@@ -32,7 +34,7 @@ class ReservationEQRepository implements IReservationRepository
         $reservation->mentee_id = $user_id;
         $reservation->mentor_id = $request->mentor_id;
         $reservation->date = $request->date;
-        $reservation->time = $request->time;        
+        $reservation->time = $request->time;
 
         return $reservation->save();
     }

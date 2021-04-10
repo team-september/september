@@ -19,8 +19,7 @@ class AvailabilityEQRepository implements IAvailabilityRepository
     public function __construct(
         IMentorshipRepository $mentorshipRepository,
         IReservationRepository $reservationRepository
-        )
-    {
+    ) {
         $this->mentorshipRepository = $mentorshipRepository;
         $this->reservationRepository = $reservationRepository;
     }
@@ -35,7 +34,8 @@ class AvailabilityEQRepository implements IAvailabilityRepository
 
         // 既に予約日が紐付いているものは除外
         $existingReservationDates = $this->reservationRepository->fetchReservationsByMenteeId($user->id)->pluck('date');
-        if ( $existingReservationDates->isNotEmpty() ) {
+
+        if ($existingReservationDates->isNotEmpty()) {
             $query->whereNotIn('available_date', $existingReservationDates);
         }
         // 日付が該当月のもの

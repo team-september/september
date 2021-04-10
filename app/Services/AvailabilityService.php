@@ -152,7 +152,7 @@ class AvailabilityService
     }
 
     /**
-     * Y-m-dの文字列を渡すと取得済みのコレクションから予約可能な日かどうかを判定
+     * Y-m-dの文字列を渡すと取得済みのコレクションから予約可能な日かどうかを判定.
      * @param string $date
      * @return bool
      */
