@@ -50,6 +50,8 @@ jobs:
         run: php artisan migrate --force
       - name: Execute Seed
         run: php artisan db:seed --force
+      - name: Clear cache before test
+        run: php artisan config:clear
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: vendor/bin/phpunit --coverage-clover .tests/coverage.xml
       - name: Upload coverage to Codecov
