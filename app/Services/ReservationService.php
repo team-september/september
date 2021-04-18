@@ -23,7 +23,7 @@ class ReservationService
 
     public function makeNewReservation(ReservationRequest $request)
     {
-        $user_id = $this->userRepository->getUserBySub(Auth::id())->id;
-        return $this->reservationRepository->store($request, $user_id);
+        $userId = $this->userRepository->getUserBySub(Auth::id())->id;
+        return $this->reservationRepository->store($request, $userId);
     }
 }

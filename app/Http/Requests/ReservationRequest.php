@@ -26,6 +26,9 @@ class ReservationRequest extends FormRequest
     public function rules()
     {
         return [
+            'mentee_id' => ['exists:users,id'],
+            'mentor_id' => ['exists:users,id'],
+            'date' => ['exists:availabilities, "availabilities.available_date"'],
             'time' => ['required'],
         ];
     }

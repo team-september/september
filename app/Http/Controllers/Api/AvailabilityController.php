@@ -23,7 +23,7 @@ class AvailabilityController extends Controller
         $dates = collect($request->date);
 
         // 設定された空き日を取得
-        $availabilities = $this->availabilityRepository->findAvailabilitiesByDates($dates, $request->mentor_id);
+        $availabilities = $this->availabilityRepository->findAvailabilitiesByDates($dates, (int)$request->mentor_id);
 
         // 日付⇒時間の連想配列に加工する
         $result = [];

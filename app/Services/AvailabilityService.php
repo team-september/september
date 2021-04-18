@@ -77,17 +77,18 @@ class AvailabilityService
         if ($this->user->is_mentor === false) {
             abort(400);
         }
+        
         $dates = collect($request->availability_setting);
 
         $deleteTargets = $dates->where('is_available', false);
-        $deleteResult = $this->availabilityRepository->removeAvailabilitiesByDates($deleteTargets, $this->mentor_id);
+        $deleteResult = $this->availabilityRepository->removeAvailabilitiesByDates($deleteTargets, $this->user->id);
 
         if ($deleteResult === false) {
             return back()->withErrors('更新処理に失敗しました');
         }
 
         $updateTargets = $dates->where('is_available', true);
-        return $this->availabilityRepository->updateOrInsertAvailabilitiesByDates($updateTargets, $this->mentor_id);
+        return $this->availabilityRepository->updateOrInsertAvailabilitiesByDates($updateTargets, $this->user->id);
     }
 
     public function updateAvailableTimes(Request $request)
@@ -99,7 +100,7 @@ class AvailabilityService
 
         $times = collect($request->set_time);
 
-        return $this->availabilityRepository->updateOrInsertAvailableTimes($times, $this->mentor_id);
+        return $this->availabilityRepository->updateOrInsertAvailableTimes($times, $this->user->id);
     }
 
     /**
