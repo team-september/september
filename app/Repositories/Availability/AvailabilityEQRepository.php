@@ -117,7 +117,7 @@ class AvailabilityEQRepository implements IAvailabilityRepository
                 ->whereIn('available_date', $times->keys())
                 ->get();
 
-            $availabilities->map(function($availability) use ($times) {
+            $availabilities->map(function ($availability) use ($times): void {
                 // 紐づいた空き時間を一回削除
                 optional($availability->available_times)->delete();
 
@@ -126,8 +126,8 @@ class AvailabilityEQRepository implements IAvailabilityRepository
                     if ($date !== $availability->available_date->format('Y-m-d')) {
                         continue;
                     }
-                    
-                    array_map(function($time) use ($availability) {
+
+                    array_map(function ($time) use ($availability): void {
                         $availableTime = new AvailableTime();
                         $availableTime->availability_id = $availability->id;
                         $availableTime->time = $time;

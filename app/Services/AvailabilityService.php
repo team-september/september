@@ -80,7 +80,7 @@ class AvailabilityService
         if ($this->user->is_mentor === false) {
             abort(400);
         }
-        
+
         $dates = collect($request->availability_setting);
 
         $deleteTargets = $dates->where('is_available', false);
