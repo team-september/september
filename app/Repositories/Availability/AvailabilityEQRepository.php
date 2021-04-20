@@ -105,7 +105,7 @@ class AvailabilityEQRepository implements IAvailabilityRepository
         }
     }
 
-    public function updateOrInsertAvailableTimes(Collection $times, int $mentorId): bool
+    public function updateAvailableTimes(Collection $times, int $mentorId): bool
     {
         if ($times->isEmpty()) {
             return true;
@@ -113,25 +113,28 @@ class AvailabilityEQRepository implements IAvailabilityRepository
 
         try {
             // 親（設定された空き日）を取得
-            $availabilites = Availability::where('mentor_id', $mentorId)
+            $availabilities = Availability::where('mentor_id', $mentorId)
                 ->whereIn('available_date', $times->keys())
                 ->get();
 
-            foreach ($availabilites as $availability) {
-                // 紐づいた子を一回削除
+            $availabilities->map(function($availability) use ($times) {
+                // 紐づいた空き時間を一回削除
                 optional($availability->available_times)->delete();
 
                 // 日付に合致する時間をインサート
-                foreach ($times as $date => $time) {
-                    if ($availability->available_date !== new Carbon($date)) {
+                foreach ($times as $date => $times) {
+                    if ($date !== $availability->available_date->format('Y-m-d')) {
                         continue;
                     }
-                    $availableTime = new AvailableTime();
-                    $availableTime->availability_id = $availability->id;
-                    $availableTime->time = $time;
-                    $availableTime->save();
+                    
+                    array_map(function($time) use ($availability) {
+                        $availableTime = new AvailableTime();
+                        $availableTime->availability_id = $availability->id;
+                        $availableTime->time = $time;
+                        $availableTime->save();
+                    }, $times);
                 }
-            }
+            });
             return true;
         } catch (\Throwable $th) {
             Log::error($th->getMessage());

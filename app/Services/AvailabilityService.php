@@ -33,6 +33,9 @@ class AvailabilityService
 
         // 現在ログイン中のユーザー
         $this->user = $userRepository->getUserBySub(Auth::id());
+
+        // ユーザーに紐付いたメンターID
+        $this->mentorId = $this->mentorshipRepository->getMentorIdByUser($this->user);
     }
 
     /**
@@ -81,14 +84,14 @@ class AvailabilityService
         $dates = collect($request->availability_setting);
 
         $deleteTargets = $dates->where('is_available', false);
-        $deleteResult = $this->availabilityRepository->removeAvailabilitiesByDates($deleteTargets, $this->user->id);
+        $deleteResult = $this->availabilityRepository->removeAvailabilitiesByDates($deleteTargets, $this->mentorId);
 
         if ($deleteResult === false) {
             return back()->withErrors('更新処理に失敗しました');
         }
 
         $updateTargets = $dates->where('is_available', true);
-        return $this->availabilityRepository->updateOrInsertAvailabilitiesByDates($updateTargets, $this->user->id);
+        return $this->availabilityRepository->updateOrInsertAvailabilitiesByDates($updateTargets, $this->mentorId);
     }
 
     public function updateAvailableTimes(Request $request)
@@ -100,7 +103,7 @@ class AvailabilityService
 
         $times = collect($request->set_time);
 
-        return $this->availabilityRepository->updateOrInsertAvailableTimes($times, $this->user->id);
+        return $this->availabilityRepository->updateAvailableTimes($times, $this->mentorId);
     }
 
     /**
