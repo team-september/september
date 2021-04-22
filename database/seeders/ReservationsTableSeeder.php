@@ -1,19 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class ReservationsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run() : void
+    public function run(): void
     {
         DB::table('reservations')->insert([
             [
@@ -36,8 +36,7 @@ class ReservationsTableSeeder extends Seeder
                 'date' => new Carbon('2021-04-21'),
                 'time' => '15:00:00',
                 'status' => 1,
-            ]
+            ],
         ]);
-
     }
 }
