@@ -39,6 +39,13 @@ class ReservationController extends Controller
         }
     }
 
+    public function checkReservationApplication()
+    {
+        // $reservations = $service->fetchReservation();
+        return view('reservation.check');
+
+    }
+
     public function setting(AvailabilityService $service, Request $request)
     {
         $Availabilities = $service->updateAvailabilities($request);
