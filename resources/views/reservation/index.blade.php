@@ -37,8 +37,13 @@
                             </div>
                             <p class="font-weight-bold">
                                 希望日：{{ \Carbon\Carbon::parse($reservation->date)->format('Y/m/d') }} {{ \Carbon\Carbon::parse($reservation->time)->format('H:i') }}</p>
+                            <label for="comment-{{ $reservation->reservation_id }}">コメント（任意）</label>
+                            <textarea form="reservation-form" class="form-control" name="comment[{{ $reservation->reservation_id }}]"
+                                      id="comment-{{ $reservation->reservation_id }}"
+                                      rows="2"></textarea>
                         </div>
-                        <input form="reservation-form" type="hidden" name="reservation-ids[]" class="js-reservation-id">
+                        <input form="reservation-form" type="hidden" name="reservation-ids[]"
+                               class="js-reservation-id">
                         <input form="reservation-form" type="hidden" name="user-ids[]" class="js-user-id">
                     </div>
                 @endforeach

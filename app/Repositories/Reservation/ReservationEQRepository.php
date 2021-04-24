@@ -73,7 +73,8 @@ class ReservationEQRepository implements IReservationRepository
             foreach ($data['reservation-ids'] as $reservationId) {
                 Reservation::where('id', $reservationId)->update(
                     [
-                        'status' => $data['status']
+                        'status'         => $data['status'],
+                        'mentor_comment' => $data['comment'][$reservationId]
                     ]
                 );
             }
