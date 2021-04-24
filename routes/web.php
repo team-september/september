@@ -24,6 +24,7 @@ Route::get('/logout', 'Auth\Auth0IndexController@logout')->name('logout')->middl
 Route::group(
     ['middleware' => ['auth']],
     function (): void {
+        // プロフィール
         Route::group(['prefix' => 'profile'], function (): void {
             Route::get('/', 'ProfileController@index')->name('profile.index');
             Route::get('/show/{id}', 'ProfileController@show')->name('profile.show');
@@ -31,23 +32,28 @@ Route::group(
             Route::put('/update/{id}', 'ProfileController@update')->name('profile.update');
         });
 
+        // メンティー申請
         Route::group(['prefix' => 'application'], function (): void {
             Route::get('/', 'ApplicationController@index')->name('application.index');
             Route::post('/', 'ApplicationController@store')->name('application.store');
             Route::post('/update', 'ApplicationController@update')->name('application.update');
         });
 
-        Route::group(['prefix' => 'reservation'], function (): void {
-            Route::get('/mentor', 'ReservationController@index')->name('reservation.index');
-
-            Route::post('/submit', 'ReservationController@reserve')->name('reservation.submit');
-            Route::post('/setting', 'ReservationController@setting')->name('reservation.setting');
-            Route::post('/setting/update', 'ReservationController@setTime')->name('reservation.setTime');
+        // 1on1スケジュール
+        Route::group(['prefix' => 'schedule'], function (): void {
+            Route::get('/', 'ScheduleController@index')->name('schedule.index');
+            Route::post('/update', 'ScheduleController@update')->name('schedule.update');
+            Route::post('/store', 'ScheduleController@store')->name('schedule.store');
 
             // ajax用エンドポイント
             Route::post('/getAvailability', 'Api\AvailabilityController@getAvailability');
-            Route::get('/detail', 'ReservationController@reserve')->name('reservation.reserve');
         });
-        
+
+        // 1on1予約
+        Route::group(['prefix' => 'reservation'], function (): void {
+            Route::get('/index', 'ReservationController@index')->name('reservation.index');
+            Route::post('/store', 'ReservationController@store')->name('reservation.store');
+            Route::post('/update', 'ReservationController@update')->name('reservation.update');
+        });
     }
 );
