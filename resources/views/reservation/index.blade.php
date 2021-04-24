@@ -57,6 +57,7 @@
             </form>
             @endif
         </div>
+        @yield('modal-window')
     </div>
 </section>
 @endsection

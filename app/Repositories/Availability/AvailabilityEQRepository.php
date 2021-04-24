@@ -6,6 +6,9 @@ namespace App\Repositories\Availability;
 
 use App\Models\Availability;
 use App\Models\AvailableTime;
+use App\Models\User;
+use App\Repositories\Mentorship\IMentorshipRepository;
+use App\Repositories\Reservation\IReservationRepository;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
@@ -13,13 +16,33 @@ use Illuminate\Support\Facades\Log;
 
 class AvailabilityEQRepository implements IAvailabilityRepository
 {
-    public function getMonthsAvailabilitiesByDate(Carbon $date, int $mentorId): Collection
+    public function __construct(
+        IMentorshipRepository $mentorshipRepository,
+        IReservationRepository $reservationRepository
+    ) {
+        $this->mentorshipRepository = $mentorshipRepository;
+        $this->reservationRepository = $reservationRepository;
+    }
+
+    public function getMonthsAvailabilitiesByDate(Carbon $date, User $user): Collection
     {
-        return Availability::where('mentor_id', $mentorId)
-            ->whereDate('available_date', '>=', $date->firstOfMonth())
-            ->whereDate('available_date', '<=', $date->lastOfMonth())
-            ->with('availableTimes')
-            ->get();
+        $query = Availability::query();
+
+        // メンターIDで絞り込み
+        $mentorId = $this->mentorshipRepository->getMentorIdByUser($user);
+        $query->where('mentor_id', $mentorId);
+
+        // 既に予約日が紐付いているものは除外
+        $existingReservationDates = $this->reservationRepository->fetchReservationsByMenteeId($user->id)->pluck('date');
+
+        if ($existingReservationDates->isNotEmpty()) {
+            $query->whereNotIn('available_date', $existingReservationDates);
+        }
+        // 日付が該当月のもの
+        $query->whereDate('available_date', '>=', $date->firstOfMonth());
+        $query->whereDate('available_date', '<=', $date->lastOfMonth());
+
+        return $query->with('availableTimes')->get();
     }
 
     public function findAvailabilitiesByDates(Collection $dates, int $mentorId): Collection
@@ -82,7 +105,7 @@ class AvailabilityEQRepository implements IAvailabilityRepository
         }
     }
 
-    public function updateOrInsertAvailableTimes(Collection $times, int $mentorId): bool
+    public function updateAvailableTimes(Collection $times, int $mentorId): bool
     {
         if ($times->isEmpty()) {
             return true;
@@ -90,25 +113,28 @@ class AvailabilityEQRepository implements IAvailabilityRepository
 
         try {
             // 親（設定された空き日）を取得
-            $availabilites = Availability::where('mentor_id', $mentorId)
+            $availabilities = Availability::where('mentor_id', $mentorId)
                 ->whereIn('available_date', $times->keys())
                 ->get();
 
-            foreach ($availabilites as $availability) {
-                // 紐づいた子を一回削除
+            $availabilities->map(function ($availability) use ($times): void {
+                // 紐づいた空き時間を一回削除
                 optional($availability->available_times)->delete();
 
                 // 日付に合致する時間をインサート
-                foreach ($times as $date => $time) {
-                    if ($availability->available_date !== new Carbon($date)) {
+                foreach ($times as $date => $times) {
+                    if ($date !== $availability->available_date->format('Y-m-d')) {
                         continue;
                     }
-                    $availableTime = new AvailableTime();
-                    $availableTime->availability_id = $availability->id;
-                    $availableTime->time = $time;
-                    $availableTime->save();
+
+                    array_map(function ($time) use ($availability): void {
+                        $availableTime = new AvailableTime();
+                        $availableTime->availability_id = $availability->id;
+                        $availableTime->time = $time;
+                        $availableTime->save();
+                    }, $times);
                 }
-            }
+            });
             return true;
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
