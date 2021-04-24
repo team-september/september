@@ -63,7 +63,7 @@ return [
         'numeric' => ':attributeには:min以上の数値を指定してください。',
         'file' => ':attributeには:min KB以上のファイルを指定してください。',
         'string' => ':attributeには:min文字以上の文字列を指定してください。',
-        'array' => ':attributeには:min個以上の要素を持つ配列を指定してください。',
+        'array' => ':attributeは最低:min個以上選択してください。',
     ],
     'not_in' => ':attributeには:valuesのうちいずれとも異なる値を指定してください。',
     'numeric' => ':attributeには数値を指定してください。',
@@ -128,5 +128,8 @@ return [
         'website' => 'Website URL',
         'other' => 'その他URL',
         'mentor_id' => 'メンターの選択',
+        'reservation-ids' => '予約ID',
+        'user-ids' => 'ユーザーID',
+        'status' => 'ステータス',
     ],
 ];
