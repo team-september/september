@@ -33,11 +33,11 @@
                             </a>
                             <div class="dropdown-menu">
                                 @if ($user->is_mentor)
-                                    <a class="dropdown-item" href="{{ route('reservation.check') }}">申請承認</a>
+                                    <a class="dropdown-item" href="{{ route('reservation.index') }}">申請承認</a>
                                     <a class="dropdown-item" href="{{ route('schedule.index') }}">設定</a>
                                 @else
+                                    <a class="dropdown-item" href="{{ route('reservation.index') }}">申請確認</a>
                                     <a class="dropdown-item" href="{{ route('schedule.index') }}">予約申請</a>
-                                    <a class="dropdown-item" href="{{ route('schedule.index') }}">申請確認</a>
                                 @endif
                                 </a>
                             </div>
