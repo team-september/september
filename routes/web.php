@@ -35,13 +35,12 @@ Route::group(
 
         Route::group(['prefix' => 'reservation'], function (): void {
             Route::get('', 'ReservationController@index')->name('reservation.index');
-            Route::get('/detail', 'ReservationController@reserve')->name('reservation.reserve');
-            
-            Route::group(['middleware' => 'can:access_mentor_resource'], function(): void {
-                Route::get('/check', 'ReservationController@checkReservationApplication')->name('reservation.check');
-                Route::post('/setting', 'ReservationController@setting')->name('reservation.setting');
-                Route::post('/setting/update', 'ReservationController@setTime')->name('reservation.setTime');
-            });
+            Route::post('/submit', 'ReservationController@reserve')->name('reservation.submit');
+            Route::post('/setting', 'ReservationController@setting')->name('reservation.setting');
+            Route::post('/setting/update', 'ReservationController@setTime')->name('reservation.setTime');
+
+            // ajax用エンドポイント
+            Route::post('/getAvailability', 'Api\AvailabilityController@getAvailability');
         });
     }
 );

@@ -28,10 +28,14 @@ class AvailabilityService
         IMentorshipRepository $mentorshipRepository,
         IAvailabilityRepository $availabilityRepository
     ) {
+        $this->mentorshipRepository = $mentorshipRepository;
         $this->availabilityRepository = $availabilityRepository;
-        // メンターID取得（メンティーの場合は担当メンター）
+
+        // 現在ログイン中のユーザー
         $this->user = $userRepository->getUserBySub(Auth::id());
-        $this->mentor_id = $this->user->is_mentor ? $this->user->id : $mentorshipRepository->getMentorIdByMenteeId($this->user->id);
+
+        // ユーザーに紐付いたメンターID
+        $this->mentorId = $this->mentorshipRepository->getMentorIdByUser($this->user);
     }
 
     /**
@@ -49,14 +53,11 @@ class AvailabilityService
     {
         $this->carbon = $date;
         // メンターに紐づいた当月の予約可能日取得
-        $this->availabilities = $this->availabilityRepository->getMonthsAvailabilitiesByDate($this->carbon, $this->mentor_id);
-        $firstDayOfMonth = $this->carbon->copy()->firstOfMonth();
+        $this->availabilities = $this->availabilityRepository->getMonthsAvailabilitiesByDate($this->carbon, $this->user);
         $lastDayOfMonth = $this->carbon->copy()->lastOfMonth();
-        $prevMonth = $this->carbon->copy()->subMonthsNoOverflow();
-        $nextMonth = $this->carbon->copy()->addMonthsNoOverflow();
 
         $weeks = [];
-        $tmpDay = $firstDayOfMonth;
+        $tmpDay = $this->carbon->copy()->firstOfMonth(); // 月初からスタートする
 
         // 月末までループ
         while ($tmpDay->lte($lastDayOfMonth)) {
@@ -65,9 +66,10 @@ class AvailabilityService
         }
 
         return (object) [
+            'mentor_id' => $this->mentorshipRepository->getMentorIdByUser($this->user),
             'currentMonth' => $this->carbon,
-            'nextMonth' => $nextMonth,
-            'prevMonth' => $prevMonth,
+            'nextMonth' => $this->carbon->copy()->addMonthsNoOverflow(),
+            'prevMonth' => $this->carbon->copy()->subMonthsNoOverflow(),
             'weeks' => $weeks,
         ];
     }
@@ -78,17 +80,18 @@ class AvailabilityService
         if ($this->user->is_mentor === false) {
             abort(400);
         }
+
         $dates = collect($request->availability_setting);
 
         $deleteTargets = $dates->where('is_available', false);
-        $deleteResult = $this->availabilityRepository->removeAvailabilitiesByDates($deleteTargets, $this->mentor_id);
+        $deleteResult = $this->availabilityRepository->removeAvailabilitiesByDates($deleteTargets, $this->mentorId);
 
         if ($deleteResult === false) {
             return back()->withErrors('更新処理に失敗しました');
         }
 
         $updateTargets = $dates->where('is_available', true);
-        return $this->availabilityRepository->updateOrInsertAvailabilitiesByDates($updateTargets, $this->mentor_id);
+        return $this->availabilityRepository->updateOrInsertAvailabilitiesByDates($updateTargets, $this->mentorId);
     }
 
     public function updateAvailableTimes(Request $request)
@@ -100,12 +103,12 @@ class AvailabilityService
 
         $times = collect($request->set_time);
 
-        return $this->availabilityRepository->updateOrInsertAvailableTimes($times, $this->mentor_id);
+        return $this->availabilityRepository->updateAvailableTimes($times, $this->mentorId);
     }
 
     /**
      * 週毎のデータを配列化したもの.
-     * @param Carbon $date
+     * @param Carbon $week
      * @return array $days
      *
      * day object properties
@@ -116,10 +119,10 @@ class AvailabilityService
      * is_past      => bool
      * is_available => bool
      */
-    private function getDaysByWeek(Carbon $date): array
+    private function getDaysByWeek(Carbon $week): array
     {
-        $tmpDay = $date->copy()->startOfWeek(); // 週の頭にセット
-        $endOfWeek = $date->copy()->endOfWeek(); // 週末を定義
+        $tmpDay = $week->copy()->startOfWeek(); // 週の頭にセット
+        $endOfWeek = $week->copy()->endOfWeek(); // 週末を定義
 
         // 週末まで処理をループ
         $days = [];
@@ -143,18 +146,28 @@ class AvailabilityService
             if ($this->availabilities->isEmpty()) {
                 $day['is_available'] = false;
             } else {
-                $day['is_available'] = $this->availabilities
-                    ->filter(
-                        function ($date) use ($day) {
-                            return $date->available_date->format('Y-m-d') == $day['date'];
-                        }
-                    )
-                    ->isNotEmpty();
+                $day['is_available'] = $this->isAvailableDate($day['date']);
             }
 
             $days[] = (object) $day;
             $tmpDay->addDay(1);
         }
         return $days;
+    }
+
+    /**
+     * Y-m-dの文字列を渡すと取得済みのコレクションから予約可能な日かどうかを判定.
+     * @param string $date
+     * @return bool
+     */
+    private function isAvailableDate(string $date): bool
+    {
+        return $this->availabilities
+            ->filter(
+                function ($availability) use ($date) {
+                    return $availability->available_date->format('Y-m-d') == $date;
+                }
+            )
+            ->isNotEmpty();
     }
 }
