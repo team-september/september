@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Log;
 class ReservationController extends Controller
 {
     protected $reservationService;
-
     protected $userService;
 
     /**
