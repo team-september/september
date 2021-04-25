@@ -130,7 +130,7 @@
                                     <h6 class="mb-0">エンジニア歴</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ $career->year ?? '未登録' }}
+                                    {{ $userCareer->year ?? '未登録' }}
                                 </div>
                             </div>
 
@@ -151,12 +151,12 @@
                                         <h6 class="mb-0">希望</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        @if($purposes->isEmpty())
+                                        @if($userPurposes->isEmpty())
                                             未登録
                                         @else
-                                            @foreach($purposes as $purpose)
+                                            @foreach($userPurposes as $userPurpose)
                                                 <ul class="text-secondary list-unstyled">
-                                                    <li> {{ $purpose->purpose_name}} </li>
+                                                    <li> {{ $userPurpose->purpose_name}} </li>
                                                 </ul>
                                             @endforeach
                                         @endif
@@ -171,16 +171,16 @@
                                     <h6 class="mb-0">スキル</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary flex">
-                                    @if($skills->isEmpty())
+                                    @if($userSkills->isEmpty())
                                         未登録
                                     @else
-                                        @foreach($skills as $skill)
-                                            @if ($skill['skill_type']  === 1)
-                                                <span class="badge badge-warning">{{ $skill['skill_name'] }}</span>
-                                            @elseif($skill['skill_type']  === 2)
-                                                <span class="badge badge-success">{{ $skill['skill_name'] }}</span>
-                                            @elseif($skill['skill_type']  === 3)
-                                                <span class="badge badge-info">{{ $skill['skill_name'] }}</span>
+                                        @foreach($userSkills as $userSkill)
+                                            @if ($userSkill['skill_type']  === 1)
+                                                <span class="badge badge-warning">{{ $userSkill['skill_name'] }}</span>
+                                            @elseif($userSkill['skill_type']  === 2)
+                                                <span class="badge badge-success">{{ $userSkill['skill_name'] }}</span>
+                                            @elseif($userSkill['skill_type']  === 3)
+                                                <span class="badge badge-info">{{ $userSkill['skill_name'] }}</span>
                                             @endif
                                         @endforeach
                                     @endif

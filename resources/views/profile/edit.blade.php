@@ -110,7 +110,7 @@
                                         <select name="career"
                                                 class="form-control text-secondary">
                                             @foreach($careers as $career)
-                                                @if($user_career && $career->id === $user_career->id)
+                                                @if($userCareer && $career->id === $userCareer->id)
                                                     <option name="career" value={{ $career->id }} selected>
                                                 @else
                                                     <option name="career" value= {{ $career->id }}>
@@ -140,11 +140,11 @@
                                                 <div class="col-sm-5 text-secondary">
                                                     <input class="form-check-input" name="purpose[]" type="checkbox"
                                                            value={{ $purpose->id}}
-                                                           @if($user_purpose->isEmpty())
+                                                           @if($userPurposes->isEmpty())
                                                                id="{{ $purpose->id }}">
                                                     @endif
 
-                                                    @foreach($user_purpose as $old)
+                                                    @foreach($userPurposes as $old)
                                                         @if($old->id === $purpose->id)
                                                             id="{{ $purpose->id }}" checked>
                                                             @break
@@ -173,11 +173,11 @@
                                                 <input class="form-check-input" name="skill[]" type="checkbox"
                                                        value={{ $skill->id }}
 
-                                                       @if($user_skill->isEmpty())
+                                                       @if($userSkills->isEmpty())
                                                            id="skill_{{ $skill->id }}">
                                                 @endif
 
-                                                @foreach($user_skill as $old)
+                                                @foreach($userSkills as $old)
                                                     @if($old->id === $skill->id)
 
                                                         id="skill_{{ $skill->id }}" checked="checked">

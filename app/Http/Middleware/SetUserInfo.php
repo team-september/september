@@ -34,7 +34,7 @@ class SetUserInfo
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = $this->userRepository->getUserBySub($this->authManager->id());
+        $user = $this->userRepository->getBySub($this->authManager->id());
         $unreadApplicationCount = $user ? $this->applicationRepository->countUnreadApplications($user->id) : 0;
         $unreadApprovalCount = $user ? $this->applicationRepository->countUnreadApprovals($user->id) : 0;
 

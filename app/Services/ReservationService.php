@@ -37,7 +37,7 @@ class ReservationService
 
     public function store(StoreReservationRequest $request)
     {
-        $userId = $this->userRepository->getUserBySub(Auth::id())->id;
+        $userId = $this->userRepository->getBySub(Auth::id())->id;
         return $this->reservationRepository->store($request, $userId);
     }
 

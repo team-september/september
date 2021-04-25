@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace App\Repositories\User;
 
+use App\Http\Requests\MultipleProfileUpdateRequest;
+
 interface IUserRepository
 {
     public function create($userInfo);
 
-    public function update($user, $request);
+    public function update($user, MultipleProfileUpdateRequest $request);
 
-    public function getUserBySub($sub);
+    public function getBySub($sub);
 
-    public function getUserById($id);
+    public function getById($id);
 
     public function getMentors();
 }
