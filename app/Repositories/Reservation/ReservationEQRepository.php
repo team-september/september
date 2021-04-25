@@ -37,14 +37,14 @@ class ReservationEQRepository implements IReservationRepository
      * 予約の新規作成.
      *
      * @param StoreReservationRequest $request
-     * @param int                     $user_id
+     * @param int                     $userId
      *
      * @throws Exception 重複する予約があった場合は例外を投げる
      * @return bool 保存に成功した場合はtrueを返す
      */
-    public function store(StoreReservationRequest $request, int $user_id): bool
+    public function store(StoreReservationRequest $request, int $userId): bool
     {
-        $duplicate = Reservation::where('mentee_id', $user_id)
+        $duplicate = Reservation::where('mentee_id', $userId)
             ->where('mentor_id', $request->mentor_id)
             ->where('date', $request->date)
             ->first();
