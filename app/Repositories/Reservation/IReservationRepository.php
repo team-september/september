@@ -9,9 +9,11 @@ use Illuminate\Support\Collection;
 
 interface IReservationRepository
 {
-    public function getReservationsByMenteeId(int $menteeId): Collection;
+    public function getByMenteeId(int $menteeId): Collection;
 
-    public function getReservationsByMentorId(int $mentorId): Collection;
+    public function getByMentorId(int $mentorId): Collection;
+
+    public function getUpcomingByUser($user): Collection;
 
     public function store(StoreReservationRequest $request, int $userId): bool;
 }

@@ -26,7 +26,7 @@
                                     @endif
                                     {{-- 当日リマインド --}}
                                     @if(\Carbon\Carbon::parse($reservation->date)->eq(\Carbon\Carbon::today()))
-                                        <span class="ml-2 badge badge-info">今日</span>
+                                        <span class="ml-2 badge badge-danger">今日</span>
                                     @endif
                                 </div>
                                 <div>申請日:{{ \Carbon\Carbon::parse($reservation->created_at)->format('Y/m/d') }}</div>

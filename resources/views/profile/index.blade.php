@@ -243,6 +243,37 @@
                                 </div>
                             @endif
 
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">1on1スケジュール</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @if($upcomingReservations->isNotEmpty())
+                                        <ul class="list-unstyled">
+                                            @foreach($upcomingReservations as $upcomingReservation)
+                                                <li class="d-flex">
+                                                    <a href="{{ route('profile.show', $upcomingReservation->user_id) }}"
+                                                       target="_blank"
+                                                       rel="noopener nofollow">{{ $upcomingReservation->name }}さん</a>
+                                                    <div class="ml-3">{{ \Carbon\Carbon::parse($upcomingReservation->date)->format('Y/m/d') }} {{ \Carbon\Carbon::parse($upcomingReservation->time)->format('H:i') }}</div>
+                                                    {{-- 前日リマインド --}}
+                                                    @if(\Carbon\Carbon::parse($upcomingReservation->date)->eq(\Carbon\Carbon::today()->addDay(1)))
+                                                        <span class="ml-2 badge badge-info">明日</span>
+                                                    @endif
+                                                    {{-- 当日リマインド --}}
+                                                    @if(\Carbon\Carbon::parse($upcomingReservation->date)->eq(\Carbon\Carbon::today()))
+                                                        <span class="ml-2 badge badge-danger">今日</span>
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        該当予約なし
+                                    @endif
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="row justify-content-center px-3">

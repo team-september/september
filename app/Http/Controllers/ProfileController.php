@@ -15,6 +15,7 @@ use App\Repositories\Url\IUrlRepository;
 use App\Repositories\User\IUserRepository;
 use App\Services\ApplicationService;
 use App\Services\ProfileService;
+use App\Services\ReservationService;
 use App\Services\UrlService;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,8 @@ class ProfileController extends Controller
 
     protected $applicationService;
 
+    protected $reservationService;
+
     /**
      * ApplicationController constructor.
      *
@@ -37,17 +40,20 @@ class ProfileController extends Controller
      * @param UrlService         $urlService
      * @param ProfileService     $profileService
      * @param ApplicationService $applicationService
+     * @param ReservationService $reservationService
      */
     public function __construct(
         UserService $userService,
         UrlService $urlService,
         ProfileService $profileService,
-        ApplicationService $applicationService
+        ApplicationService $applicationService,
+        ReservationService $reservationService
     ) {
         $this->userService = $userService;
         $this->urlService = $urlService;
         $this->profileService = $profileService;
         $this->applicationService = $applicationService;
+        $this->reservationService = $reservationService;
     }
 
     public function index()
@@ -57,6 +63,8 @@ class ProfileController extends Controller
         $profile = $this->profileService->getUserProfileByUserId($user->id);
 
         $urls = $this->urlService->findUrls($profile, config('url.types'));
+
+        $upcomingReservations = $this->reservationService->getUpcomingReservationsByUser($user);
 
         list($userCareer, $careers, $userPurposes, $purposes, $userSkills, $skills, $mentors, $application,
             $appliedMentor)
@@ -79,7 +87,8 @@ class ProfileController extends Controller
                 'mentors',
                 'application',
                 'appliedMentor',
-                'justApproved'
+                'justApproved',
+                'upcomingReservations',
             )
         );
     }

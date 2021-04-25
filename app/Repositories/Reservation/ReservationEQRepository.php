@@ -8,13 +8,14 @@ use App\Constants\ReservationStatus;
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
 use App\Models\Reservation;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class ReservationEQRepository implements IReservationRepository
 {
-    public function getReservationsByMenteeId(int $menteeId): Collection
+    public function getByMenteeId(int $menteeId): Collection
     {
         return DB::table('reservations')
             ->select('reservations.id as reservation_id', '*')
@@ -23,13 +24,29 @@ class ReservationEQRepository implements IReservationRepository
             ->get();
     }
 
-    public function getReservationsByMentorId(int $mentorId): Collection
+    public function getByMentorId(int $mentorId): Collection
     {
         return DB::table('reservations')
             ->select('reservations.id as reservation_id', '*')
             ->where('mentor_id', $mentorId)
             ->where('status', ReservationStatus::APPLIED)
             ->join('users', 'users.id', 'reservations.mentee_id')
+            ->get();
+    }
+
+    public function getUpcomingByUser($user): Collection
+    {
+        $belongsTo = $user->is_mentor ? 'mentor_id' : 'mentee_id';
+        $with = $user->is_mentor ? 'mentee_id' : 'mentor_id';
+        return DB::table('reservations')
+            ->select(
+                'reservations.id as reservation_id',
+                'users.id as user_id',
+                '*')
+            ->where($belongsTo, $user->id)
+            ->where('status', ReservationStatus::APPROVED)
+            ->whereDate('date', '>=', Carbon::today())
+            ->join('users', 'users.id', "reservations.{$with}")
             ->get();
     }
 
