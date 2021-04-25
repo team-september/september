@@ -7,7 +7,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="{{ route('reservation.submit')}}" method="POST" name="reservationForm">
+      <form action="{{ route('reservation.store')}}" method="POST" name="reservationForm">
         @csrf
         <input type="hidden" name="mentor_id" value="{{ $mentor_id }}">
         <div class="modal-body">
@@ -19,7 +19,7 @@
             <label><b>希望時間</b></label>
             <template id="radio-template">
               <div class="form-check time-select-radio">
-                <input class="form-check-input" type="radio" name="time" id="" value="" required> 
+                <input class="form-check-input" type="radio" name="time" id="" value="" required>
                 <label class="form-check-label" for=""></label>
               </div>
             </template>
@@ -40,8 +40,8 @@ function getModalContents(mentor_id, date) {
   $.ajax({
     headers: {
       'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    }, 
-    url: "{{url('/reservation/getAvailability')}}",
+    },
+    url: "{{url('/schedule/getAvailability')}}",
     type: 'post',
     dataType: 'json',
     timeout: 5000,
@@ -54,10 +54,10 @@ function getModalContents(mentor_id, date) {
       const date = Object.keys(data)[0]; // キーになっている日付を取得
       const times = data[date];          // 日付の配列に入っている時間を取得
       const parent = $('#radio-box');    // ラジオボタンを追加する親要素
-      
+
       // 日付を入力
       $('#date-input').val(date);
-      
+
       // templateタグ内のDOMを利用して時間のラジオボタン生成
       for(const time of times) {
         const div = $($('#radio-template').html());
