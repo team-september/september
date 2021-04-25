@@ -14,5 +14,4 @@ interface IReservationRepository
     public function getReservationsByMentorId(int $mentorId): Collection;
 
     public function store(StoreReservationRequest $request, int $user_id): bool;
-
 }

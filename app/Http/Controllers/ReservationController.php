@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
 use App\Services\ReservationService;
-use App\Http\Requests\StoreReservationRequest;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
@@ -33,11 +35,11 @@ class ReservationController extends Controller
     }
 
     /**
-     * メンティー側の1on1予約
+     * メンティー側の1on1予約.
      *
      * @param StoreReservationRequest $request
      *
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|Redirector|RedirectResponse
      */
     public function store(StoreReservationRequest $request)
     {
@@ -50,9 +52,8 @@ class ReservationController extends Controller
         }
     }
 
-
     /**
-     * メンター側の1on1申請承認・拒否
+     * メンター側の1on1申請承認・拒否.
      *
      * @param UpdateReservationRequest $request
      *

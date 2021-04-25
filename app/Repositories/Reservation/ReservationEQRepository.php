@@ -19,7 +19,7 @@ class ReservationEQRepository implements IReservationRepository
         return DB::table('reservations')
             ->where('mentee_id', $menteeId)
             ->where('status', ReservationStatus::APPLIED)
-            ->join('users', 'users.id', "reservations.mentor_id")
+            ->join('users', 'users.id', 'reservations.mentor_id')
             ->get();
     }
 
@@ -29,7 +29,7 @@ class ReservationEQRepository implements IReservationRepository
             ->select('reservations.id as reservation_id', '*')
             ->where('mentor_id', $mentorId)
             ->where('status', ReservationStatus::APPLIED)
-            ->join('users', 'users.id', "reservations.mentee_id")
+            ->join('users', 'users.id', 'reservations.mentee_id')
             ->get();
     }
 
@@ -39,8 +39,8 @@ class ReservationEQRepository implements IReservationRepository
      * @param StoreReservationRequest $request
      * @param int                     $user_id
      *
-     * @return bool 保存に成功した場合はtrueを返す
      * @throws Exception 重複する予約があった場合は例外を投げる
+     * @return bool 保存に成功した場合はtrueを返す
      */
     public function store(StoreReservationRequest $request, int $user_id): bool
     {
@@ -73,8 +73,8 @@ class ReservationEQRepository implements IReservationRepository
             foreach ($data['reservation-ids'] as $reservationId) {
                 Reservation::where('id', $reservationId)->update(
                     [
-                        'status'         => $data['status'],
-                        'mentor_comment' => $data['comment'][$reservationId]
+                        'status' => $data['status'],
+                        'mentor_comment' => $data['comment'][$reservationId],
                     ]
                 );
             }

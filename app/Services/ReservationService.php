@@ -9,7 +9,6 @@ use App\Http\Requests\UpdateReservationRequest;
 use App\Repositories\Reservation\IReservationRepository;
 use App\Repositories\User\IUserRepository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class ReservationService
 {

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 class AvailabilityEQRepository implements IAvailabilityRepository
 {
     protected $mentorshipRepository;
+
     protected $reservationRepository;
 
     public function __construct(

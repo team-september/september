@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,23 +26,23 @@ class UpdateReservationRequest extends FormRequest
     public function rules()
     {
         return [
-            'reservation-ids'   => ['array', 'min:1'],
+            'reservation-ids' => ['array', 'min:1'],
             'reservation-ids.*' => ['exists:reservations,id'],
-            'user-ids.*'        => ['exists:users,id'],
-            'comment'           => ['nullable', 'array'],
-            'comment.*'         => ['nullable', 'string'],
-            'status'            => ['in:2,3'],
+            'user-ids.*' => ['exists:users,id'],
+            'comment' => ['nullable', 'array'],
+            'comment.*' => ['nullable', 'string'],
+            'status' => ['in:2,3'],
         ];
     }
 
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         // nullは除外
         $this->merge([
             'reservation-ids' => array_filter($this->input('reservation-ids'), function ($reservationId) {
                 return isset($reservationId);
             }),
-            'user-ids'        => array_filter($this->input('user-ids'), function ($userId) {
+            'user-ids' => array_filter($this->input('user-ids'), function ($userId) {
                 return isset($userId);
             }),
         ]);

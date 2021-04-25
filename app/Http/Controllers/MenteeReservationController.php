@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Services\ReservationService;
-use Illuminate\Http\Request;
 
 class MenteeReservationController extends Controller
 {
@@ -21,7 +22,7 @@ class MenteeReservationController extends Controller
 
     public function index()
     {
-         $menteeReservations = $this->reservationService->getMenteeReservations();
+        $menteeReservations = $this->reservationService->getMenteeReservations();
         return view('reservation.mentee.index');
     }
 }
