@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Repositories\User\IUserRepository;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -20,8 +22,13 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Register any authentication / authorization services.
      */
-    public function boot(): void
+    public function boot(IUserRepository $userRepository): void
     {
         $this->registerPolicies();
+
+        Gate::define('access_mentor_resource', function($user) use ($userRepository)
+        {
+            return $userRepository->getUserBySub($user->sub)->id;
+        });
     }
 }

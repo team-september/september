@@ -4,62 +4,67 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ReservationRequest;
-use App\Services\AvailabilityService;
+use App\Http\Requests\StoreReservationRequest;
+use App\Http\Requests\UpdateReservationRequest;
 use App\Services\ReservationService;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
-    public function index(AvailabilityService $service, Request $request)
-    {
-        // 日付データ取得
-        $date = $request->ym ? new Carbon($request->ym) : Carbon::now();
-        $availabilityData = $service->getAvailabilityDataByMonth($date);
+    protected $reservationService;
 
-        return view('reservation.index', [
-            'mentor_id' => $availabilityData->mentor_id,
-            'prevMonth' => $availabilityData->prevMonth,
-            'nextMonth' => $availabilityData->nextMonth,
-            'currentMonth' => $availabilityData->currentMonth,
-            'calendarData' => $availabilityData->weeks,
-        ]);
+    /**
+     * ReservationController constructor.
+     *
+     * @param $reservationService
+     */
+    public function __construct(ReservationService $reservationService)
+    {
+        $this->reservationService = $reservationService;
     }
 
-    public function reserve(ReservationService $service, ReservationRequest $request)
+    public function index()
+    {
+        $reservations = $this->reservationService->getReservationsBySub(Auth::id());
+
+        return view('reservation.index', compact('reservations'));
+    }
+
+    /**
+     * メンティー側の1on1予約.
+     *
+     * @param StoreReservationRequest $request
+     *
+     * @return Application|Redirector|RedirectResponse
+     */
+    public function store(StoreReservationRequest $request)
     {
         try {
-            $service->makeNewReservation($request);
-            return redirect(route('reservation.index'))->with(['message' => '1on1の予約申請を受け付けました']);
+            $this->reservationService->store($request);
+            return redirect(route('schedule.index'))->with(['message' => '1on1の予約申請を受け付けました']);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return back()->withErrors('予約の申請に失敗しました');
         }
     }
 
-    public function setting(AvailabilityService $service, Request $request)
+    /**
+     * メンター側の1on1申請承認・拒否.
+     *
+     * @param UpdateReservationRequest $request
+     *
+     * @return RedirectResponse
+     */
+    public function update(UpdateReservationRequest $request)
     {
-        $Availabilities = $service->updateAvailabilities($request);
-
-        // 指定された月に予約可能な日がなければカレンダー画面へ戻す
-        if ($Availabilities->isEmpty()) {
-            return back();
+        if ($this->reservationService->update($request)) {
+            return redirect()->back()->with(['message' => '更新しました。']);
         }
 
-        return view('reservation.setting', [
-            'settingDates' => $Availabilities,
-        ]);
-    }
-
-    public function setTime(AvailabilityService $service, Request $request)
-    {
-        $result = $service->updateAvailableTimes($request);
-
-        if ($result) {
-            return redirect(route('reservation.index'))->with('message', '予約可能な日時を設定しました。');
-        }
-        back()->withErrors('日時の設定に失敗しました');
+        return redirect()->back()->with(['failure' => '更新に失敗しました。']);
     }
 }

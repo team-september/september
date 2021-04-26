@@ -27,9 +27,21 @@
                                 </span>
                             @endif
                         </a>
-                        <a class="nav-item nav-link" href="{{ route('reservation.index') }}">
-                            1on1予約
-                        </a>
+                        <div class="dropdown nav-item nav-link">
+                            <a role="button" class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer">
+                                1on1予約
+                            </a>
+                            <div class="dropdown-menu">
+                                @if ($user->is_mentor)
+                                    <a class="dropdown-item" href="{{ route('reservation.index') }}">申請承認</a>
+                                    <a class="dropdown-item" href="{{ route('schedule.index') }}">設定</a>
+                                @else
+                                    <a class="dropdown-item" href="{{ route('reservation.index') }}">申請確認</a>
+                                    <a class="dropdown-item" href="{{ route('schedule.index') }}">予約申請</a>
+                                @endif
+                                </a>
+                            </div>
+                        </div>
                         <a class="nav-item nav-link" href="{{ route('logout') }}">ログアウト</a>
                     @else
                         <a class="nav-item nav-link" href="{{ route('login') }}">ログイン</a>

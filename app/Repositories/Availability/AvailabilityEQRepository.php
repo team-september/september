@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Log;
 
 class AvailabilityEQRepository implements IAvailabilityRepository
 {
+    protected $mentorshipRepository;
+
+    protected $reservationRepository;
+
     public function __construct(
         IMentorshipRepository $mentorshipRepository,
         IReservationRepository $reservationRepository
@@ -62,7 +66,8 @@ class AvailabilityEQRepository implements IAvailabilityRepository
         try {
             foreach ($dates as $date => $values) {
                 $targetDate = new Carbon($date);
-                $availability = Availability::where('mentor_id', $mentorId)->where('available_date', $targetDate)->first();
+                $availability = Availability::where('mentor_id', $mentorId)->where('available_date', $targetDate)
+                    ->first();
 
                 if ($availability) {
                     $availability->delete();
@@ -89,7 +94,8 @@ class AvailabilityEQRepository implements IAvailabilityRepository
                 $targetDate = new Carbon($date);
 
                 // 該当するレコードがなければ新しいレコードをインスタンス化
-                $availability = Availability::where('mentor_id', $mentorId)->where('available_date', $targetDate)->firstOrNew();
+                $availability = Availability::where('mentor_id', $mentorId)->where('available_date', $targetDate)
+                    ->firstOrNew();
 
                 $availability->mentor_id = $mentorId;
                 $availability->available_date = $targetDate;
