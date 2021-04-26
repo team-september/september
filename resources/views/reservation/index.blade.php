@@ -1,5 +1,13 @@
 @extends('layouts.base')
 
+@push('styles')
+    <style>
+        .border-2 {
+            border-width: 2px !important;
+        }
+    </style>
+@endpush
+
 @push('scripts')
     <script type="text/javascript">
         $(function () {
@@ -7,12 +15,12 @@
                 const selected_reservation = $(this);
 
                 // 既に選択済みの場合、ボーダー解除して値を空にする
-                if (selected_reservation.hasClass('border-3')) {
-                    selected_reservation.removeClass('border-3 border-primary');
+                if (selected_reservation.hasClass('border border-2 border-primary')) {
+                    selected_reservation.removeClass('border border-2 border-primary');
                     selected_reservation.find('.js-reservation-id').val('');
                     selected_reservation.find('.js-user-id').val('');
                 } else { // 未選択の場合、ボーダーつけて値を入れる
-                    selected_reservation.addClass('border-3 border-primary');
+                    selected_reservation.addClass('border border-2 border-primary');
                     selected_reservation.find('.js-reservation-id').val(selected_reservation.attr('id'));
                     selected_reservation.find('.js-user-id').val(selected_reservation.attr('data-user-id'));
                 }
@@ -38,7 +46,8 @@
                             <p class="font-weight-bold">
                                 希望日：{{ \Carbon\Carbon::parse($reservation->date)->format('Y/m/d') }} {{ \Carbon\Carbon::parse($reservation->time)->format('H:i') }}</p>
                             <label for="comment-{{ $reservation->reservation_id }}">コメント（任意）</label>
-                            <textarea form="reservation-form" class="form-control" name="comment[{{ $reservation->reservation_id }}]"
+                            <textarea form="reservation-form" class="form-control"
+                                      name="comment[{{ $reservation->reservation_id }}]"
                                       id="comment-{{ $reservation->reservation_id }}"
                                       rows="2"></textarea>
                         </div>
