@@ -19,7 +19,7 @@ class ReservationEQRepository implements IReservationRepository
         return DB::table('reservations')
             ->select('reservations.id as reservation_id', '*')
             ->where('mentee_id', $menteeId)
-            ->join('users', 'users.id', "reservations.mentor_id")
+            ->join('users', 'users.id', 'reservations.mentor_id')
             ->get();
     }
 

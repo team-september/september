@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 class ReservationController extends Controller
 {
     protected $reservationService;
+
     protected $userService;
 
     /**
@@ -35,6 +36,7 @@ class ReservationController extends Controller
     {
         $sub = Auth::id();
         $reservations = $this->reservationService->getReservationsBySub($sub);
+
         if ($this->userService->isMentor($sub)) {
             return view('reservation.mentor.index', compact('reservations'));
         }
