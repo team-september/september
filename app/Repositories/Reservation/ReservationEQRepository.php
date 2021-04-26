@@ -54,7 +54,7 @@ class ReservationEQRepository implements IReservationRepository
         }
 
         $reservation = new Reservation();
-        $reservation->mentee_id = $user_id;
+        $reservation->mentee_id = $userId;
         $reservation->mentor_id = $request->mentor_id;
         $reservation->date = $request->date;
         $reservation->time = $request->time;
