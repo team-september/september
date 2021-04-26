@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
 use App\Services\ReservationService;
+use App\Services\UserService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
@@ -16,22 +17,29 @@ use Illuminate\Support\Facades\Log;
 class ReservationController extends Controller
 {
     protected $reservationService;
+    protected $userService;
 
     /**
      * ReservationController constructor.
      *
-     * @param $reservationService
+     * @param ReservationService $reservationService
+     * @param UserService        $userService
      */
-    public function __construct(ReservationService $reservationService)
+    public function __construct(ReservationService $reservationService, UserService $userService)
     {
         $this->reservationService = $reservationService;
+        $this->userService = $userService;
     }
 
     public function index()
     {
-        $reservations = $this->reservationService->getReservationsBySub(Auth::id());
+        $sub = Auth::id();
+        $reservations = $this->reservationService->getReservationsBySub($sub);
+        if ($this->userService->isMentor($sub)) {
+            return view('reservation.mentor.index', compact('reservations'));
+        }
 
-        return view('reservation.index', compact('reservations'));
+        return view('reservation.mentee.index', compact('reservations'));
     }
 
     /**
