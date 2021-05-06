@@ -20,8 +20,8 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    public function isMentor(string $sub)
+    public function getUserBySub(string $sub)
     {
-        return $this->userRepository->getUserBySub($sub)->is_mentor ? true : false;
+        return $this->userRepository->getUserBySub($sub);
     }
 }

@@ -34,10 +34,10 @@ class ReservationController extends Controller
 
     public function index()
     {
-        $sub = Auth::id();
-        $reservations = $this->reservationService->getReservationsBySub($sub);
+        $user = $this->userService->getUserBySub(Auth::id());
+        $reservations = $this->reservationService->getReservationsByUser($user);
 
-        if ($this->userService->isMentor($sub)) {
+        if ($user->is_mentor) {
             return view('reservation.mentor.index', compact('reservations'));
         }
 
