@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
+use App\Models\User;
 use App\Repositories\Reservation\IReservationRepository;
 use App\Repositories\User\IUserRepository;
 use Illuminate\Support\Facades\Auth;
@@ -22,9 +23,8 @@ class ReservationService
         $this->reservationRepository = $reservationRepository;
     }
 
-    public function getReservationsBySub(string $sub)
+    public function getReservationsByUser(User $user)
     {
-        $user = $this->userRepository->getUserBySub($sub);
         return $user->is_mentor
             ? $this->reservationRepository->getReservationsByMentorId($user->id)
             : $this->reservationRepository->getReservationsByMenteeId($user->id);

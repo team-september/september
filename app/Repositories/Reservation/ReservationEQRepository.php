@@ -17,8 +17,8 @@ class ReservationEQRepository implements IReservationRepository
     public function getReservationsByMenteeId(int $menteeId): Collection
     {
         return DB::table('reservations')
+            ->select('reservations.id as reservation_id', '*')
             ->where('mentee_id', $menteeId)
-            ->where('status', ReservationStatus::APPLIED)
             ->join('users', 'users.id', 'reservations.mentor_id')
             ->get();
     }
