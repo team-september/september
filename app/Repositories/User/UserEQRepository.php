@@ -13,11 +13,11 @@ class UserEQRepository implements IUserRepository
     {
         return User::create(
             [
-                'sub'       => $userInfo['sub'],
+                'sub' => $userInfo['sub'],
                 'is_mentor' => 0,
-                'nickname'  => $userInfo['nickname'],
-                'name'      => $userInfo['name'],
-                'picture'   => $userInfo['picture'],
+                'nickname' => $userInfo['nickname'],
+                'name' => $userInfo['name'],
+                'picture' => $userInfo['picture'],
             ]
         );
     }

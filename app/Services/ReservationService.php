@@ -35,7 +35,6 @@ class ReservationService
         return $this->reservationRepository->getUpcomingByUser($user);
     }
 
-
     public function store(StoreReservationRequest $request)
     {
         $userId = $this->userRepository->getBySub(Auth::id())->id;

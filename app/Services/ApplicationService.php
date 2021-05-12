@@ -1,17 +1,16 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Services;
 
-
-use App\Models\Application;
 use App\Repositories\Application\IApplicationRepository;
-use App\Repositories\ReadApplication\IReadApplicationRepository;
 use App\Repositories\ReadApproval\IReadApprovalRepository;
 
 class ApplicationService
 {
     protected $applicationRepository;
+
     protected $readApprovalRepository;
 
     /**

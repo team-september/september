@@ -42,7 +42,8 @@ class ReservationEQRepository implements IReservationRepository
             ->select(
                 'reservations.id as reservation_id',
                 'users.id as user_id',
-                '*')
+                '*'
+            )
             ->where($belongsTo, $user->id)
             ->where('status', ReservationStatus::APPROVED)
             ->whereDate('date', '>=', Carbon::today())

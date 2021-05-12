@@ -26,7 +26,6 @@ class ProfileService
 
     protected $skillRepository;
 
-
     public function __construct(
         IUserRepository $userRepository,
         IApplicationRepository $applicationRepository,

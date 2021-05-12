@@ -28,10 +28,10 @@ class UserService
         //データがない場合ユーザー関連情報を作成
         if (empty($user)) {
             $userInfo = [
-                'sub'      => $auth0User->sub,
+                'sub' => $auth0User->sub,
                 'nickname' => $auth0User->nickname,
-                'name'     => $auth0User->name,
-                'picture'  => $auth0User->picture,
+                'name' => $auth0User->name,
+                'picture' => $auth0User->picture,
             ];
 
             $user = $this->userRepository->create($userInfo);

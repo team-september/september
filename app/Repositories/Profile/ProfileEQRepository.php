@@ -27,7 +27,7 @@ class ProfileEQRepository implements IProfileRepository
     {
         $profile->fill(
             [
-                'goal'      => $request->goal,
+                'goal' => $request->goal,
                 'career_id' => $request->career,
             ]
         )->save();

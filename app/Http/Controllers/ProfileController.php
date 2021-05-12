@@ -5,14 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MultipleProfileUpdateRequest;
-use App\Repositories\Application\IApplicationRepository;
-use App\Repositories\Career\ICareerRepository;
-use App\Repositories\Profile\IProfileRepository;
-use App\Repositories\Purpose\IPurposeRepository;
-use App\Repositories\ReadApproval\IReadApprovalRepository;
-use App\Repositories\Skill\ISkillRepository;
-use App\Repositories\Url\IUrlRepository;
-use App\Repositories\User\IUserRepository;
 use App\Services\ApplicationService;
 use App\Services\ProfileService;
 use App\Services\ReservationService;
