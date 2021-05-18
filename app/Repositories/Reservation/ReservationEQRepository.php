@@ -18,7 +18,11 @@ class ReservationEQRepository implements IReservationRepository
     public function getByMenteeId(int $menteeId): Collection
     {
         return DB::table('reservations')
-            ->select('reservations.id as reservation_id', '*')
+            ->select(
+                'reservations.id as reservation_id',
+                'reservations.created_at as reservation_created_at',
+                '*'
+            )
             ->where('mentee_id', $menteeId)
             ->join('users', 'users.id', 'reservations.mentor_id')
             ->get();
@@ -27,7 +31,11 @@ class ReservationEQRepository implements IReservationRepository
     public function getByMentorId(int $mentorId): Collection
     {
         return DB::table('reservations')
-            ->select('reservations.id as reservation_id', '*')
+            ->select(
+                'reservations.id as reservation_id',
+                'reservations.created_at as reservation_created_at',
+                '*'
+            )
             ->where('mentor_id', $mentorId)
             ->where('status', ReservationStatus::APPLIED)
             ->join('users', 'users.id', 'reservations.mentee_id')

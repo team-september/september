@@ -41,7 +41,7 @@
                         <div class="card-body">
                             <div class="d-md-flex justify-content-between mb-4 mb-md-0">
                                 <h5 class="card-title">{{ $reservation->name }}</h5>
-                                <div>申請日:{{ \Carbon\Carbon::parse($reservation->created_at)->format('Y/m/d') }}</div>
+                                <div>申請日:{{ \Carbon\Carbon::parse($reservation->reservation_created_at)->format('Y/m/d') }}</div>
                             </div>
                             <p class="font-weight-bold">
                                 希望日：{{ \Carbon\Carbon::parse($reservation->date)->format('Y/m/d') }} {{ \Carbon\Carbon::parse($reservation->time)->format('H:i') }}</p>
