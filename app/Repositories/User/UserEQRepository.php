@@ -14,7 +14,7 @@ class UserEQRepository implements IUserRepository
         return User::create(
             [
                 'sub' => $userInfo['sub'],
-                'is_mentor' => 0,
+                'is_mentor' => false,
                 'nickname' => $userInfo['nickname'],
                 'name' => $userInfo['name'],
                 'picture' => $userInfo['picture'],
