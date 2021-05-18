@@ -21,7 +21,7 @@
                                     @endif
 
                                     {{-- 前日リマインド --}}
-                                    @if(\Carbon\Carbon::parse($reservation->date)->eq(\Carbon\Carbon::today()->addDay(1)))
+                                    @if(\Carbon\Carbon::parse($reservation->date)->eq(\Carbon\Carbon::today()->addDay()))
                                         <span class="ml-2 badge badge-info">明日</span>
                                     @endif
                                     {{-- 当日リマインド --}}
