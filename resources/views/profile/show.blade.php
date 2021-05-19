@@ -111,7 +111,7 @@
                                     <h6 class="mb-0">エンジニア歴</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ $career->year ?? '未登録' }}
+                                    {{ $userCareer->year ?? '未登録' }}
                                 </div>
                             </div>
 
@@ -132,12 +132,12 @@
                                         <h6 class="mb-0">希望</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        @if($purposes->isEmpty())
+                                        @if($userPurposes->isEmpty())
                                             未登録
                                         @else
-                                            @foreach($purposes as $purpose)
+                                            @foreach($userPurposes as $userPurpose)
                                                 <ul class="text-secondary list-unstyled">
-                                                    <li> {{ $purpose->purpose_name}} </li>
+                                                    <li> {{ $userPurpose->purpose_name}} </li>
                                                 </ul>
                                             @endforeach
                                         @endif

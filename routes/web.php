@@ -27,9 +27,9 @@ Route::group(
         // プロフィール
         Route::group(['prefix' => 'profile'], function (): void {
             Route::get('/', 'ProfileController@index')->name('profile.index');
-            Route::get('/show/{id}', 'ProfileController@show')->name('profile.show');
             Route::get('/edit', 'ProfileController@edit')->name('profile.edit');
-            Route::put('/update/{id}', 'ProfileController@update')->name('profile.update');
+            Route::get('/{id}', 'ProfileController@show')->name('profile.show');
+            Route::put('/{id}', 'ProfileController@update')->name('profile.update');
         });
 
         // メンティー申請

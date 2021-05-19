@@ -130,7 +130,7 @@
                                     <h6 class="mb-0">エンジニア歴</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ $career->year ?? '未登録' }}
+                                    {{ $userCareer->year ?? '未登録' }}
                                 </div>
                             </div>
 
@@ -151,12 +151,12 @@
                                         <h6 class="mb-0">希望</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        @if($purposes->isEmpty())
+                                        @if($userPurposes->isEmpty())
                                             未登録
                                         @else
-                                            @foreach($purposes as $purpose)
+                                            @foreach($userPurposes as $userPurpose)
                                                 <ul class="text-secondary list-unstyled">
-                                                    <li> {{ $purpose->purpose_name}} </li>
+                                                    <li> {{ $userPurpose->purpose_name}} </li>
                                                 </ul>
                                             @endforeach
                                         @endif
@@ -171,16 +171,16 @@
                                     <h6 class="mb-0">スキル</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary flex">
-                                    @if($skills->isEmpty())
+                                    @if($userSkills->isEmpty())
                                         未登録
                                     @else
-                                        @foreach($skills as $skill)
-                                            @if ($skill['skill_type']  === 1)
-                                                <span class="badge badge-warning">{{ $skill['skill_name'] }}</span>
-                                            @elseif($skill['skill_type']  === 2)
-                                                <span class="badge badge-success">{{ $skill['skill_name'] }}</span>
-                                            @elseif($skill['skill_type']  === 3)
-                                                <span class="badge badge-info">{{ $skill['skill_name'] }}</span>
+                                        @foreach($userSkills as $userSkill)
+                                            @if ($userSkill['skill_type']  === 1)
+                                                <span class="badge badge-warning">{{ $userSkill['skill_name'] }}</span>
+                                            @elseif($userSkill['skill_type']  === 2)
+                                                <span class="badge badge-success">{{ $userSkill['skill_name'] }}</span>
+                                            @elseif($userSkill['skill_type']  === 3)
+                                                <span class="badge badge-info">{{ $userSkill['skill_name'] }}</span>
                                             @endif
                                         @endforeach
                                     @endif
@@ -242,6 +242,37 @@
                                     </div>
                                 </div>
                             @endif
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">1on1スケジュール</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @if($upcomingReservations->isNotEmpty())
+                                        <ul class="list-unstyled">
+                                            @foreach($upcomingReservations as $upcomingReservation)
+                                                <li class="d-flex">
+                                                    <a href="{{ route('profile.show', $upcomingReservation->user_id) }}"
+                                                       target="_blank"
+                                                       rel="noopener nofollow">{{ $upcomingReservation->name }}さん</a>
+                                                    <div class="ml-3">{{ \Carbon\Carbon::parse($upcomingReservation->date)->format('Y/m/d') }} {{ \Carbon\Carbon::parse($upcomingReservation->time)->format('H:i') }}</div>
+                                                    {{-- 前日リマインド --}}
+                                                    @if(\Carbon\Carbon::parse($upcomingReservation->date)->eq(\Carbon\Carbon::today()->addDay(1)))
+                                                        <span class="ml-2 badge badge-info">明日</span>
+                                                    @endif
+                                                    {{-- 当日リマインド --}}
+                                                    @if(\Carbon\Carbon::parse($upcomingReservation->date)->eq(\Carbon\Carbon::today()))
+                                                        <span class="ml-2 badge badge-danger">今日</span>
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        該当予約なし
+                                    @endif
+                                </div>
+                            </div>
 
                         </div>
                     </div>

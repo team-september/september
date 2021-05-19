@@ -38,7 +38,7 @@ class ApplicationController extends Controller
 
     public function index()
     {
-        $user = $this->userRepository->getUserBySub(Auth::id());
+        $user = $this->userRepository->getBySub(Auth::id());
         $userId = $user->id;
         $applications = $user->is_mentor ? $user->mentorApplications : $user->menteeApplications;
 
@@ -53,7 +53,7 @@ class ApplicationController extends Controller
             if ($application->status !== 1) {
                 continue;
             }
-            $user = $this->userRepository->getUserById($application->{$userCategory});
+            $user = $this->userRepository->getById($application->{$userCategory});
             $create = $application->created_at->format('Y/m/d');
             $applicants[] = ['id' => $application->{$userCategory}, 'name' => $user->name, 'created_at' => $create];
         }
@@ -63,7 +63,7 @@ class ApplicationController extends Controller
     public function store(ApplicationCreateRequest $request)
     {
         $auth0User = Auth::user();
-        $user = $this->userRepository->getUserBySub($auth0User->sub);
+        $user = $this->userRepository->getBySub($auth0User->sub);
 
         if ($this->applicationRepository->getOngoingApplication($user->id)) {
             return redirect()->route('profile.index')->with(['alert' => '既に申請済みです。']);

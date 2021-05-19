@@ -19,8 +19,17 @@
                                     @else
                                         <span class="badge badge-danger">拒否</span>
                                     @endif
+
+                                    {{-- 前日リマインド --}}
+                                    @if(\Carbon\Carbon::parse($reservation->date)->eq(\Carbon\Carbon::today()->addDay()))
+                                        <span class="ml-2 badge badge-info">明日</span>
+                                    @endif
+                                    {{-- 当日リマインド --}}
+                                    @if(\Carbon\Carbon::parse($reservation->date)->eq(\Carbon\Carbon::today()))
+                                        <span class="ml-2 badge badge-danger">今日</span>
+                                    @endif
                                 </div>
-                                <div>申請日:{{ \Carbon\Carbon::parse($reservation->created_at)->format('Y/m/d') }}</div>
+                                <div>申請日:{{ \Carbon\Carbon::parse($reservation->reservation_created_at)->format('Y/m/d') }}</div>
                             </div>
                             <p class="font-weight-bold">
                                 希望日：{{ \Carbon\Carbon::parse($reservation->date)->format('Y/m/d') }} {{ \Carbon\Carbon::parse($reservation->time)->format('H:i') }}</p>

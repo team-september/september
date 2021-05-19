@@ -6,7 +6,7 @@ namespace App\Repositories\Url;
 
 interface IUrlRepository
 {
-    public function update($url, $request, $urTypes, $index);
+    public function update($url, $request, $snsType);
 
     public function create($urlType);
 }

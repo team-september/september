@@ -32,7 +32,7 @@ class AvailabilityService
         $this->availabilityRepository = $availabilityRepository;
 
         // 現在ログイン中のユーザー
-        $this->user = $userRepository->getUserBySub(Auth::id());
+        $this->user = $userRepository->getBySub(Auth::id());
 
         // ユーザーに紐付いたメンターID
         $this->mentorId = $this->mentorshipRepository->getMentorIdByUser($this->user);

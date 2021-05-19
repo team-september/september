@@ -26,18 +26,18 @@ class ReservationService
     public function getReservationsByUser(User $user)
     {
         return $user->is_mentor
-            ? $this->reservationRepository->getReservationsByMentorId($user->id)
-            : $this->reservationRepository->getReservationsByMenteeId($user->id);
+            ? $this->reservationRepository->getByMentorId($user->id)
+            : $this->reservationRepository->getByMenteeId($user->id);
     }
 
-    public function getReservationsByMentorId(int $mentorId)
+    public function getUpcomingReservationsByUser($user)
     {
-        return $this->reservationRepository->getReservationsByMentorId($mentorId);
+        return $this->reservationRepository->getUpcomingByUser($user);
     }
 
     public function store(StoreReservationRequest $request)
     {
-        $userId = $this->userRepository->getUserBySub(Auth::id())->id;
+        $userId = $this->userRepository->getBySub(Auth::id())->id;
         return $this->reservationRepository->store($request, $userId);
     }
 

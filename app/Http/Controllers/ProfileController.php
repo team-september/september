@@ -5,109 +5,66 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MultipleProfileUpdateRequest;
-use App\Repositories\Application\IApplicationRepository;
-use App\Repositories\Career\ICareerRepository;
-use App\Repositories\Profile\IProfileRepository;
-use App\Repositories\Purpose\IPurposeRepository;
-use App\Repositories\ReadApproval\IReadApprovalRepository;
-use App\Repositories\Skill\ISkillRepository;
-use App\Repositories\Url\IUrlRepository;
-use App\Repositories\User\IUserRepository;
+use App\Services\ApplicationService;
 use App\Services\ProfileService;
+use App\Services\ReservationService;
 use App\Services\UrlService;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
-    protected $userRepository;
-
-    protected $applicationRepository;
-
-    protected $careerRepository;
-
-    protected $purposeRepository;
-
-    protected $skillRepository;
-
-    protected $profileRepository;
-
-    protected $urlRepository;
-
-    protected $readApprovalRepository;
+    protected $userService;
 
     protected $urlService;
 
     protected $profileService;
 
+    protected $applicationService;
+
+    protected $reservationService;
+
     /**
      * ApplicationController constructor.
      *
-     * @param IUserRepository         $userRepository
-     * @param IApplicationRepository  $applicationRepository
-     * @param ICareerRepository       $careerRepository
-     * @param IPurposeRepository      $purposeRepository
-     * @param ISkillRepository        $skillRepository
-     * @param IProfileRepository      $profileRepository
-     * @param IUrlRepository          $urlRepository
-     * @param IReadApprovalRepository $readApprovalRepository
-     * @param UrlService              $urlService
-     * @param ProfileService          $profileService
+     * @param UserService        $userService
+     * @param UrlService         $urlService
+     * @param ProfileService     $profileService
+     * @param ApplicationService $applicationService
+     * @param ReservationService $reservationService
      */
     public function __construct(
-        IUserRepository $userRepository,
-        IApplicationRepository $applicationRepository,
-        ICareerRepository $careerRepository,
-        IPurposeRepository $purposeRepository,
-        ISkillRepository $skillRepository,
-        IProfileRepository $profileRepository,
-        IUrlRepository $urlRepository,
-        IReadApprovalRepository $readApprovalRepository,
+        UserService $userService,
         UrlService $urlService,
-        ProfileService $profileService
+        ProfileService $profileService,
+        ApplicationService $applicationService,
+        ReservationService $reservationService
     ) {
-        $this->userRepository = $userRepository;
-        $this->applicationRepository = $applicationRepository;
-        $this->careerRepository = $careerRepository;
-        $this->purposeRepository = $purposeRepository;
-        $this->skillRepository = $skillRepository;
-        $this->profileRepository = $profileRepository;
-        $this->urlRepository = $urlRepository;
-        $this->readApprovalRepository = $readApprovalRepository;
+        $this->userService = $userService;
         $this->urlService = $urlService;
         $this->profileService = $profileService;
+        $this->applicationService = $applicationService;
+        $this->reservationService = $reservationService;
     }
 
     public function index()
     {
-        $auth0User = Auth::user();
-        $user = $this->userRepository->getUserBySub($auth0User->sub);
+        $user = $this->userService->getOrCreate(Auth::user());
 
-        //データがない場合ユーザー関連情報を作成
-        if (empty($user)) {
-            $userInfo = [
-                'sub' => $auth0User->sub,
-                'nickname' => $auth0User->nickname,
-                'name' => $auth0User->name,
-                'picture' => $auth0User->picture,
-            ];
+        $profile = $this->profileService->getUserProfileByUserId($user->id);
 
-            $user = $this->userRepository->create($userInfo);
-            // UserObserverにて関連レコードを作成
-        }
-
-        //入力されていた値の取得
-        $profile = $user->profile;
         $urls = $this->urlService->findUrls($profile, config('url.types'));
-        list($career, $purposes, $skills, $mentors, $application, $appliedMentor)
-            = $this->profileService->findProfile($profile);
 
-        // 承認直後か判定
-        $justApproved = $application && $application->readApproval->isEmpty() && $application->status == config('application.status.approved');
+        $upcomingReservations = $this->reservationService->getUpcomingReservationsByUser($user);
 
-        if ($justApproved) {
+        list($userCareer, $careers, $userPurposes, $purposes, $userSkills, $skills, $mentors, $application,
+            $appliedMentor)
+            = $this->profileService->findProfileDetail($profile);
+
+        if ($justApproved = $this->applicationService->justApproved($application)) {
             //既読処理
-            $this->readApprovalRepository->create($application);
+            $this->applicationService->createReadApproval($application);
         }
 
         return view(
@@ -116,24 +73,29 @@ class ProfileController extends Controller
                 'user',
                 'profile',
                 'urls',
-                'career',
-                'purposes',
-                'skills',
+                'userCareer',
+                'userPurposes',
+                'userSkills',
                 'mentors',
                 'application',
                 'appliedMentor',
-                'justApproved'
+                'justApproved',
+                'upcomingReservations',
             )
         );
     }
 
     public function show($id)
     {
-        $user = $this->userRepository->getUserById($id);
-        $profile = $user->profile;
+        $user = $this->userService->getUserById($id);
+
+        $profile = $this->profileService->getUserProfileByUserId($user->id);
+
         $urls = $this->urlService->findUrls($profile, config('url.types'));
-        list($career, $purposes, $skills, $mentors, $application, $appliedMentor)
-            = $this->profileService->findProfile($profile);
+
+        list($userCareer, $careers, $userPurposes, $purposes, $userSkills, $skills, $mentors, $application,
+            $appliedMentor)
+            = $this->profileService->findProfileDetail($profile);
 
         return view(
             'profile.show',
@@ -141,8 +103,8 @@ class ProfileController extends Controller
                 'user',
                 'profile',
                 'urls',
-                'career',
-                'purposes',
+                'userCareer',
+                'userPurposes',
                 'skills',
                 'mentors',
                 'application',
@@ -153,15 +115,15 @@ class ProfileController extends Controller
 
     public function edit()
     {
-        $user = $this->userRepository->getUserBySub(Auth::id());
-        $profile = $user->profile;
-        $urls = $this->urlService->findUrls($profile, config('url.types'));
-        $careers = $this->careerRepository->getAll();
-        $purposes = $this->purposeRepository->getAll();
-        $skills = $this->skillRepository->getAll();
+        $user = $this->userService->getUserBySub(Auth::id());
 
-        list($user_career, $user_purpose, $user_skill, $mentors, $application, $appliedMentor)
-            = $this->profileService->findProfile($profile);
+        $profile = $this->profileService->getUserProfileByUserId($user->id);
+
+        $urls = $this->urlService->findUrls($profile, config('url.types'));
+
+        list($userCareer, $careers, $userPurposes, $purposes, $userSkills, $skills, $mentors, $application,
+            $appliedMentor)
+            = $this->profileService->findProfileDetail($profile);
 
         return view(
             'profile.edit',
@@ -169,11 +131,11 @@ class ProfileController extends Controller
                 'user',
                 'profile',
                 'urls',
-                'user_career',
+                'userCareer',
                 'careers',
-                'user_purpose',
+                'userPurposes',
                 'purposes',
-                'user_skill',
+                'userSkills',
                 'skills',
                 'application',
                 'appliedMentor'
@@ -183,17 +145,19 @@ class ProfileController extends Controller
 
     public function update(MultipleProfileUpdateRequest $request, $id)
     {
-        $user = $this->userRepository->getUserById($id);
-        $profile = $user->profile;
-        $urls = $profile->urls;
+        $user = $this->userService->getUserById($id);
+
+        $profile = $this->profileService->getUserProfileByUserId($user->id);
+
+        $urls = $this->urlService->findUrls($profile, config('url.types'));
 
         DB::transaction(
             function () use ($request, $user, $profile, $urls): void {
-                $this->userRepository->update($user, $request);
-                $this->profileRepository->update($profile, $request);
+                $this->userService->update($user, $request);
+                $this->profileService->update($profile, $request);
 
-                foreach ($urls as $index => $url) {
-                    $this->urlRepository->update($url, $request, config('url.types'), $index);
+                foreach ($urls as $snsType => $url) {
+                    $this->urlService->update($url, $request, $snsType);
                 }
             }
         );

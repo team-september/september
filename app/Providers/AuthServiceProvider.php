@@ -28,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('access_mentor_resource', function($user) use ($userRepository)
         {
-            return $userRepository->getUserBySub($user->sub)->id;
+            return $userRepository->getBySub($user->sub)->id;
         });
     }
 }

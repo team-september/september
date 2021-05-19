@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories\User;
 
+use App\Http\Requests\MultipleProfileUpdateRequest;
 use App\Models\User;
 
 class UserEQRepository implements IUserRepository
@@ -13,7 +14,7 @@ class UserEQRepository implements IUserRepository
         return User::create(
             [
                 'sub' => $userInfo['sub'],
-                'is_mentor' => 0,
+                'is_mentor' => false,
                 'nickname' => $userInfo['nickname'],
                 'name' => $userInfo['name'],
                 'picture' => $userInfo['picture'],
@@ -21,7 +22,7 @@ class UserEQRepository implements IUserRepository
         );
     }
 
-    public function update($user, $request)
+    public function update($user, MultipleProfileUpdateRequest $request)
     {
         return $user->fill(
             [
@@ -30,12 +31,12 @@ class UserEQRepository implements IUserRepository
         )->save();
     }
 
-    public function getUserBySub($sub)
+    public function getBySub($sub)
     {
         return User::where('sub', $sub)->first();
     }
 
-    public function getUserById($id)
+    public function getById($id)
     {
         return User::find($id);
     }
