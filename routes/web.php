@@ -40,7 +40,7 @@ Route::group(
         });
 
         // 1on1スケジュール
-        Route::group(['prefix' => 'schedule'], function (): void {
+        Route::group(['prefix' => 'schedule', 'middleware' => 'can:access_1on1'], function (): void {
             Route::get('/', 'ScheduleController@index')->name('schedule.index');
             Route::post('/update', 'ScheduleController@update')->name('schedule.update');
             Route::post('/store', 'ScheduleController@store')->name('schedule.store');

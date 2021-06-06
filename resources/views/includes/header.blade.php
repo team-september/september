@@ -27,6 +27,7 @@
                                 </span>
                             @endif
                         </a>
+                        @can('access_1on1')
                         <div class="dropdown nav-item nav-link">
                             <a role="button" class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer">
                                 1on1予約
@@ -42,6 +43,7 @@
                                 </a>
                             </div>
                         </div>
+                        @endcan
                         <a class="nav-item nav-link" href="{{ route('logout') }}">ログアウト</a>
                     @else
                         <a class="nav-item nav-link" href="{{ route('login') }}">ログイン</a>
