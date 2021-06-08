@@ -17,7 +17,9 @@ class MentorshipEQRepository implements IMentorshipRepository
         }
 
         // メンティーなら紐付いた最初のメンターのIDを返す
-        $mentorship = Mentorship::where('mentee_id', $user->id)->first();
+        $mentorship = Mentorship::where('mentee_id', $user->id)
+            ->where('is_active', true)
+            ->first();
 
         return optional($mentorship)->mentor_id;
     }
