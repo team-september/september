@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\Models\Application;
@@ -15,18 +17,19 @@ class ApplicationServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->service = new ApplicationService(
             new ReadApprovalRepository,
         );
     }
 
-    public function testJustApprovedMethod()
+    public function testJustApprovedMethod(): void
     {
         // 適当なモデルデータをインスタンス化
         $application = new Application();
 
-        $application->readApproval = collect(new ReadApproval([
+        $application->readApproval = collect(
+            new ReadApproval([
                 'application_id' => $application->id,
                 'user_id' => $application->user_id,
             ])

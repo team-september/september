@@ -14,7 +14,6 @@ class ApplicationService
     protected $readApprovalRepository;
 
     /**
-     *
      * @param $readApprovalRepository
      */
     public function __construct(
@@ -31,7 +30,7 @@ class ApplicationService
 
         $unread = $application->readApproval->isEmpty();
         $approved = $application->status === ApplicationStatus::APPROVED;
-        
+
         return $unread && $approved;
     }
 
