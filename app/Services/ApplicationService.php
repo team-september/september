@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Repositories\Application\IApplicationRepository;
+use App\Constants\ApplicationStatus;
 use App\Repositories\ReadApproval\IReadApprovalRepository;
 
 class ApplicationService
@@ -14,16 +14,11 @@ class ApplicationService
     protected $readApprovalRepository;
 
     /**
-     * ApplicationService constructor.
-     *
-     * @param $applicationRepository
      * @param $readApprovalRepository
      */
     public function __construct(
-        IApplicationRepository $applicationRepository,
         IReadApprovalRepository $readApprovalRepository
     ) {
-        $this->applicationRepository = $applicationRepository;
         $this->readApprovalRepository = $readApprovalRepository;
     }
 
@@ -33,15 +28,10 @@ class ApplicationService
             return false;
         }
 
-        if (!$application->readApproval->isEmpty()) {
-            return false;
-        }
+        $unread = $application->readApproval->isEmpty();
+        $approved = $application->status === ApplicationStatus::APPROVED;
 
-        if (!$application->status == config('application.status.approved')) {
-            return false;
-        }
-
-        return true;
+        return $unread && $approved;
     }
 
     public function createReadApproval($application)
