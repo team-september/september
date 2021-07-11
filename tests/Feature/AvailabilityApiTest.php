@@ -7,12 +7,16 @@ namespace Tests\Feature;
 use App\Repositories\Availability\IAvailabilityRepository;
 use Carbon\Carbon;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AvailabilityApiTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function setUp(): void
     {
         parent::setUp();
+        $this->seed('UserTableSeeder');
         $this->seed('AvailabilitiesTableSeeder');
     }
 
