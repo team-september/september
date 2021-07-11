@@ -6,8 +6,8 @@ namespace Tests\Feature;
 
 use App\Repositories\Availability\IAvailabilityRepository;
 use Carbon\Carbon;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class AvailabilityApiTest extends TestCase
 {
