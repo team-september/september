@@ -105,7 +105,7 @@ class ProfileController extends Controller
                 'urls',
                 'userCareer',
                 'userPurposes',
-                'skills',
+                'userSkills',
                 'mentors',
                 'application',
                 'appliedMentor'
